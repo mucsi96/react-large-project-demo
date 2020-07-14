@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["**/*.stories.tsx"],
+  "compilerOptions": {
+    "declaration": true
+  }
+}

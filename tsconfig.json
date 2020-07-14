@@ -1,0 +1,13 @@
+{
+  "include": ["src"],
+  "files": ["./typings.d.ts"],
+  "compilerOptions": {
+    "jsx": "react",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2015",
+    "module": "ESNext",
+    "moduleResolution": "Node"
+  }
+}
