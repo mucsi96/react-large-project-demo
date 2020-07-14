@@ -8,7 +8,8 @@
     "start": "start-storybook",
     "storybook": "start-storybook -p 9009",
     "build-storybook": "build-storybook",
-    "build": "tsc --project tsconfig.build.json"
+    "build": "tsc --project tsconfig.build.json",
+    "build:watch": "yarn build --watch"
   },
   "peerDependencies": {
     "react": "^16.13.1",
