@@ -7,17 +7,14 @@
   "scripts": {
     "start": "dev-tools storybook",
     "build": "tsc --project tsconfig.build.json",
-    "build:watch": "yarn build --watch"
+    "build:watch": "yarn build --watch",
+    "test": "dev-tools test"
   },
   "peerDependencies": {
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
     "dev-tools": "1.0.0",
     "react-scripts": "^3.4.1",
     "typescript": "^3.9.6"
