@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "dev-tools storybook",
-    "build": "tsc --project tsconfig.build.json",
-    "build:watch": "yarn build --watch",
+    "build": "dev-tools build",
+    "build:watch": "dev-tools build --watch",
     "test": "dev-tools test"
   },
   "peerDependencies": {

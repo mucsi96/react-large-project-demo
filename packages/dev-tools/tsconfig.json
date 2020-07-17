@@ -1,5 +1,4 @@
 {
-  "include": ["src"],
   "files": ["./typings.d.ts"],
   "compilerOptions": {
     "jsx": "react",
@@ -8,6 +7,13 @@
     "strict": true,
     "target": "ES2015",
     "module": "ESNext",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
   }
 }

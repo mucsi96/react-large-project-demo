@@ -1,19 +1,4 @@
 {
   "extends": "dev-tools/tsconfig.json",
-  "include": [
-    "./src"
-  ],
-  "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true
-  }
+  "include": ["./src"]
 }
