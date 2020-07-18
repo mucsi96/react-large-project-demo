@@ -1,14 +1,8 @@
 #!/usr/bin/env node
 
 const { resolve } = require("path");
-const fs = require("fs");
-
+const { createVirtualSymbolicLink, setProcessArgs } = require("../src/utils");
 const script = process.argv[2];
-const restArgs = process.argv.slice(3);
-
-function setProcessArgs(args) {
-  process.argv = [process.argv[0], process.argv[1], ...args, ...restArgs];
-}
 
 switch (script) {
   case "storybook": {
@@ -28,26 +22,12 @@ switch (script) {
     return;
   }
   case "build": {
-    setProcessArgs(["--project", resolve(process.cwd(), "tsconfig.json")]);
-    console.log(process.argv);
-    const originalReadFile = fs.readFileSync;
-    fs.readFileSync = (fileName, encoding) => {
-      if (fileName.endsWith("/tsconfig.json")) {
-        const config = JSON.parse(originalReadFile(fileName, encoding));
-
-        return JSON.stringify({
-          ...config,
-          exclude: ["**/*.stories.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
-          compilerOptions: {
-            ...config.compilerOptions,
-            declaration: true,
-            noEmit: false,
-            outDir: "dist",
-          },
-        });
-      }
-      return originalReadFile(fileName, encoding);
-    };
+    const tsConfig = resolve(process.cwd(), "tsconfig.build.json");
+    setProcessArgs(["--project", tsConfig]);
+    createVirtualSymbolicLink(
+      require.resolve("../tsconfig.build.json"),
+      tsConfig
+    );
     require("typescript/lib/tsc");
     return;
   }
