@@ -1,8 +1,11 @@
 const fs = require("fs");
+const Module = require("module");
 
 let virtualSymbolicLinks = [];
-const originalReadFile = fs.readFileSync;
+const originalExistsSync = fs.existsSync;
 const originalStatSync = fs.statSync;
+const originalReadFile = fs.readFileSync;
+const originalRequire = Module.prototype.require;
 
 function getVirtualSymbolicLink(fileName) {
   return virtualSymbolicLinks.find(({ to }) =>
@@ -10,9 +13,17 @@ function getVirtualSymbolicLink(fileName) {
   );
 }
 
-fs.statSync = (fileName, options) => {
+fs.existsSync = function(fileName) {
   if (!getVirtualSymbolicLink(fileName)) {
-    return originalStatSync(fileName, options);
+    return originalExistsSync.apply(this, arguments);
+  }
+
+  return true;
+};
+
+fs.statSync = function(fileName) {
+  if (!getVirtualSymbolicLink(fileName)) {
+    return originalStatSync.apply(this, arguments);
   }
 
   return {
@@ -20,20 +31,34 @@ fs.statSync = (fileName, options) => {
   };
 };
 
-fs.readFileSync = (fileName, encoding) => {
+fs.readFileSync = function(fileName, encoding) {
   const symbolicLink = getVirtualSymbolicLink(fileName);
 
   if (!symbolicLink) {
-    return originalReadFile(fileName, encoding);
+    return originalReadFile.apply(this, arguments);
   }
 
-  return originalReadFile(symbolicLink.from, encoding);
+  return originalReadFile.call(this, symbolicLink.from, encoding);
+};
+
+Module.prototype.require = function(id) {
+  const symbolicLink = getVirtualSymbolicLink(id);
+
+  if (!symbolicLink) {
+    return originalRequire.apply(this, arguments);
+  }
+
+  return originalRequire.call(this, symbolicLink.from);
 };
 
 function createVirtualSymbolicLink(from, to) {
+  const arrayTo = Array.isArray(to) ? to : [to];
   virtualSymbolicLinks = [
     ...virtualSymbolicLinks,
-    { from, to: [to, to.replace(/\\/g, "/")] },
+    {
+      from,
+      to: arrayTo.flatMap((toItem) => [toItem, toItem.replace(/\\/g, "/")]),
+    },
   ];
 }
 

@@ -6,9 +6,11 @@ const script = process.argv[2];
 
 switch (script) {
   case "storybook": {
-    const customPresets = require("@storybook/core/dist/server/common/custom-presets.js");
-    customPresets.default = () => [require.resolve("../.storybook/main")];
     setProcessArgs([]);
+    createVirtualSymbolicLink(require.resolve("../.storybook/main"), [
+      resolve(process.cwd(), ".storybook/main.js"),
+      resolve(process.cwd(), ".storybook/main"),
+    ]);
     require("@storybook/react/bin");
     return;
   }
