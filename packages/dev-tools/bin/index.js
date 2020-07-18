@@ -3,6 +3,10 @@
 const script = process.argv[2];
 
 switch (script) {
+  case "start": {
+    require("./start");
+    return;
+  }
   case "storybook": {
     require("./storybook");
     return;
