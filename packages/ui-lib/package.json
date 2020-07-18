@@ -8,7 +8,8 @@
     "start": "dev-tools storybook",
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch",
-    "test": "dev-tools test"
+    "test": "dev-tools test",
+    "check-types": "dev-tools check-types"
   },
   "peerDependencies": {
     "react": "^16.13.1",

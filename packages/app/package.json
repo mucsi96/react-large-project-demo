@@ -13,7 +13,8 @@
   "scripts": {
     "start": "dev-tools start",
     "build": "dev-tools build",
-    "test": "dev-tools test"
+    "test": "dev-tools test",
+    "check-types": "dev-tools check-types"
   },
   "eslintConfig": {
     "extends": "react-app"

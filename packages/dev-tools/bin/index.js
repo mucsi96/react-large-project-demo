@@ -23,6 +23,14 @@ switch (script) {
     require("./buildLib");
     return;
   }
+  case "check-types": {
+    require("./checkTypes");
+    return;
+  }
+  case "lint": {
+    require("./lint");
+    return;
+  }
   default: {
     throw new Error(`Unsupported script ${script}`);
   }
