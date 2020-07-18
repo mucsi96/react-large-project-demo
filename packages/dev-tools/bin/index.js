@@ -15,12 +15,19 @@ switch (script) {
     return;
   }
   case "test": {
-    setProcessArgs([
-      "test",
-      "--config-overrides",
-      require.resolve("../config-overrides"),
-    ]);
-    require("react-app-rewired/bin");
+    const jest = require("jest");
+    const originalRun = jest.run;
+    jest.run = function(args) {
+      const configIndex = args.findIndex((arg) => arg === "--config") + 1;
+      args[configIndex] = JSON.stringify({
+        ...JSON.parse(args[configIndex]),
+        setupFilesAfterEnv: [require.resolve("../src/setupTests")],
+        snapshotSerializers: ["enzyme-to-json/serializer"],
+      });
+      return originalRun.apply(this, arguments);
+    };
+    setProcessArgs(["test"]);
+    require("react-scripts/scripts/test");
     return;
   }
   case "build": {
