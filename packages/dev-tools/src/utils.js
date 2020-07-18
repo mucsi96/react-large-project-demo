@@ -4,6 +4,7 @@ const Module = require("module");
 let virtualSymbolicLinks = [];
 const originalExistsSync = fs.existsSync;
 const originalStatSync = fs.statSync;
+const originalRealpathSync = fs.realpathSync;
 const originalReadFile = fs.readFileSync;
 const originalRequire = Module.prototype.require;
 
@@ -31,6 +32,16 @@ fs.statSync = function(fileName) {
   };
 };
 
+fs.realpathSync = function(path, options) {
+  const symbolicLink = getVirtualSymbolicLink(path);
+
+  if (!symbolicLink) {
+    return originalRealpathSync.apply(this, arguments);
+  }
+
+  return originalRealpathSync.call(this, symbolicLink.from, options);
+};
+
 fs.readFileSync = function(fileName, encoding) {
   const symbolicLink = getVirtualSymbolicLink(fileName);
 
@@ -49,6 +60,16 @@ Module.prototype.require = function(id) {
   }
 
   return originalRequire.call(this, symbolicLink.from);
+};
+
+Module.prototype.require.resolve = function(id) {
+  const symbolicLink = getVirtualSymbolicLink(id);
+
+  if (!symbolicLink) {
+    return originalRequire.resolve.apply(this, arguments);
+  }
+
+  return originalRequire.resolve.call(this, symbolicLink.from);
 };
 
 function createVirtualSymbolicLink(from, to) {
