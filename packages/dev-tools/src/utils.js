@@ -1,7 +1,9 @@
 const fs = require("fs");
 const Module = require("module");
+const { resolve } = require("path");
 
 let virtualSymbolicLinks = [];
+let virtualFiles = [];
 const originalExistsSync = fs.existsSync;
 const originalStatSync = fs.statSync;
 const originalRealpathSync = fs.realpathSync;
@@ -14,8 +16,14 @@ function getVirtualSymbolicLink(fileName) {
   );
 }
 
+function getVirtualFile(fileName) {
+  return virtualFiles.find(({ names }) =>
+    names.find((name) => fileName.endsWith(name))
+  );
+}
+
 fs.existsSync = function(fileName) {
-  if (!getVirtualSymbolicLink(fileName)) {
+  if (!getVirtualSymbolicLink(fileName) && !getVirtualFile(fileName)) {
     return originalExistsSync.apply(this, arguments);
   }
 
@@ -23,7 +31,7 @@ fs.existsSync = function(fileName) {
 };
 
 fs.statSync = function(fileName) {
-  if (!getVirtualSymbolicLink(fileName)) {
+  if (!getVirtualSymbolicLink(fileName) && !getVirtualFile(fileName)) {
     return originalStatSync.apply(this, arguments);
   }
 
@@ -35,21 +43,26 @@ fs.statSync = function(fileName) {
 fs.realpathSync = function(path, options) {
   const symbolicLink = getVirtualSymbolicLink(path);
 
-  if (!symbolicLink) {
+  if (!symbolicLink && !getVirtualFile(path)) {
     return originalRealpathSync.apply(this, arguments);
   }
 
-  return originalRealpathSync.call(this, symbolicLink.from, options);
+  return symbolicLink
+    ? originalRealpathSync.call(this, symbolicLink.to, options)
+    : resolve(path);
 };
 
 fs.readFileSync = function(fileName, encoding) {
   const symbolicLink = getVirtualSymbolicLink(fileName);
+  const virtualFile = getVirtualFile(fileName);
 
-  if (!symbolicLink) {
+  if (!symbolicLink && !virtualFile) {
     return originalReadFile.apply(this, arguments);
   }
 
-  return originalReadFile.call(this, symbolicLink.from, encoding);
+  return symbolicLink
+    ? originalReadFile.call(this, symbolicLink.from, encoding)
+    : virtualFile.content;
 };
 
 Module.prototype.require = function(id) {
@@ -83,6 +96,16 @@ function createVirtualSymbolicLink(from, to) {
   ];
 }
 
+function createVirtualFile(fileName, content) {
+  virtualFiles = [
+    ...virtualFiles,
+    {
+      names: [fileName, fileName.replace(/\\/g, "/")],
+      content,
+    },
+  ];
+}
+
 function setProcessArgs(args) {
   process.argv = [
     ...process.argv.slice(0, 2),
@@ -93,5 +116,6 @@ function setProcessArgs(args) {
 
 module.exports = {
   createVirtualSymbolicLink,
+  createVirtualFile,
   setProcessArgs,
 };
