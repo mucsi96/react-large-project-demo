@@ -21,8 +21,8 @@ switch (script) {
       const configIndex = args.findIndex((arg) => arg === "--config") + 1;
       args[configIndex] = JSON.stringify({
         ...JSON.parse(args[configIndex]),
+        ...require("../package.json").jest,
         setupFilesAfterEnv: [require.resolve("../src/setupTests")],
-        snapshotSerializers: ["enzyme-to-json/serializer"],
       });
       return originalRun.apply(this, arguments);
     };

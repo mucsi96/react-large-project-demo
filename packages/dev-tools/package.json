@@ -24,5 +24,10 @@
     "enzyme-to-json": "^3.5.0",
     "react-scripts": "^3.4.1",
     "typescript": "^3.9.7"
+  },
+  "jest": {
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
   }
 }
