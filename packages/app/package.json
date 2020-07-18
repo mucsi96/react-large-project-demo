@@ -7,10 +7,13 @@
     "react-dom": "^16.13.1",
     "ui-lib": "^1.0.0"
   },
+  "devDependencies": {
+    "dev-tools": "1.0.0"
+  },
   "scripts": {
-    "start": "dev-rools start",
-    "build": "dev-rools build",
-    "test": "dev-rools test"
+    "start": "dev-tools start",
+    "build": "dev-tools build",
+    "test": "dev-tools test"
   },
   "eslintConfig": {
     "extends": "react-app"

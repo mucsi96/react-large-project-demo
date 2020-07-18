@@ -19,6 +19,10 @@ switch (script) {
     require("./build");
     return;
   }
+  case "build-lib": {
+    require("./buildLib");
+    return;
+  }
   default: {
     throw new Error(`Unsupported script ${script}`);
   }

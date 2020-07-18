@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "start": "dev-tools storybook",
-    "build": "dev-tools build",
-    "build:watch": "dev-tools build --watch",
+    "build": "dev-tools build-lib",
+    "build:watch": "yarn build --watch",
     "test": "dev-tools test"
   },
   "peerDependencies": {
