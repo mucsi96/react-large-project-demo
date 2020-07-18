@@ -4,6 +4,7 @@ const { resolve } = require("path");
 
 let virtualSymbolicLinks = [];
 let virtualFiles = [];
+let virtualizetionEnabled = false;
 const originalExistsSync = fs.existsSync;
 const originalStatSync = fs.statSync;
 const originalRealpathSync = fs.realpathSync;
@@ -22,70 +23,79 @@ function getVirtualFile(fileName) {
   );
 }
 
-fs.existsSync = function(fileName) {
-  if (!getVirtualSymbolicLink(fileName) && !getVirtualFile(fileName)) {
-    return originalExistsSync.apply(this, arguments);
+function enableVirtualization() {
+  if (virtualizetionEnabled) {
+    return;
   }
 
-  return true;
-};
+  fs.existsSync = function(fileName) {
+    if (!getVirtualSymbolicLink(fileName) && !getVirtualFile(fileName)) {
+      return originalExistsSync.apply(this, arguments);
+    }
 
-fs.statSync = function(fileName) {
-  if (!getVirtualSymbolicLink(fileName) && !getVirtualFile(fileName)) {
-    return originalStatSync.apply(this, arguments);
-  }
-
-  return {
-    isFile: () => true,
+    return true;
   };
-};
 
-fs.realpathSync = function(path, options) {
-  const symbolicLink = getVirtualSymbolicLink(path);
+  fs.statSync = function(fileName) {
+    if (!getVirtualSymbolicLink(fileName) && !getVirtualFile(fileName)) {
+      return originalStatSync.apply(this, arguments);
+    }
 
-  if (!symbolicLink && !getVirtualFile(path)) {
-    return originalRealpathSync.apply(this, arguments);
-  }
+    return {
+      isFile: () => true,
+    };
+  };
 
-  return symbolicLink
-    ? originalRealpathSync.call(this, symbolicLink.to, options)
-    : resolve(path);
-};
+  fs.realpathSync = function(path, options) {
+    const symbolicLink = getVirtualSymbolicLink(path);
 
-fs.readFileSync = function(fileName, encoding) {
-  const symbolicLink = getVirtualSymbolicLink(fileName);
-  const virtualFile = getVirtualFile(fileName);
+    if (!symbolicLink && !getVirtualFile(path)) {
+      return originalRealpathSync.apply(this, arguments);
+    }
 
-  if (!symbolicLink && !virtualFile) {
-    return originalReadFile.apply(this, arguments);
-  }
+    return symbolicLink
+      ? originalRealpathSync.call(this, symbolicLink.to, options)
+      : resolve(path);
+  };
 
-  return symbolicLink
-    ? originalReadFile.call(this, symbolicLink.from, encoding)
-    : virtualFile.content;
-};
+  fs.readFileSync = function(fileName, encoding) {
+    const symbolicLink = getVirtualSymbolicLink(fileName);
+    const virtualFile = getVirtualFile(fileName);
 
-Module.prototype.require = function(id) {
-  const symbolicLink = getVirtualSymbolicLink(id);
+    if (!symbolicLink && !virtualFile) {
+      return originalReadFile.apply(this, arguments);
+    }
 
-  if (!symbolicLink) {
-    return originalRequire.apply(this, arguments);
-  }
+    return symbolicLink
+      ? originalReadFile.call(this, symbolicLink.from, encoding)
+      : virtualFile.content;
+  };
 
-  return originalRequire.call(this, symbolicLink.from);
-};
+  Module.prototype.require = function(id) {
+    const symbolicLink = getVirtualSymbolicLink(id);
 
-Module.prototype.require.resolve = function(id) {
-  const symbolicLink = getVirtualSymbolicLink(id);
+    if (!symbolicLink) {
+      return originalRequire.apply(this, arguments);
+    }
 
-  if (!symbolicLink) {
-    return originalRequire.resolve.apply(this, arguments);
-  }
+    return originalRequire.call(this, symbolicLink.from);
+  };
 
-  return originalRequire.resolve.call(this, symbolicLink.from);
-};
+  Module.prototype.require.resolve = function(id) {
+    const symbolicLink = getVirtualSymbolicLink(id);
+
+    if (!symbolicLink) {
+      return originalRequire.resolve.apply(this, arguments);
+    }
+
+    return originalRequire.resolve.call(this, symbolicLink.from);
+  };
+
+  virtualizetionEnabled = true;
+}
 
 function createVirtualSymbolicLink(from, to) {
+  enableVirtualization();
   const arrayTo = Array.isArray(to) ? to : [to];
   virtualSymbolicLinks = [
     ...virtualSymbolicLinks,
@@ -97,6 +107,7 @@ function createVirtualSymbolicLink(from, to) {
 }
 
 function createVirtualFile(fileName, content) {
+  enableVirtualization();
   virtualFiles = [
     ...virtualFiles,
     {
