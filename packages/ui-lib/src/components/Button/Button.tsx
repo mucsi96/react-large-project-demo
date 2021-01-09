@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 
-type ButtonProps = {
+export type ButtonProps = {
   /**
    * Simple click handler
    */
