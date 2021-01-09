@@ -1,9 +1,7 @@
-import { resolve } from "path";
 import { setProcessArgs } from "./utils";
 
 function checkTypes() {
-  const tsConfig = resolve(__dirname, "../config/tsconfig.json");
-  setProcessArgs(["--project", tsConfig]);
+  setProcessArgs([]);
 
   require("typescript/lib/tsc");
 }
