@@ -3,8 +3,7 @@ import { setProcessArgs } from "./utils";
 
 function storybook() {
   const configDir = resolve(__dirname, "../config/.storybook");
-  //   setProcessArgs(["--config-dir", configDir]);
-  setProcessArgs([]);
+  setProcessArgs(["--config-dir", configDir]);
 
   require("@storybook/react/bin");
 }
