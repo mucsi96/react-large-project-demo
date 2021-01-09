@@ -3,7 +3,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
 import url from "@rollup/plugin-url";
 import svgr from "@svgr/rollup";
-import { basename, dirname, relative } from "path";
+import { dirname, relative } from "path";
 import external from "rollup-plugin-peer-deps-external";
 import postcss from "rollup-plugin-postcss";
 import visualizer from "rollup-plugin-visualizer";
@@ -13,12 +13,11 @@ const packageJson = require(`${relativeBasePath}/package.json`);
 
 const extensions = [".js", ".jsx", ".ts", ".tsx"];
 const config = {
-  input: `src`,
+  input: "src",
   output: [
     {
       file: packageJson.main,
       format: "cjs",
-      sourcemap: true,
     },
     {
       dir: dirname(packageJson.module),
@@ -29,10 +28,10 @@ const config = {
   ],
   plugins: [
     typescript({
-      // exclude: ["**/*.stories.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+      exclude: ["**/*.stories.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
       declaration: true,
-      // declarationDir: `./${dirname(packageJson.types)}`,
-      declarationDir: `.`,
+      declarationDir: dirname(packageJson.types),
+      rootDir: "src",
     }),
     external(),
     postcss(),
@@ -42,37 +41,10 @@ const config = {
     commonjs(),
     url(),
     svgr(),
-    visualizer(),
+    visualizer({
+      filename: `reports/build-stats.html`,
+    }),
   ],
 };
 
-export default [
-  {
-    input: `src`,
-    output: {
-      dir: dirname(packageJson.main),
-      entryFileNames: basename(packageJson.main),
-      format: "cjs",
-      sourcemap: true,
-    },
-    plugins: [
-      typescript({
-        exclude: ["**/*.stories.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
-        declaration: true,
-        declarationDir: dirname(packageJson.types),
-        rootDir: "src",
-      }),
-      external(),
-      postcss(),
-      resolve({
-        extensions,
-      }),
-      commonjs(),
-      url(),
-      svgr(),
-      visualizer({
-        filename: `reports/build-stats.html`,
-      }),
-    ],
-  },
-];
+export default config;
