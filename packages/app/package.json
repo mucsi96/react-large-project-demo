@@ -8,27 +8,15 @@
     "ui-lib": "^1.0.0"
   },
   "devDependencies": {
-    "dev-tools": "1.0.0"
+    "dev-tools": "1.0.0",
+    "typescript": "4.1.3",
+    "@types/react": "17.0.0",
+    "@types/react-dom": "17.0.0"
   },
   "scripts": {
     "start": "dev-tools start",
     "build": "dev-tools build",
     "test": "dev-tools test",
     "check-types": "dev-tools check-types"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }

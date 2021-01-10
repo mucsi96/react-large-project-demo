@@ -1,4 +1,4 @@
-import { join } from "path";
+import { join, resolve } from "path";
 import { exit } from "process";
 
 export function runPackageBinary({
@@ -25,6 +25,24 @@ export function runPackageBinary({
   ];
 
   require(join(packageName, binaryPath));
+}
+
+export function runReactScripts(script: string, args: string[] = []) {
+  process.env.BROWSERSLIST_CONFIG = resolve(
+    __dirname,
+    "../config/.browserslistrc"
+  );
+
+  runPackageBinary({
+    packageName: "react-app-rewired",
+    binaryName: "react-app-rewired",
+    args: [
+      script,
+      "--config-overrides",
+      resolve(__dirname, "../config/cra-config-overrides.js"),
+      ...args,
+    ],
+  });
 }
 
 export function pickCommand(

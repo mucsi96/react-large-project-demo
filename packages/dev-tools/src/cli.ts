@@ -1,7 +1,34 @@
 #!/usr/bin/env node
 import del from "del";
 import { resolve } from "path";
-import { pickCommand, runPackageBinary } from "./utils";
+import { pickCommand, runPackageBinary, runReactScripts } from "./utils";
+
+function checkTypes() {
+  runPackageBinary({
+    packageName: "typescript",
+    binaryName: "tsc",
+    args: [],
+  });
+}
+
+function test() {
+  runReactScripts(
+    "test",
+    process.argv.includes("--watch") ? [] : ["--watchAll=false"]
+  );
+}
+
+function storybook() {
+  runPackageBinary({
+    packageName: "@storybook/react",
+    binaryName: "start-storybook",
+    args: ["--config-dir", resolve(__dirname, "../config/.storybook")],
+  });
+}
+
+function start() {
+  runReactScripts("start");
+}
 
 function buildLib() {
   del.sync([resolve(process.cwd(), "dist")]);
@@ -13,41 +40,18 @@ function buildLib() {
   });
 }
 
-function checkTypes() {
-  runPackageBinary({
-    packageName: "typescript",
-    binaryName: "tsc",
-    args: [],
-  });
-}
-
-function storybook() {
-  runPackageBinary({
-    packageName: "@storybook/react",
-    binaryName: "start-storybook",
-    args: ["--config-dir", resolve(__dirname, "../config/.storybook")],
-  });
-}
-
-function test() {
-  runPackageBinary({
-    packageName: "react-app-rewired",
-    binaryName: "react-app-rewired",
-    args: [
-      "test",
-      "--config-overrides",
-      resolve(__dirname, "../config/cra-config-overrides.js"),
-      ...(process.argv.includes("--watch") ? [] : ["--watchAll=false"]),
-    ],
-  });
+function build() {
+  runReactScripts("build");
 }
 
 pickCommand(
   {
     ["check-types"]: checkTypes,
-    ["build-lib"]: buildLib,
-    storybook,
     test,
+    storybook,
+    start,
+    ["build-lib"]: buildLib,
+    build,
   },
   process.argv[2]
 );
