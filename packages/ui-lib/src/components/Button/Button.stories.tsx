@@ -1,17 +1,21 @@
-import { action } from "@storybook/addon-actions";
-import React from "react";
-import { Button } from "./Button";
+import { Meta, Story } from "@storybook/react";
+import React, { ReactNode } from "react";
+import { Button, ButtonProps } from "./Button";
 
-export default { title: "Button", component: Button };
+export default { title: "Button", component: Button } as Meta;
 
-export const withText = () => (
-  <Button onClick={action("clicked")}>Hello Button</Button>
+const Template: Story<ButtonProps | { children: ReactNode }> = (args) => (
+  <Button {...args} />
 );
 
-export const withEmoji = () => (
-  <Button onClick={action("clicked")}>
-    <span role="img" aria-label="so cool">
-      😀 😎 👍 💯
-    </span>
-  </Button>
-);
+export const withText = Template.bind({});
+
+withText.args = {
+  children: "Hello Button",
+};
+
+export const withEmoji = Template.bind({});
+
+withEmoji.args = {
+  children: "😀 😎 👍 💯",
+};

@@ -1,4 +1,6 @@
+import classNames from "classnames";
 import React, { FC } from "react";
+import styles from "./Button.module.scss";
 
 export type ButtonProps = {
   /**
@@ -17,8 +19,20 @@ export type ButtonProps = {
   secondary?: boolean;
 };
 
-export const Button: FC<ButtonProps> = ({ children, onClick }) => (
-  <button type="button" onClick={onClick}>
+export const Button: FC<ButtonProps> = ({
+  children,
+  onClick,
+  primary,
+  secondary,
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={classNames({
+      [styles.primary]: primary,
+      [styles.secondary]: secondary,
+    })}
+  >
     {children}
   </button>
 );
