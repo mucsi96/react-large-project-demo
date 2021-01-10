@@ -17,7 +17,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Button>Learn React</Button>
+          <Button primary>Learn React</Button>
         </a>
       </header>
     </div>

@@ -24,6 +24,7 @@ const config = {
       format: "esm",
       sourcemap: true,
       preserveModules: true,
+      preserveModulesRoot: "src",
     },
   ],
   plugins: [
@@ -33,8 +34,8 @@ const config = {
       declarationDir: dirname(packageJson.types),
       rootDir: "src",
     }),
-    external(),
     postcss(),
+    external(),
     resolve({
       extensions,
     }),
