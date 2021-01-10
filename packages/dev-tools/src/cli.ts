@@ -11,6 +11,14 @@ function checkTypes() {
   });
 }
 
+function lint() {
+  runPackageBinary({
+    packageName: "eslint",
+    binaryName: "eslint",
+    args: ["--config", resolve(__dirname, "../config/.eslintrc.json"), "src"],
+  });
+}
+
 function test() {
   runReactScripts(
     "test",
@@ -47,6 +55,7 @@ function build() {
 pickCommand(
   {
     ["check-types"]: checkTypes,
+    lint,
     test,
     storybook,
     start,

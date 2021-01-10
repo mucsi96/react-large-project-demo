@@ -9,12 +9,13 @@
   ],
   "license": "MIT",
   "scripts": {
-    "start": "dev-tools storybook",
-    "build": "dev-tools build-lib",
-    "build:watch": "yarn build --watch",
+    "lint": "dev-tools lint",
+    "check-types": "dev-tools check-types",
     "test": "dev-tools test",
     "test:watch": "dev-tools test --watch",
-    "check-types": "dev-tools check-types"
+    "start": "dev-tools storybook",
+    "build": "dev-tools build-lib",
+    "build:watch": "yarn build --watch"
   },
   "peerDependencies": {
     "react": "^16.13.1",
