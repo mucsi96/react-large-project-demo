@@ -1,17 +1,53 @@
 #!/usr/bin/env node
-import buildLib from "./buildLib";
-import checkTypes from "./checkTypes";
-import storybook from "./storybook";
+import del from "del";
+import { resolve } from "path";
+import { pickCommand, runPackageBinary } from "./utils";
 
-const command = process.argv[2];
-const commandFunction = ({
-  ["check-types"]: checkTypes,
-  ["build-lib"]: buildLib,
-  storybook,
-} as Record<string, Function>)[command];
+function buildLib() {
+  del.sync([resolve(process.cwd(), "dist")]);
 
-if (!commandFunction) {
-  throw new Error(`Unsupported script ${command}`);
+  runPackageBinary({
+    packageName: "rollup",
+    binaryName: "rollup",
+    args: ["--config", resolve(__dirname, "../config/rollup.config.js")],
+  });
 }
 
-commandFunction();
+function checkTypes() {
+  runPackageBinary({
+    packageName: "typescript",
+    binaryName: "tsc",
+    args: [],
+  });
+}
+
+function storybook() {
+  runPackageBinary({
+    packageName: "@storybook/react",
+    binaryName: "start-storybook",
+    args: ["--config-dir", resolve(__dirname, "../config/.storybook")],
+  });
+}
+
+function test() {
+  runPackageBinary({
+    packageName: "react-app-rewired",
+    binaryName: "react-app-rewired",
+    args: [
+      "test",
+      "--config-overrides",
+      resolve(__dirname, "../config/cra-config-overrides.js"),
+      ...(process.argv.includes("--watch") ? [] : ["--watchAll=false"]),
+    ],
+  });
+}
+
+pickCommand(
+  {
+    ["check-types"]: checkTypes,
+    ["build-lib"]: buildLib,
+    storybook,
+    test,
+  },
+  process.argv[2]
+);

@@ -1,4 +1,5 @@
 import { join } from "path";
+import { exit } from "process";
 
 export function runPackageBinary({
   packageName,
@@ -13,7 +14,8 @@ export function runPackageBinary({
   const binaryPath = binaryName ? packageJson.bin[binaryName] : packageJson.bin;
 
   if (typeof binaryPath !== "string") {
-    throw new Error(`Wrong binaryPath ${binaryPath}`);
+    console.error(`Wrong binaryPath ${binaryPath} in package ${packageName}`);
+    exit(1);
   }
 
   process.argv = [
@@ -23,4 +25,22 @@ export function runPackageBinary({
   ];
 
   require(join(packageName, binaryPath));
+}
+
+export function pickCommand(
+  commands: Record<string, Function>,
+  command: string
+): void {
+  const commandFunction = commands[command];
+
+  if (!commandFunction) {
+    console.error(
+      `Usage: dev-tools ${Object.keys(commands).join(
+        "|"
+      )} [additional options...]`
+    );
+    exit(1);
+  }
+
+  commandFunction();
 }

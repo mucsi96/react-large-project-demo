@@ -13,6 +13,7 @@
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch",
     "test": "dev-tools test",
+    "test:watch": "dev-tools test --watch",
     "check-types": "dev-tools check-types"
   },
   "peerDependencies": {
