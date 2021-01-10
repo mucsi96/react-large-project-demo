@@ -1,9 +1,11 @@
-import { setProcessArgs } from "./utils";
+import { runPackageBinary } from "./utils";
 
 function checkTypes() {
-  setProcessArgs([]);
-
-  require("typescript/lib/tsc");
+  runPackageBinary({
+    packageName: "typescript",
+    binaryName: "tsc",
+    args: [],
+  });
 }
 
 export default checkTypes;

@@ -1,11 +1,12 @@
 import { resolve } from "path";
-import { setProcessArgs } from "./utils";
+import { runPackageBinary } from "./utils";
 
 function storybook() {
-  const configDir = resolve(__dirname, "../config/.storybook");
-  setProcessArgs(["--config-dir", configDir]);
-
-  require("@storybook/react/bin");
+  runPackageBinary({
+    packageName: "@storybook/react",
+    binaryName: "start-storybook",
+    args: ["--config-dir", resolve(__dirname, "../config/.storybook")],
+  });
 }
 
 export default storybook;

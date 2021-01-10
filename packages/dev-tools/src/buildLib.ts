@@ -1,13 +1,15 @@
 import del from "del";
 import { resolve } from "path";
-import { setProcessArgs } from "./utils";
+import { runPackageBinary } from "./utils";
 
 function build() {
   del.sync([resolve(process.cwd(), "dist")]);
-  const config = resolve(__dirname, "../config/rollup.config.js");
-  setProcessArgs(["--config", config]);
 
-  require("rollup/dist/bin/rollup");
+  runPackageBinary({
+    packageName: "rollup",
+    binaryName: "rollup",
+    args: ["--config", resolve(__dirname, "../config/rollup.config.js")],
+  });
 }
 
 export default build;
