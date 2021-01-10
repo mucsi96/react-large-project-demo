@@ -5,3 +5,4 @@
 - Add API mocking support
 - Add readme
 - Add presentation
+- Make sure type-script-eslint reccomended rules are included
