@@ -15,7 +15,7 @@ function lint() {
   runPackageBinary({
     packageName: "eslint",
     binaryName: "eslint",
-    args: ["--config", resolve(__dirname, "../config/.eslintrc.json"), "src"],
+    args: ["src"],
   });
 }
 
