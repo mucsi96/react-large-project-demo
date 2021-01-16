@@ -16,6 +16,7 @@ export type ButtonProps = {
   /**
    * default is false
    */
+  
   secondary?: boolean;
 };
 

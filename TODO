@@ -2,7 +2,5 @@
 - Add testing helpers like `asMock` and `mockPromise`
 - Add CI support with lerna
 - Add integration testing
-- Add API mocking support
 - Add readme
 - Add presentation
-- Make sure type-script-eslint reccomended rules are included

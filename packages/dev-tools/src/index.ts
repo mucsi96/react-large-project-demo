@@ -10,3 +10,5 @@ export function setupEslintParser(root: string) {
     },
   };
 }
+
+export * from "./mockApi";
