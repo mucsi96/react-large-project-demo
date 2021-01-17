@@ -1,6 +1,8 @@
 import { Mock, MockMethod } from "./types";
 import { findMatchingMock, createMockResponse } from "./utils";
 
+export * from "./WaitForMockApi";
+
 let mocks: Mock[] = [];
 let serviceWorkerRegistered = false;
 
