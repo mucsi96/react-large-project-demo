@@ -19,6 +19,7 @@
     "test": "dev-tools test",
     "test:watch": "dev-tools test --awatch",
     "start": "dev-tools start",
-    "build": "dev-tools build"
+    "build": "dev-tools build",
+    "ci": "npm-run-all lint check-types test build"
   }
 }

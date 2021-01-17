@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import del from "del";
 import { resolve } from "path";
+import { run as runCI } from "./ci";
 import { pickCommand, runPackageBinary, runReactScripts } from "./utils";
 
 function checkTypes() {
@@ -105,6 +106,7 @@ pickCommand(
     start,
     ["build-lib"]: buildLib,
     build,
+    ci: runCI,
   },
   process.argv[2]
 );
