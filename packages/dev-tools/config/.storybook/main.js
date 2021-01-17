@@ -1,5 +1,4 @@
 const { relative } = require("path");
-const craConfigOverrides = require("../cra-config-overrides");
 
 const relativeBasePath = relative(__dirname, process.cwd()).replace(/\\/g, "/");
 
@@ -15,7 +14,4 @@ module.exports = {
       },
     },
   ],
-  webpackFinal(config) {
-    return craConfigOverrides.webpack(config);
-  },
 };
