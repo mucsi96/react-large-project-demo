@@ -15,7 +15,12 @@ function lint() {
   runPackageBinary({
     packageName: "eslint",
     binaryName: "eslint",
-    args: ["src"],
+    args: [
+      "src",
+      ...(process.argv.includes("--max-warnings")
+        ? []
+        : ["--max-warnings", "0"]),
+    ],
   });
 }
 
@@ -26,11 +31,49 @@ function test() {
   );
 }
 
+function intTest() {
+  if (process.argv.includes("--update")) {
+    process.env.SNAPSHOT_UPDATE = "true";
+  }
+
+  if (process.argv.includes("--debug")) {
+    process.env.DEBUG = "true";
+  }
+
+  process.argv = process.argv.filter(
+    (arg) => !["--update", "--debug"].includes(arg)
+  );
+
+  runPackageBinary({
+    packageName: "@cucumber/cucumber",
+    binaryName: "cucumber-js",
+    args: [
+      "--require-module",
+      "ts-node/register",
+      "--require",
+      "dev-tools/lib/intTest/cucumberConfig",
+      "--require",
+      "stepDefinitions/**/*.ts",
+      "--publish-quiet",
+      "--format",
+      "progress",
+      "--format",
+      "html:reports/cucumber_report.html",
+      "features/**/*.feature",
+    ],
+  });
+}
+
 function storybook() {
   runPackageBinary({
     packageName: "@storybook/react",
     binaryName: "start-storybook",
-    args: ["--config-dir", resolve(__dirname, "../config/.storybook")],
+    args: [
+      "--config-dir",
+      resolve(__dirname, "../config/.storybook"),
+      "--port",
+      "9009",
+    ],
   });
 }
 
@@ -57,6 +100,7 @@ pickCommand(
     ["check-types"]: checkTypes,
     lint,
     test,
+    ["int-test"]: intTest,
     storybook,
     start,
     ["build-lib"]: buildLib,

@@ -12,7 +12,10 @@
     "lint": "dev-tools lint",
     "check-types": "dev-tools check-types",
     "test": "dev-tools test",
-    "test:watch": "dev-tools test --watch",
+    "int:test": "dev-tools int-test",
+    "int:test:update": "yarn int:test --update",
+    "int:test:debug": "yarn int:test --debug",
+    "test:watch": "yarn test --watch",
     "start": "dev-tools storybook",
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch"

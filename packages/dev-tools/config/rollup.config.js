@@ -33,6 +33,8 @@ const config = {
       declaration: true,
       declarationDir: dirname(packageJson.types),
       rootDir: "src",
+      module: "ESNext",
+      target: "ES2015",
     }),
     postcss(),
     external(),

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Show the list of friends 1`] = `
+"[
+  { name: 'name', value: 'Tom' },
+  { name: 'name', value: 'John' },
+  { name: 'name', value: 'Alex' }
+]"
+`;
