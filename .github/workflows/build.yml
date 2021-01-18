@@ -1,12 +1,6 @@
 name: Build
 
-on:
-  # push:
-  #   branches:
-  #     - master
-  pull_request:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
   test:
@@ -20,5 +14,9 @@ jobs:
           node-version: "12"
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Run checks
+      - name: Run push checks
+        if: ${{ github.event_name == 'push' }}
+        run: npx lerna run ci
+      - name: Run pull request checks
+        if: ${{ github.event_name == 'pull_request' }}
         run: npx lerna run ci --since "origin/$GITHUB_BASE_REF"
