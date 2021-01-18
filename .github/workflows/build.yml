@@ -1,9 +1,9 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #     - master
   pull_request:
     branches:
       - master
@@ -19,4 +19,4 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Run checks
-        run: yarn ci
+        run: yarn ci "$GITHUB_HEAD_REF" "$GITHUB_BASE_REF"
