@@ -24,8 +24,8 @@ jobs:
         run: yarn build
         working-directory: packages/dev-tools
       - name: Get head
-        run: git rev-parse "$GITHUB_HEAD_REF"
+        run: echo ::set-env name=HEAD::$(git rev-parse "$GITHUB_HEAD_REF" --)
       - name: Get base
-        run: git rev-parse "$GITHUB_BASE_REF"
+        run: echo ::set-env name=BASE::$(git rev-parse "$GITHUB_BASE_REF" --)
       - name: Run checks
-        run: yarn ci "$GITHUB_HEAD_REF" "$GITHUB_BASE_REF"
+        run: yarn ci "$HEAD" "$BASE"
