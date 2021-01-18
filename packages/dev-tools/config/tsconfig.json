@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "files": ["./typings.d.ts"],
   "compilerOptions": {
-    "jsx": "react",
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
