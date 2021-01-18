@@ -25,7 +25,7 @@ jobs:
       - name: Build dev-tools
         run: yarn build
         working-directory: packages/dev-tools
+      - name: Run checks2
+        run: npx lerna run ci --since "origin/$GITHUB_BASE_REF"
       - name: Run checks
         run: yarn ci "origin/$GITHUB_HEAD_REF" "origin/$GITHUB_BASE_REF"
-      - name: Run checks2
-        run: yarn ci2 --since "origin/$GITHUB_BASE_REF"
