@@ -23,11 +23,7 @@ jobs:
       - name: Build dev-tools
         run: yarn build
         working-directory: packages/dev-tools
-      - name: Get head
-        id: get-head
-        run: echo ::set-output name=REF::$(git rev-parse "$GITHUB_HEAD_REF" --)
-      - name: Get base
-        id: get-base
-        run: echo ::set-output name=REF::$(git rev-parse "$GITHUB_BASE_REF" --)
       - name: Run checks
-        run: yarn ci "${{ steps.get-head.outputs.REF }}" "${{ steps.get-base.outputs.REF }}"
+        run: yarn ci "refs/remotes/origin/$GITHUB_HEAD_REF" "refs/remotes/origin/$GITHUB_BASE_REF"
+      - name: Run checks2
+        run: yarn ci2 --since "refs/remotes/origin/$GITHUB_BASE_REF"
