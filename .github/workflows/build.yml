@@ -24,4 +24,4 @@ jobs:
         run: yarn build
         working-directory: packages/dev-tools
       - name: Run checks
-        run: yarn ci "$GITHUB_SHA" "$GITHUB_BASE_REF"
+        run: yarn ci "origin/$GITHUB_HEAD_REF" "origin/$GITHUB_BASE_REF"
