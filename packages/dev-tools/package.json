@@ -13,9 +13,12 @@
     "node": ">= 10.0.0"
   },
   "scripts": {
+    "lint": "dev-tools lint",
+    "check-types": "dev-tools check-types",
     "build": "del-cli lib && tsc --declaration --outDir lib",
     "prepack": "npm run build",
-    "update:dependencies": "npx npm-check-updates -u"
+    "update:dependencies": "npx npm-check-updates -u",
+    "ci": "npm-run-all lint check-types build"
   },
   "dependencies": {
     "@storybook/addon-essentials": "6.1.11",
