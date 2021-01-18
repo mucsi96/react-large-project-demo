@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
           node-version: "12"
@@ -24,6 +26,6 @@ jobs:
         run: yarn build
         working-directory: packages/dev-tools
       - name: Run checks
-        run: yarn ci "refs/remotes/origin/$GITHUB_HEAD_REF" "refs/remotes/origin/$GITHUB_BASE_REF"
+        run: yarn ci "origin/$GITHUB_HEAD_REF" "origin/$GITHUB_BASE_REF"
       - name: Run checks2
-        run: yarn ci2 --since "refs/remotes/origin/$GITHUB_BASE_REF"
+        run: yarn ci2 --since "origin/$GITHUB_BASE_REF"
