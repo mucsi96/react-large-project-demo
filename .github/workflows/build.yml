@@ -16,6 +16,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "12"
+      - name: Check yarn version
+        run: yarn --version
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build dev-tools
