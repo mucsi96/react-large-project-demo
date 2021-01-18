@@ -10,10 +10,9 @@
     "packages/*"
   ],
   "devDependencies": {
-    "npm-run-all": "4.1.5",
-    "dev-tools": "1.0.0"
+    "npm-run-all": "4.1.5"
   },
   "scripts": {
-    "ci": "dev-tools ci"
+    "ci": "node packages/dev-tools/lib/cli.js ci"
   }
 }
