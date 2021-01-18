@@ -18,5 +18,8 @@ jobs:
           node-version: "12"
       - name: Install dependencies
         run: yarn install --frozen-lockfile
+      - name: Build dev-tools
+        run: yarn build
+        working-directory: packages/dev-tools
       - name: Run checks
         run: yarn ci "$GITHUB_HEAD_REF" "$GITHUB_BASE_REF"
