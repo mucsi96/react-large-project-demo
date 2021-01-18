@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+// eslint-disable-next-line no-restricted-globals
 const sw = (self as unknown) as ServiceWorkerGlobalScope;
 
 sw.addEventListener("install", () => {
@@ -23,22 +26,25 @@ sw.addEventListener("fetch", (event) => {
   return event.respondWith(createResponse(clientId, request));
 });
 
-sw.addEventListener("message", async ({ data }) => {
-  if (data && data.type === "CLIENT_CLOSED") {
-    const clients = await sw.clients.matchAll({
-      includeUncontrolled: true,
-      type: "window",
-    });
+sw.addEventListener(
+  "message",
+  async ({ data }: { data?: { type: string } }) => {
+    if (data && data.type === "CLIENT_CLOSED") {
+      const clients = await sw.clients.matchAll({
+        includeUncontrolled: true,
+        type: "window",
+      });
 
-    if (!clients || !clients.length || clients.length === 1) {
-      sw.registration.unregister();
+      if (!clients || !clients.length || clients.length === 1) {
+        sw.registration.unregister();
+      }
     }
   }
-});
+);
 
 function sendToClient(
   client: Client,
-  message: object
+  message: unknown
 ): Promise<{ type: string; response: { body: string; status: number } }> {
   return new Promise((resolve) => {
     const channel = new MessageChannel();

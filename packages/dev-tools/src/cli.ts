@@ -98,13 +98,13 @@ function build() {
 
 pickCommand(
   {
-    ["check-types"]: checkTypes,
+    "check-types": checkTypes,
     lint,
     test,
-    ["int-test"]: intTest,
+    "int-test": intTest,
     storybook,
     start,
-    ["build-lib"]: buildLib,
+    "build-lib": buildLib,
     build,
     ci: runCI,
   },

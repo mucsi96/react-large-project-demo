@@ -2,7 +2,7 @@ import { resolve } from "path";
 
 export const eslintConfig = resolve(__dirname, "../config/.eslintrc.json");
 
-export function setupEslintParser(root: string) {
+export function setupEslintParser(root: string): Record<string, unknown> {
   return {
     files: ["*.ts", "*.tsx"],
     parserOptions: {

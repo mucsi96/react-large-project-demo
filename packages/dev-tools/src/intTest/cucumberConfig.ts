@@ -48,22 +48,24 @@ BeforeStep(({ pickle }) => {
   currentPickle = pickle;
 });
 
-AfterStep(async function (this: IWorldOptions, { result }) {
+AfterStep(function (this: IWorldOptions, { result }) {
   if (result.status === Status.FAILED) {
     const path = getScreenshotName();
-    await page.screenshot({
-      path,
-    });
-    await this.attach(readFileSync(path), "image/png");
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    page
+      .screenshot({
+        path,
+      })
+      .then(() => this.attach(readFileSync(path), "image/png"));
   }
 });
 
 export function getTestContext(): {
-  fileName: string;
-  testName: string;
+  fileName?: string | null;
+  testName?: string | null;
 } {
   return {
-    fileName: currentPickle.uri!,
-    testName: currentPickle.name!,
+    fileName: currentPickle.uri,
+    testName: currentPickle.name,
   };
 }

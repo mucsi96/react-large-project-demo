@@ -5,7 +5,13 @@ export const WaitForMockApi: FC = ({ children }) => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    enableMockApi().then(() => setReady(true));
+    enableMockApi()
+      .then(() => setReady(true))
+      .catch((error) =>
+        setReady(() => {
+          throw error;
+        })
+      );
   }, []);
 
   if (!ready) {

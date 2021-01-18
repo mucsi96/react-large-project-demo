@@ -3,9 +3,18 @@ import { findMatchingMock, getParams, getQuery } from "./utils";
 
 let mocks: Mock[] = [];
 
-export async function enableMockApi() {
-  const mockApiServiceWorker = require("file-loader!dev-tools/lib/mockApi/mockApiServiceWorker")
-    .default;
+type RawRequest = {
+  url: string;
+  method: MockMethod;
+  body: string;
+  headers: Record<string, string | string[]>;
+};
+
+export async function enableMockApi(): Promise<void> {
+  // eslint-disable-next-line import/no-webpack-loader-syntax, @typescript-eslint/no-var-requires
+  const mockApiServiceWorker = (require("file-loader!dev-tools/lib/mockApi/mockApiServiceWorker") as {
+    default: string;
+  }).default;
 
   navigator.serviceWorker
     .register(mockApiServiceWorker, { scope: "./" })
@@ -19,9 +28,15 @@ export async function enableMockApi() {
     }
   });
 
-  navigator.serviceWorker.onmessage = async ({ data, ports }) => {
+  navigator.serviceWorker.onmessage = async ({
+    data,
+    ports,
+  }: {
+    data?: { type?: string; request: RawRequest };
+    ports: ReadonlyArray<MessagePort>;
+  }) => {
     if (data && data.type === "REQUEST") {
-      handleRequest({ ...data.request, port: ports[0], mocks });
+      return handleRequest({ ...data.request, port: ports[0], mocks });
     }
   };
 
@@ -85,7 +100,7 @@ export async function createMockResponse({
   method: MockMethod;
   body: string;
   headers: Record<string, string | string[]>;
-}) {
+}): Promise<{ body: unknown; status: number }> {
   let status = 200;
   let delay: number | undefined;
   let mockError = false;
@@ -95,7 +110,7 @@ export async function createMockResponse({
       url: url.pathname,
       method,
       headers,
-      body: body && JSON.parse(body),
+      body: body && (JSON.parse(body) as unknown),
       params: getParams(match, mock),
       query: getQuery(url.searchParams),
     },
