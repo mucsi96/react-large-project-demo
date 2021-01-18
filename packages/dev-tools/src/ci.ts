@@ -3,7 +3,7 @@ import { readdirSync } from "fs";
 import { resolve } from "path";
 import { runPackageBinary } from "./utils";
 
-export function run() {
+export function run(): void {
   const [, , , headRef, baseRef] = process.argv;
 
   const packages: string[] = getPackages();
@@ -57,7 +57,11 @@ function getPackageDependencies(packages: string[]) {
     const {
       dependencies = {},
       devDependencies = {},
-    } = require(`${name}/package.json`);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+    } = require(`${name}/package.json`) as {
+      dependencies: Record<string, string>;
+      devDependencies: Record<string, string>;
+    };
     return {
       name,
       dependencies: [
@@ -73,7 +77,7 @@ function getAffectedPackages(
   packageDepndencies: { name: string; dependencies: string[] }[]
 ) {
   let lastSize = 0;
-  let affectedPackages = new Set(changedPackages);
+  const affectedPackages = new Set(changedPackages);
 
   while (lastSize !== affectedPackages.size) {
     lastSize = affectedPackages.size;

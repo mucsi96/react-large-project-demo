@@ -19,7 +19,6 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build dev-tools
-        run: yarn build
-        working-directory: packages/dev-tools
+        run: yarn run --scope dev-tools build
       - name: Run checks
         run: yarn ci "$GITHUB_SHA" "$GITHUB_BASE_REF"
