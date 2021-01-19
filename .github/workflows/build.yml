@@ -23,11 +23,9 @@ jobs:
       - name: Build dev-tools
         run: yarn build
         working-directory: packages/dev-tools
-      - name: Bootstrap
-        run: npx lerna bootstrap
       - name: Run push checks
         if: ${{ github.event_name == 'push' }}
-        run: npx lerna run ci
+        run: yarn qa
       - name: Run pull request checks
         if: ${{ github.event_name == 'pull_request' }}
-        run: npx lerna run ci --since "origin/$GITHUB_BASE_REF"
+        run: yarn qa --since "origin/$GITHUB_BASE_REF"
