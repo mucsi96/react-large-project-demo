@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import { join, resolve } from "path";
 import { exit } from "process";
 
@@ -10,8 +11,11 @@ export function runPackageBinary({
   binaryName?: string;
   args: string[];
 }): void {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const packageJson = require(`${packageName}/package.json`) as {
+  const packageJson = JSON.parse(
+    readFileSync(resolve(require.resolve(packageName), "package.json"), {
+      encoding: "utf8",
+    })
+  ) as {
     bin: string | Record<string, string>;
   };
   const binaryPath = binaryName
