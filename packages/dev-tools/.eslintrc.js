@@ -1,6 +1,11 @@
-const { eslintConfig, setupEslintParser } = require("dev-tools");
-
 module.exports = {
-  extends: eslintConfig,
-  overrides: [setupEslintParser(__dirname)],
+  extends: "./config/.eslintrc.json",
+  overrides: [
+    {
+      files: ["*.ts", "*.tsx"],
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+    },
+  ],
 };

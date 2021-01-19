@@ -14,11 +14,11 @@
   },
   "scripts": {
     "lint": "node lib/cli.js lint",
-    "check-types": "node lib/cli.js check-types",
+    "check-types": "node lib/cli.js check-types --no-emit",
     "build": "del-cli lib && tsc --declaration --outDir lib",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",
-    "ci": "npm-run-all lint check-types"
+    "qa": "yarn lint"
   },
   "dependencies": {
     "@storybook/addon-essentials": "6.1.11",
@@ -60,6 +60,8 @@
     "jest-snapshot": "^26.6.2",
     "puppeteer": "^5.5.0",
     "minimist": "1.2.5",
-    "lerna": "3.22.1"
+    "lerna": "3.22.1",
+    "react": "16.13.1",
+    "@types/react": "17.0.0"
   }
 }
