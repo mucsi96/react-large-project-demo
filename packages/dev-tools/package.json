@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "bin": "./lib/cli.js",
+  "bin": "./bin.js",
   "files": [
     "lib",
     "config"
@@ -13,12 +13,12 @@
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "lint": "dev-tools lint",
-    "check-types": "dev-tools check-types",
+    "lint": "eslint src",
+    "check-types": "tsc --no-emit",
     "build": "del-cli lib && tsc --declaration --outDir lib",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",
-    "ci": "npm-run-all lint check-types build"
+    "qa": "npm-run-all lint build"
   },
   "dependencies": {
     "@storybook/addon-essentials": "6.1.11",
@@ -47,7 +47,7 @@
     "postcss": "8.1.8",
     "tslib": "2.1.0",
     "react-app-rewired": "2.1.8",
-    "react-scripts": "4.0.0",
+    "react-scripts": "4.0.1",
     "babel-jest": "26.6.3",
     "babel-loader": "8.1.0",
     "eslint-config-react-app": "6.0.0",
@@ -60,6 +60,9 @@
     "jest-snapshot": "^26.6.2",
     "puppeteer": "^5.5.0",
     "minimist": "1.2.5",
-    "lerna": "3.22.1"
+    "lerna": "3.22.1",
+    "react": "16.13.1",
+    "@types/react": "17.0.0",
+    "ts-node": "9.1.1"
   }
 }

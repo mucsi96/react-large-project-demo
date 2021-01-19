@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import { join, resolve } from "path";
 import { exit } from "process";
 
@@ -9,12 +10,14 @@ export function runPackageBinary({
   packageName: string;
   binaryName?: string;
   args: string[];
-}) {
-  const packageJson = require(`${packageName}/package.json`);
-  const binaryPath = binaryName ? packageJson.bin[binaryName] : packageJson.bin;
+}): void {
+  const packageJson = getPackageJson(packageName);
+  const binaryPath = binaryName
+    ? (packageJson.bin as Record<string, string>)[binaryName]
+    : packageJson.bin;
 
   if (typeof binaryPath !== "string") {
-    console.error(`Wrong binaryPath ${binaryPath} in package ${packageName}`);
+    console.error(`Wrong binaryPath in package ${packageName}`);
     exit(1);
   }
 
@@ -27,7 +30,26 @@ export function runPackageBinary({
   require(join(packageName, binaryPath));
 }
 
-export function runReactScripts(script: string, args: string[] = []) {
+function getPackageJson(packageName: string) {
+  const packagePathRegex = new RegExp(
+    `^.*[\\\\/]node_modules[\\\\/]${packageName}[\\\\/]`
+  );
+  const packagePath = packagePathRegex.exec(require.resolve(packageName))?.[0];
+
+  if (!packagePath) {
+    throw new Error(`Cannot resolve package path for ${packageName}`);
+  }
+
+  return JSON.parse(
+    readFileSync(resolve(packagePath, "package.json"), {
+      encoding: "utf8",
+    })
+  ) as {
+    bin: string | Record<string, string>;
+  };
+}
+
+export function runReactScripts(script: string, args: string[] = []): void {
   process.env.BROWSERSLIST_CONFIG = resolve(
     __dirname,
     "../config/.browserslistrc"
@@ -46,7 +68,7 @@ export function runReactScripts(script: string, args: string[] = []) {
 }
 
 export function pickCommand(
-  commands: Record<string, Function>,
+  commands: Record<string, () => void>,
   command: string
 ): void {
   const commandFunction = commands[command];

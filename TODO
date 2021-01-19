@@ -1,5 +1,9 @@
+- Fix CI
+- Add dependency update
+- Run integration test on CI
+- Add integration test to app
+- Add mock switching
 - Add TypeScript Project References https://www.typescriptlang.org/docs/handbook/project-references.html
 - Add testing helpers like `asMock` and `mockPromise`
-- Add CI support with lerna
 - Add readme
 - Add presentation

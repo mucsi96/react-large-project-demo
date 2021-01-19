@@ -1,7 +1,5 @@
-#!/usr/bin/env node
 import del from "del";
 import { resolve } from "path";
-import { run as runCI } from "./ci";
 import { pickCommand, runPackageBinary, runReactScripts } from "./utils";
 
 function checkTypes() {
@@ -50,17 +48,17 @@ function intTest() {
     binaryName: "cucumber-js",
     args: [
       "--require-module",
-      "ts-node/register",
+      "dev-tools/lib/intTest/enableTypeScript",
       "--require",
       "dev-tools/lib/intTest/cucumberConfig",
       "--require",
-      "stepDefinitions/**/*.ts",
+      "test/stepDefinitions/**/*.ts",
       "--publish-quiet",
       "--format",
       "progress",
       "--format",
       "html:reports/cucumber_report.html",
-      "features/**/*.feature",
+      "test/features/**/*.feature",
     ],
   });
 }
@@ -98,15 +96,14 @@ function build() {
 
 pickCommand(
   {
-    ["check-types"]: checkTypes,
+    "check-types": checkTypes,
     lint,
     test,
-    ["int-test"]: intTest,
+    "int-test": intTest,
     storybook,
     start,
-    ["build-lib"]: buildLib,
+    "build-lib": buildLib,
     build,
-    ci: runCI,
   },
   process.argv[2]
 );

@@ -1,11 +1,4 @@
 {
   "extends": "dev-tools/config/tsconfig.json",
-  "include": [
-    "src"
-  ],
-  "compilerOptions": {
-    "allowJs": true,
-    "module": "esnext",
-    "jsx": "react-jsx"
-  }
+  "include": ["src", "test/stepDefinitions"]
 }

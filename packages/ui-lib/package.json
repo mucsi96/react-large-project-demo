@@ -19,14 +19,14 @@
     "start": "dev-tools storybook",
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch",
-    "ci": "npm-run-all lint check-types test int:test build"
+    "qa": "npm-run-all lint check-types test build"
   },
   "dependencies": {
     "classnames": "2.2.6"
   },
   "peerDependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   },
   "devDependencies": {
     "dev-tools": "1.0.0",

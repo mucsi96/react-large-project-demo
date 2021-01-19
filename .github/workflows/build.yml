@@ -6,17 +6,23 @@ on:
       - master
   pull_request:
     branches:
-      - master
+      - "**"
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
           node-version: "12"
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Run checks
-        run: yarn ci
+      - name: Run push checks
+        if: ${{ github.event_name == 'push' }}
+        run: yarn qa
+      - name: Run pull request checks
+        if: ${{ github.event_name == 'pull_request' }}
+        run: yarn qa --since "origin/$GITHUB_BASE_REF"

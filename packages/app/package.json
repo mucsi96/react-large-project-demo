@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
     "ui-lib": "^1.0.0"
   },
   "devDependencies": {
@@ -17,9 +17,9 @@
     "lint": "dev-tools lint",
     "check-types": "dev-tools check-types",
     "test": "dev-tools test",
-    "test:watch": "dev-tools test --awatch",
+    "test:watch": "dev-tools test --watch",
     "start": "dev-tools start",
     "build": "dev-tools build",
-    "ci": "npm-run-all lint check-types test build"
+    "qa": "npm-run-all lint check-types test build"
   }
 }

@@ -3,5 +3,5 @@ import expect from "expect";
 
 Then("I see the list of friends", async () => {
   await page.waitForSelector("#root ul");
-  await expect(await getDataSnapshot("#root")).toMatchSnapshot();
+  expect(await getDataSnapshot("#root")).toMatchSnapshot();
 });

@@ -25,7 +25,9 @@ exports[`renders learn react link 1`] = `
       rel="noopener noreferrer"
       target="_blank"
     >
-      <Button>
+      <Button
+        primary={true}
+      >
         Learn React
       </Button>
     </a>

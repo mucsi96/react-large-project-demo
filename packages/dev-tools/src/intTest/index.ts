@@ -3,7 +3,7 @@ import "./snapshot";
 
 const context: { browser?: Browser; page?: Page } = {};
 
-export async function start() {
+export async function start(): Promise<void> {
   context.browser = await launch({
     headless: false,
     args: ["--disable-gpu", "--no-sandbox"],
@@ -13,7 +13,7 @@ export async function start() {
   context.page = pages[0];
 }
 
-export async function stop() {
+export async function stop(): Promise<void> {
   const pages = (await context.browser?.pages()) ?? [];
   await Promise.all(pages.map((page) => page.close()));
   await context.browser?.close();
@@ -22,8 +22,8 @@ export async function stop() {
 export const page = new Proxy(
   {},
   {
-    get: function (_target, name) {
-      return (context.page as any)[name];
+    get: function (_target, name: string) {
+      return ((context.page as unknown) as Record<string, Page>)[name];
     },
   }
 ) as Page;
@@ -31,8 +31,8 @@ export const page = new Proxy(
 export const browser = new Proxy(
   {},
   {
-    get: function (_target, name) {
-      return (context.browser as any)[name];
+    get: function (_target, name: string) {
+      return ((context.browser as unknown) as Record<string, Browser>)[name];
     },
   }
 ) as Browser;

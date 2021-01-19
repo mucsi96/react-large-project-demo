@@ -1,7 +1,11 @@
 import { Key, pathToRegexp } from "path-to-regexp";
 import { Mock, MockWithRegexp } from "./types";
 
-export function findMatchingMock(mocks: Mock[], url: URL, method: string) {
+export function findMatchingMock(
+  mocks: Mock[],
+  url: URL,
+  method: string
+): { match: RegExpExecArray | null; mock: MockWithRegexp | null } {
   const mock = mocks
     .map((mock) => {
       const keys: Key[] = [];
@@ -21,7 +25,10 @@ export function findMatchingMock(mocks: Mock[], url: URL, method: string) {
   return { match, mock };
 }
 
-export function getParams(match: RegExpExecArray, mock: MockWithRegexp) {
+export function getParams(
+  match: RegExpExecArray,
+  mock: MockWithRegexp
+): Record<string, string> {
   return match.reduce((acc, val, i) => {
     const prop = mock.keys[i - 1];
 
@@ -37,7 +44,9 @@ export function getParams(match: RegExpExecArray, mock: MockWithRegexp) {
   }, {} as Record<string, string>);
 }
 
-export function getQuery(searchParams: URLSearchParams) {
+export function getQuery(
+  searchParams: URLSearchParams
+): Record<string, string | string[]> {
   const query = {} as Record<string, string | string[]>;
 
   searchParams.forEach((value, name) => {
