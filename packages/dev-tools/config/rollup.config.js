@@ -29,7 +29,12 @@ const config = {
   ],
   plugins: [
     typescript({
-      exclude: ["**/*.stories.tsx", "**/*.spec.ts", "**/*.spec.tsx"],
+      exclude: [
+        "**/*.stories.tsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "./test/**/*",
+      ],
       declaration: true,
       declarationDir: dirname(packageJson.types),
       rootDir: "src",

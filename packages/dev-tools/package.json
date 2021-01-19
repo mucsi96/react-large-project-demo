@@ -13,12 +13,12 @@
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "lint": "node lib/cli.js lint",
-    "check-types": "node lib/cli.js check-types --no-emit",
+    "lint": "eslint src",
+    "check-types": "tsc --no-emit",
     "build": "del-cli lib && tsc --declaration --outDir lib",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",
-    "qa": "yarn lint"
+    "qa": "npm-run-all lint build"
   },
   "dependencies": {
     "@storybook/addon-essentials": "6.1.11",

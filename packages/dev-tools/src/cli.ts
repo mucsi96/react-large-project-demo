@@ -52,13 +52,13 @@ function intTest() {
       "--require",
       "dev-tools/lib/intTest/cucumberConfig",
       "--require",
-      "stepDefinitions/**/*.ts",
+      "test/stepDefinitions/**/*.ts",
       "--publish-quiet",
       "--format",
       "progress",
       "--format",
       "html:reports/cucumber_report.html",
-      "features/**/*.feature",
+      "test/features/**/*.feature",
     ],
   });
 }
