@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import del from "del";
 import { resolve } from "path";
 import { pickCommand, runPackageBinary, runReactScripts } from "./utils";
@@ -49,7 +48,7 @@ function intTest() {
     binaryName: "cucumber-js",
     args: [
       "--require-module",
-      "ts-node/register",
+      "dev-tools/lib/intTest/enableTypeScript",
       "--require",
       "dev-tools/lib/intTest/cucumberConfig",
       "--require",

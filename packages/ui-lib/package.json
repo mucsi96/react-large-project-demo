@@ -19,7 +19,7 @@
     "start": "dev-tools storybook",
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch",
-    "qa": "npm-run-all lint check-types test int:test build"
+    "qa": "npm-run-all lint check-types test build"
   },
   "dependencies": {
     "classnames": "2.2.6"

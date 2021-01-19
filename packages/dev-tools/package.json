@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "bin": "./lib/cli.js",
+  "bin": "./bin.js",
   "files": [
     "lib",
     "config"
@@ -62,6 +62,7 @@
     "minimist": "1.2.5",
     "lerna": "3.22.1",
     "react": "16.13.1",
-    "@types/react": "17.0.0"
+    "@types/react": "17.0.0",
+    "ts-node": "9.1.1"
   }
 }

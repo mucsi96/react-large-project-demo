@@ -1,1 +1,1 @@
-export * from "./components";
+import "./setupApiMocks";

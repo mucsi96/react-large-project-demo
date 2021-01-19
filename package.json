@@ -14,5 +14,9 @@
   },
   "scripts": {
     "qa": "lerna run qa"
+  },
+  "resolutions": {
+    "node-notifier": "8.0.0",
+    "es-abstract": "1.18.0-next.1"
   }
 }

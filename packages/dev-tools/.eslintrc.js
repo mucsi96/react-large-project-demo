@@ -1,10 +1,12 @@
+const { resolve } = require("path");
+
 module.exports = {
-  extends: "./config/.eslintrc.json",
+  extends: resolve(__dirname, "config/.eslintrc.json"),
   overrides: [
     {
       files: ["*.ts", "*.tsx"],
       parserOptions: {
-        project: "./tsconfig.json",
+        project: resolve(__dirname, "tsconfig.json"),
       },
     },
   ],
