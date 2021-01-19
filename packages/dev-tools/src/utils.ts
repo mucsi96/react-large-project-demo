@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { join, resolve } from "path";
+import { join, resolve, sep } from "path";
 import { exit } from "process";
 
 export function runPackageBinary({
@@ -11,13 +11,7 @@ export function runPackageBinary({
   binaryName?: string;
   args: string[];
 }): void {
-  const packageJson = JSON.parse(
-    readFileSync(resolve(require.resolve(packageName), "package.json"), {
-      encoding: "utf8",
-    })
-  ) as {
-    bin: string | Record<string, string>;
-  };
+  const packageJson = getPackageJson(packageName);
   const binaryPath = binaryName
     ? (packageJson.bin as Record<string, string>)[binaryName]
     : packageJson.bin;
@@ -34,6 +28,25 @@ export function runPackageBinary({
   ];
 
   require(join(packageName, binaryPath));
+}
+
+function getPackageJson(packageName: string) {
+  const packagePathRegex = new RegExp(
+    `^.*[\\\\/]node_modules[\\\\/]${packageName}[\\\\/]`
+  );
+  const packagePath = packagePathRegex.exec(require.resolve(packageName))?.[0];
+
+  if (!packagePath) {
+    throw new Error(`Cannot resolve package path for ${packageName}`);
+  }
+
+  return JSON.parse(
+    readFileSync(resolve(packagePath, "package.json"), {
+      encoding: "utf8",
+    })
+  ) as {
+    bin: string | Record<string, string>;
+  };
 }
 
 export function runReactScripts(script: string, args: string[] = []): void {
