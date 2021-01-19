@@ -1,5 +1,5 @@
 import { readFileSync } from "fs";
-import { join, resolve, sep } from "path";
+import { join, resolve } from "path";
 import { exit } from "process";
 
 export function runPackageBinary({
