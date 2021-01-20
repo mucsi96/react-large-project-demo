@@ -14,7 +14,7 @@
   },
   "scripts": {
     "lint": "eslint src --max-warnings 0",
-    "check-types": "tsc --no-emit",
+    "check-types": "tsc --noEmit",
     "build": "del-cli lib && tsc --declaration --outDir lib",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",
