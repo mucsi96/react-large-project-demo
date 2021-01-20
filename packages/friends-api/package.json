@@ -15,7 +15,8 @@
     "test:watch": "yarn test --watch",
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch",
-    "qa": "npm-run-all lint check-types test build"
+    "qa": "npm-run-all lint check-types test",
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "dev-tools": "1.0.0",

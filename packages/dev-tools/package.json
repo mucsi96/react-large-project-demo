@@ -18,7 +18,8 @@
     "build": "del-cli lib && tsc --declaration --outDir lib",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",
-    "qa": "npm-run-all lint build"
+    "qa": "npm-run-all lint check-types",
+    "prepare": "yarn build"
   },
   "dependencies": {
     "@storybook/addon-essentials": "6.1.11",
