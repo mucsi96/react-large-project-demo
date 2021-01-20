@@ -1,21 +1,23 @@
-import { Meta, Story } from "@storybook/react";
-import React, { ReactNode } from "react";
-import { Button, ButtonProps } from "./Button";
+import { Meta, Story } from '@storybook/react';
+import React, { ReactNode } from 'react';
+import { Button, ButtonProps } from './Button';
 
-export default { title: "Button", component: Button } as Meta;
+type StoryProps = ButtonProps | { children: ReactNode };
 
-const Template: Story<ButtonProps | { children: ReactNode }> = (args) => (
-  <Button {...args} />
-);
+export default { title: 'Button', component: Button } as Meta;
 
-export const withText = Template.bind({});
+const Template: Story<StoryProps> = (args) => <Button {...args} />;
 
-withText.args = {
-  children: "Hello Button",
-};
+function createStory(args: StoryProps) {
+  const story = Template.bind({});
+  story.args = args;
+  return story;
+}
 
-export const withEmoji = Template.bind({});
+export const withText = createStory({
+  children: 'Hello Button',
+});
 
-withEmoji.args = {
-  children: "😀 😎 👍 💯",
-};
+export const withEmoji = createStory({
+  children: '😀 😎 👍 💯',
+});
