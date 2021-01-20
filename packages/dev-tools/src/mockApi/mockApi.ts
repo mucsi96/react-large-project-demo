@@ -1,5 +1,5 @@
-import { Mock, MockMethod, MockWithRegexp } from "./types";
-import { findMatchingMock, getParams, getQuery } from "./utils";
+import { Mock, MockMethod, MockWithRegexp } from './types';
+import { findMatchingMock, getParams, getQuery } from './utils';
 
 let mocks: Mock[] = [];
 
@@ -10,20 +10,15 @@ type RawRequest = {
   headers: Record<string, string | string[]>;
 };
 
-export async function enableMockApi(): Promise<void> {
-  // eslint-disable-next-line import/no-webpack-loader-syntax, @typescript-eslint/no-var-requires
-  const mockApiServiceWorker = (require("file-loader!dev-tools/lib/mockApi/mockApiServiceWorker") as {
-    default: string;
-  }).default;
-
+export async function enableMockApi(serviceWorkerPath: string): Promise<void> {
   navigator.serviceWorker
-    .register(mockApiServiceWorker, { scope: "./" })
-    .catch((err) => console.error("error registering sw", err));
+    .register(serviceWorkerPath, { scope: './' })
+    .catch((err) => console.error('error registering sw', err));
 
-  window.addEventListener("beforeunload", () => {
+  window.addEventListener('beforeunload', () => {
     if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({
-        type: "CLIENT_CLOSED",
+        type: 'CLIENT_CLOSED',
       });
     }
   });
@@ -35,7 +30,7 @@ export async function enableMockApi(): Promise<void> {
     data?: { type?: string; request: RawRequest };
     ports: ReadonlyArray<MessagePort>;
   }) => {
-    if (data && data.type === "REQUEST") {
+    if (data && data.type === 'REQUEST') {
       return handleRequest({ ...data.request, port: ports[0], mocks });
     }
   };
@@ -67,7 +62,7 @@ async function handleRequest({
 
   if (!match || !mock) {
     return port.postMessage({
-      type: "MOCK_NOT_FOUND",
+      type: 'MOCK_NOT_FOUND',
     });
   }
 
@@ -82,7 +77,7 @@ async function handleRequest({
 
   port.postMessage({
     response,
-    type: "MOCK_SUCCESS",
+    type: 'MOCK_SUCCESS',
   });
 }
 
@@ -142,7 +137,7 @@ export async function createMockResponse({
 
   return {
     body: mockHTML
-      ? "<html></html>"
+      ? '<html></html>'
       : responseBody && JSON.stringify(responseBody),
     status: mockError ? 500 : status,
   };
