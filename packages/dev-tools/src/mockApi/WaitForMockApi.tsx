@@ -15,7 +15,7 @@ export const WaitForMockApi: FC<{ serviceWorkerPath: string }> = ({
           throw error;
         })
       );
-  }, []);
+  }, [serviceWorkerPath]);
 
   if (!ready) {
     return null;
