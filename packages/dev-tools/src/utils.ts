@@ -31,6 +31,16 @@ export function runPackageBinary({
 }
 
 function getPackageJson(packageName: string) {
+  return JSON.parse(
+    readFileSync(resolve(getPackagePath(packageName), 'package.json'), {
+      encoding: 'utf8',
+    })
+  ) as {
+    bin: string | Record<string, string>;
+  };
+}
+
+function getPackagePath(packageName: string) {
   const searchSubPath = ['node_modules', ...packageName.split(/[\\/]/)];
   const entryPointPath = require.resolve(packageName).split(/[\\/]/);
   const matchIndex = entryPointPath.findIndex(
@@ -48,14 +58,7 @@ function getPackageJson(packageName: string) {
   const packagePath = entryPointPath
     .slice(0, matchIndex + searchSubPath.length)
     .join(sep);
-
-  return JSON.parse(
-    readFileSync(resolve(packagePath, 'package.json'), {
-      encoding: 'utf8',
-    })
-  ) as {
-    bin: string | Record<string, string>;
-  };
+  return packagePath;
 }
 
 export function runReactScripts(script: string, args: string[] = []): void {
