@@ -1,17 +1,13 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import React, { FC } from "react";
-
-async function loadFriends(): Promise<string[]> {
-  const response = await fetch("/friends");
-  return (await response.json()) as string[];
-}
+import { useEffect } from 'react';
+import { useState } from 'react';
+import React, { FC } from 'react';
+import { Friend, getFriends } from 'friends-api';
 
 export const FriendsList: FC = () => {
-  const [friends, setFriends] = useState<string[]>();
+  const [friends, setFriends] = useState<Friend[]>();
 
   useEffect(() => {
-    loadFriends()
+    getFriends()
       .then(setFriends)
       .catch((err) =>
         setFriends(() => {
@@ -21,16 +17,19 @@ export const FriendsList: FC = () => {
   }, []);
 
   if (!friends) {
-    return <span>{"Loading..."}</span>;
+    return <span>{'Loading...'}</span>;
   }
 
   return (
     <ul>
-      {friends.map((friend) => (
-        <li key={friend} data-name="name">
-          {friend}
-        </li>
-      ))}
+      {friends.map(({ firstName, lastName }) => {
+        const friend = [firstName, lastName].join(' ');
+        return (
+          <li key={friend} data-name="name">
+            {friend}
+          </li>
+        );
+      })}
     </ul>
   );
 };

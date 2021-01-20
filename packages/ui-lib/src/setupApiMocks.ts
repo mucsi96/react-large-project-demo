@@ -1,8 +1,5 @@
-import { registerApiMocks } from "dev-tools";
+import { setupApiMocks as setupFriendsApiMocks } from 'friends-api';
 
-registerApiMocks([
-  {
-    path: "/friends",
-    callback: () => ["Tom", "John", "Alex"],
-  },
-]);
+export function setupApiMocks(): void {
+  setupFriendsApiMocks();
+}

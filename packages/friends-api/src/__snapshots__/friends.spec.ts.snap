@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`friends getFriends fetches the list of friends 1`] = `
+Array [
+  Object {
+    "firstName": "Alyson",
+    "lastName": "Donnelly",
+  },
+  Object {
+    "firstName": "Carlee",
+    "lastName": "Kreiger",
+  },
+  Object {
+    "firstName": "Enrico",
+    "lastName": "Pouros",
+  },
+]
+`;

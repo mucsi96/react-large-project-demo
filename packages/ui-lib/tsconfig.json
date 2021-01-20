@@ -1,4 +1,4 @@
 {
   "extends": "dev-tools/config/tsconfig.json",
-  "include": ["src", "test/stepDefinitions"]
+  "include": ["src", "test/stepDefinitions", "../friends-api/setupApiMocks.ts"]
 }
