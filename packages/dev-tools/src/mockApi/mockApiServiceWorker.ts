@@ -3,22 +3,24 @@
 // eslint-disable-next-line no-restricted-globals
 const sw = (self as unknown) as ServiceWorkerGlobalScope;
 
-sw.addEventListener("install", () => {
+sw.addEventListener('install', () => {
   sw.skipWaiting();
 });
 
-sw.addEventListener("activate", (event) => {
+sw.addEventListener('activate', (event) => {
   event.waitUntil(sw.clients.claim());
 });
 
-sw.addEventListener("fetch", (event) => {
+sw.addEventListener('fetch', (event) => {
   const { request, clientId } = event;
   const { destination, cache, mode } = request;
 
   if (
     !clientId ||
     destination ||
-    (cache === "only-if-cached" && mode !== "same-origin")
+    (cache === 'only-if-cached' && mode !== 'same-origin') ||
+    !request.url.startsWith('http') ||
+    request.url.includes('webpack')
   ) {
     return;
   }
@@ -27,12 +29,12 @@ sw.addEventListener("fetch", (event) => {
 });
 
 sw.addEventListener(
-  "message",
+  'message',
   async ({ data }: { data?: { type: string } }) => {
-    if (data && data.type === "CLIENT_CLOSED") {
+    if (data && data.type === 'CLIENT_CLOSED') {
       const clients = await sw.clients.matchAll({
         includeUncontrolled: true,
-        type: "window",
+        type: 'window',
       });
 
       if (!clients || !clients.length || clients.length === 1) {
@@ -68,7 +70,7 @@ async function createResponse(clientId: string, request: Request) {
   const headers = getHeaders(request);
 
   const { type, response } = await sendToClient(client, {
-    type: "REQUEST",
+    type: 'REQUEST',
     request: {
       url,
       method,
@@ -77,7 +79,7 @@ async function createResponse(clientId: string, request: Request) {
     },
   });
 
-  if (type !== "MOCK_SUCCESS") {
+  if (type !== 'MOCK_SUCCESS') {
     return getOriginalResponse();
   }
 

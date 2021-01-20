@@ -1,10 +1,5 @@
 import { getFriends } from './friends';
-
-const mockFriends = [
-  { firstName: 'Alyson', lastName: 'Donnelly' },
-  { firstName: 'Carlee', lastName: 'Kreiger' },
-  { firstName: 'Enrico', lastName: 'Pouros' },
-];
+import mockFriends from './mockFriends';
 
 describe('friends', () => {
   describe('getFriends', () => {

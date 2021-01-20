@@ -27,6 +27,7 @@ const config = {
       preserveModulesRoot: 'src',
     },
   ],
+  external: ['dev-tools'],
   plugins: [
     typescript({
       exclude: [
