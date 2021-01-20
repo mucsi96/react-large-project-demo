@@ -17,6 +17,7 @@
     "int:test:update": "yarn int:test --update",
     "int:test:debug": "yarn int:test --debug",
     "start": "dev-tools storybook",
+    "build:storybook": "dev-tools build-storybook",
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch",
     "qa": "npm-run-all lint check-types test",

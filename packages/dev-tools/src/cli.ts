@@ -1,5 +1,5 @@
 import del from 'del';
-import { resolve } from 'path';
+import { basename, resolve } from 'path';
 import { pickCommand, runPackageBinary, runReactScripts } from './utils';
 
 function checkTypes() {
@@ -92,6 +92,19 @@ function buildLib() {
   });
 }
 
+function buildStorybook() {
+  runPackageBinary({
+    packageName: '@storybook/react',
+    binaryName: 'build-storybook',
+    args: [
+      '--config-dir',
+      resolve(__dirname, '../config/.storybook'),
+      '-o',
+      resolve(__dirname, '../../../dist', basename(process.cwd())),
+    ],
+  });
+}
+
 function build() {
   del.sync([resolve(process.cwd(), 'build')]);
 
@@ -107,6 +120,7 @@ pickCommand(
     storybook,
     start,
     'build-lib': buildLib,
+    'build-storybook': buildStorybook,
     build,
   },
   process.argv[2]

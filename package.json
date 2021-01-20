@@ -14,7 +14,8 @@
   },
   "scripts": {
     "qa": "lerna run qa",
-    "prepare": "lerna run prepare"
+    "prepare": "lerna run prepare",
+    "prepare:deploy": "lerna run build:storybook"
   },
   "resolutions": {
     "node-notifier": "8.0.0",
