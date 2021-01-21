@@ -6,7 +6,7 @@ describe('friends', () => {
     it('fetches the list of friends', async () => {
       window.fetch = jest
         .fn()
-        .mockResolvedValueOnce({ json: () => mockFriends });
+        .mockResolvedValueOnce({ json: () => mockFriends, ok: true });
       const friends = await getFriends();
       expect(window.fetch).toHaveBeenCalledWith('/friends');
       expect(friends).toMatchSnapshot();
