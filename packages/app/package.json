@@ -19,6 +19,7 @@
     "lint": "dev-tools lint",
     "check-types": "dev-tools check-types",
     "test": "dev-tools test",
+    "test:update": "dev-tools test -u",
     "test:watch": "dev-tools test --watch",
     "start": "dev-tools start",
     "build": "dev-tools build",

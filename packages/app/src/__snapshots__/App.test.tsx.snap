@@ -30,6 +30,7 @@ exports[`renders learn react link 1`] = `
       >
         Learn React
       </Button>
+      <FriendsList />
     </a>
   </header>
 </div>
