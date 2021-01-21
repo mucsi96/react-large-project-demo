@@ -12,7 +12,8 @@ sw.addEventListener('activate', (event) => {
 sw.addEventListener('fetch', (event) => {
     const { request, clientId } = event;
     const url = new URL(request.url);
-    if (!clientId || !url.pathname.startsWith('/api/')) {
+    const basePathname = sw.location.pathname.slice(0, sw.location.pathname.lastIndexOf('/'));
+    if (!clientId || !url.pathname.startsWith(`${basePathname}/api/`)) {
         return;
     }
     return event.respondWith(createResponse(clientId, request));
