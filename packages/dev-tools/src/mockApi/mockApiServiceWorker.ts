@@ -13,11 +13,10 @@ sw.addEventListener('activate', (event) => {
 
 sw.addEventListener('fetch', (event) => {
   const { request, clientId } = event;
-  const { destination, cache, mode } = request;
+  const { cache, mode } = request;
 
   if (
     !clientId ||
-    destination ||
     (cache === 'only-if-cached' && mode !== 'same-origin') ||
     !request.url.startsWith('http') ||
     request.url.includes('webpack')
