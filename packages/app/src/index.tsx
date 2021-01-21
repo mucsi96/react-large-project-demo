@@ -7,7 +7,10 @@ import { WaitForMockApi } from 'dev-tools';
 
 let app = <App />;
 
-if (process.env.USE_MOCK_API || process.env.NODE_ENV === 'development') {
+if (
+  process.env.REACT_APP_USE_MOCK_API ||
+  process.env.NODE_ENV === 'development'
+) {
   setupApiMocks();
   // eslint-disable-next-line import/no-webpack-loader-syntax, @typescript-eslint/no-var-requires
   const serviceWorkerPath = (require('file-loader?name=[name].[ext]!dev-tools/lib/mockApi/mockApiServiceWorker') as {

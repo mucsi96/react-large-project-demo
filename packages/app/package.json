@@ -25,7 +25,7 @@
     "build": "dev-tools build",
     "qa": "npm-run-all lint check-types test build",
     "build:prop:app": "cross-env PUBLIC_URL=/react-large-project-demo/app-prod yarn build && cpr build ../../dist/app-prod",
-    "build:mock:app": "cross-env PUBLIC_URL=/react-large-project-demo/app-mock cross-env USE_MOCK_API=true yarn build && cpr build ../../dist/app-mock",
+    "build:mock:app": "cross-env PUBLIC_URL=/react-large-project-demo/app-mock cross-env REACT_APP_USE_MOCK_API=true yarn build && cpr build ../../dist/app-mock",
     "build:app": "yarn build:prop:app && yarn build:mock:app"
   }
 }
