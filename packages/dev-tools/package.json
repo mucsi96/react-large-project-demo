@@ -68,5 +68,8 @@
   },
   "devDependencies": {
     "webpack": "4.46.0"
+  },
+  "resolutions": {
+    "webpack": "4.46.0"
   }
 }
