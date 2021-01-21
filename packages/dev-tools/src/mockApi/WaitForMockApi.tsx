@@ -1,21 +1,18 @@
 import React, { FC, useState, useEffect } from 'react';
 import { enableMockApi } from './mockApi';
 
-export const WaitForMockApi: FC<{ serviceWorkerPath: string }> = ({
-  children,
-  serviceWorkerPath,
-}) => {
+export const WaitForMockApi: FC = ({ children }) => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    enableMockApi(serviceWorkerPath)
+    enableMockApi()
       .then(() => setReady(true))
       .catch((error) =>
         setReady(() => {
           throw error;
         })
       );
-  }, [serviceWorkerPath]);
+  }, []);
 
   if (!ready) {
     return null;

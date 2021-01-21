@@ -12,13 +12,8 @@ if (
   process.env.NODE_ENV === 'development'
 ) {
   setupApiMocks();
-  // eslint-disable-next-line import/no-webpack-loader-syntax, @typescript-eslint/no-var-requires
-  const serviceWorkerPath = (require('file-loader?name=[name].[ext]!dev-tools/lib/mockApi/mockApiServiceWorker') as {
-    default: string;
-  }).default;
-  app = (
-    <WaitForMockApi serviceWorkerPath={serviceWorkerPath}>{app}</WaitForMockApi>
-  );
+
+  app = <WaitForMockApi>{app}</WaitForMockApi>;
 }
 
 ReactDOM.render(

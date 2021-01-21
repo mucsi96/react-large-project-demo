@@ -10,9 +10,9 @@ type RawRequest = {
   headers: Record<string, string | string[]>;
 };
 
-export async function enableMockApi(serviceWorkerPath: string): Promise<void> {
+export async function enableMockApi(): Promise<void> {
   navigator.serviceWorker
-    .register(serviceWorkerPath, { scope: './' })
+    .register('mockApiServiceWorker.js', { scope: './' })
     .catch((err) => console.error('error registering sw', err));
 
   window.addEventListener('beforeunload', () => {
