@@ -5,5 +5,7 @@
 Demonstration for large scale React application in TypeScript
 
 [Live ui-lib storybook](https://mucsi96.github.io/react-large-project-demo/ui-lib)
+
 [Live mock app](https://mucsi96.github.io/react-large-project-demo/app-mock)
+
 [Live production app](https://mucsi96.github.io/react-large-project-demo/app-prod)
