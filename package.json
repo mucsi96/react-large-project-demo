@@ -15,7 +15,7 @@
   "scripts": {
     "qa": "lerna run qa",
     "prepare": "lerna run prepare",
-    "prepare:deploy": "lerna run build:storybook"
+    "prepare:deploy": "lerna run build:storybook && lerna run build:app"
   },
   "resolutions": {
     "node-notifier": "8.0.0",

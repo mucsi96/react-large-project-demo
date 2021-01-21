@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import { Button } from "ui-lib";
-import "./App.css";
-import logo from "./logo.svg";
+import React, { FC } from 'react';
+import { Button, FriendsList } from 'ui-lib';
+import './App.css';
+import logo from './logo.svg';
 
 const App: FC = () => (
   <div className="App">
@@ -17,6 +17,7 @@ const App: FC = () => (
         rel="noopener noreferrer"
       >
         <Button primary>Learn React</Button>
+        <FriendsList />
       </a>
     </header>
   </div>
