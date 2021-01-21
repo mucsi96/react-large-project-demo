@@ -1,0 +1,1 @@
+{"version":3,"file":"static/css/main.a5d60f2f.chunk.css","sources":["webpack:///src/components/Button/Button.module.scss"],"sourcesContent":[".primary {\n  background-color: chocolate;\n  color: white;\n  padding: 10px 20px;\n  border: 1px solid white;\n  border-radius: 10px;\n}\n\n.secondary {\n  background-color: lightskyblue;\n}\n"],"mappings":"AAAA;;","sourceRoot":""}
