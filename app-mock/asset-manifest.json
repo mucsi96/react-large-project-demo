@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/react-large-project-demo/app-mock,/static/css/main.7d180cbf.chunk.css",
-    "main.js": "/react-large-project-demo/app-mock,/static/js/main.b6b6b30e.chunk.js",
-    "main.js.map": "/react-large-project-demo/app-mock,/static/js/main.b6b6b30e.chunk.js.map",
-    "runtime-main.js": "/react-large-project-demo/app-mock,/static/js/runtime-main.d8bce945.js",
-    "runtime-main.js.map": "/react-large-project-demo/app-mock,/static/js/runtime-main.d8bce945.js.map",
-    "static/js/2.53200709.chunk.js": "/react-large-project-demo/app-mock,/static/js/2.53200709.chunk.js",
-    "static/js/2.53200709.chunk.js.map": "/react-large-project-demo/app-mock,/static/js/2.53200709.chunk.js.map",
-    "index.html": "/react-large-project-demo/app-mock,/index.html",
-    "mockApiServiceWorker.js": "/react-large-project-demo/app-mock,/mockApiServiceWorker.js",
-    "static/css/main.7d180cbf.chunk.css.map": "/react-large-project-demo/app-mock,/static/css/main.7d180cbf.chunk.css.map",
-    "static/js/2.53200709.chunk.js.LICENSE.txt": "/react-large-project-demo/app-mock,/static/js/2.53200709.chunk.js.LICENSE.txt",
-    "static/media/logo.2d27ead7.svg": "/react-large-project-demo/app-mock,/static/media/logo.2d27ead7.svg"
+    "main.css": "/react-large-project-demo/app-mock/static/css/main.7d180cbf.chunk.css",
+    "main.js": "/react-large-project-demo/app-mock/static/js/main.c9b965fa.chunk.js",
+    "main.js.map": "/react-large-project-demo/app-mock/static/js/main.c9b965fa.chunk.js.map",
+    "runtime-main.js": "/react-large-project-demo/app-mock/static/js/runtime-main.1809b6af.js",
+    "runtime-main.js.map": "/react-large-project-demo/app-mock/static/js/runtime-main.1809b6af.js.map",
+    "static/js/2.53200709.chunk.js": "/react-large-project-demo/app-mock/static/js/2.53200709.chunk.js",
+    "static/js/2.53200709.chunk.js.map": "/react-large-project-demo/app-mock/static/js/2.53200709.chunk.js.map",
+    "index.html": "/react-large-project-demo/app-mock/index.html",
+    "mockApiServiceWorker.js": "/react-large-project-demo/app-mock/mockApiServiceWorker.js",
+    "static/css/main.7d180cbf.chunk.css.map": "/react-large-project-demo/app-mock/static/css/main.7d180cbf.chunk.css.map",
+    "static/js/2.53200709.chunk.js.LICENSE.txt": "/react-large-project-demo/app-mock/static/js/2.53200709.chunk.js.LICENSE.txt",
+    "static/media/logo.2d27ead7.svg": "/react-large-project-demo/app-mock/static/media/logo.2d27ead7.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.d8bce945.js",
+    "static/js/runtime-main.1809b6af.js",
     "static/js/2.53200709.chunk.js",
     "static/css/main.7d180cbf.chunk.css",
-    "static/js/main.b6b6b30e.chunk.js"
+    "static/js/main.c9b965fa.chunk.js"
   ]
 }
