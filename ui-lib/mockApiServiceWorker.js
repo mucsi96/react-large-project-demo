@@ -1,1 +1,75 @@
-"use strict";const sw=self;function sendToClient(client,message){return new Promise(resolve=>{const channel=new MessageChannel;channel.port1.onmessage=event=>resolve(event.data),client.postMessage(message,[channel.port2])})}async function createResponse(clientId,request){const getOriginalResponse=()=>fetch(request),client=await sw.clients.get(clientId);if(!client)return getOriginalResponse();const{url:url,method:method}=request,body=await request.text(),headers=getHeaders(request),{type:type,response:response}=await sendToClient(client,{type:"REQUEST",request:{url:url,method:method,body:body,headers:headers}});return"MOCK_SUCCESS"!==type?getOriginalResponse():new Response(response.body,{status:response.status})}function getHeaders(request){const headers={};return request.headers.forEach((value,name)=>{Array.isArray(headers[name])?headers[name]=[...headers[name],value]:headers[name]?headers[name]=[headers[name],value]:headers[name]=value}),headers}sw.addEventListener("install",()=>{sw.skipWaiting()}),sw.addEventListener("activate",event=>{event.waitUntil(sw.clients.claim())}),sw.addEventListener("fetch",event=>{const{request:request,clientId:clientId}=event,url=new URL(request.url);if(clientId&&url.pathname.startsWith("/api/"))return event.respondWith(createResponse(clientId,request))}),sw.addEventListener("message",async({data:data})=>{if(data&&"CLIENT_CLOSED"===data.type){const clients=await sw.clients.matchAll({includeUncontrolled:!0,type:"window"});clients&&clients.length&&1!==clients.length||sw.registration.unregister()}});
+"use strict";
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+// eslint-disable-next-line no-restricted-globals
+const sw = self;
+sw.addEventListener('install', () => {
+    sw.skipWaiting();
+});
+sw.addEventListener('activate', (event) => {
+    event.waitUntil(sw.clients.claim());
+});
+sw.addEventListener('fetch', (event) => {
+    const { request, clientId } = event;
+    const url = new URL(request.url);
+    if (!clientId || !url.pathname.startsWith('/api/')) {
+        return;
+    }
+    return event.respondWith(createResponse(clientId, request));
+});
+sw.addEventListener('message', async ({ data }) => {
+    if (data && data.type === 'CLIENT_CLOSED') {
+        const clients = await sw.clients.matchAll({
+            includeUncontrolled: true,
+            type: 'window',
+        });
+        if (!clients || !clients.length || clients.length === 1) {
+            sw.registration.unregister();
+        }
+    }
+});
+function sendToClient(client, message) {
+    return new Promise((resolve) => {
+        const channel = new MessageChannel();
+        channel.port1.onmessage = (event) => resolve(event.data);
+        client.postMessage(message, [channel.port2]);
+    });
+}
+async function createResponse(clientId, request) {
+    const getOriginalResponse = () => fetch(request);
+    const client = await sw.clients.get(clientId);
+    if (!client) {
+        return getOriginalResponse();
+    }
+    const { url, method } = request;
+    const body = await request.text();
+    const headers = getHeaders(request);
+    const { type, response } = await sendToClient(client, {
+        type: 'REQUEST',
+        request: {
+            url,
+            method,
+            body,
+            headers,
+        },
+    });
+    if (type !== 'MOCK_SUCCESS') {
+        return getOriginalResponse();
+    }
+    return new Response(response.body, { status: response.status });
+}
+function getHeaders(request) {
+    const headers = {};
+    request.headers.forEach((value, name) => {
+        if (Array.isArray(headers[name])) {
+            headers[name] = [...headers[name], value];
+            return;
+        }
+        if (headers[name]) {
+            headers[name] = [headers[name], value];
+            return;
+        }
+        headers[name] = value;
+    });
+    return headers;
+}

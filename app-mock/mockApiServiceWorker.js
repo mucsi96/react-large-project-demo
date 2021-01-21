@@ -1,1 +1,75 @@
-"use strict";const sw=self;function sendToClient(e,t){return new Promise((s=>{const n=new MessageChannel;n.port1.onmessage=e=>s(e.data),e.postMessage(t,[n.port2])}))}async function createResponse(e,t){const s=()=>fetch(t),n=await sw.clients.get(e);if(!n)return s();const{url:a,method:r}=t,i=await t.text(),o=getHeaders(t),{type:c,response:d}=await sendToClient(n,{type:"REQUEST",request:{url:a,method:r,body:i,headers:o}});return"MOCK_SUCCESS"!==c?s():new Response(d.body,{status:d.status})}function getHeaders(e){const t={};return e.headers.forEach(((e,s)=>{Array.isArray(t[s])?t[s]=[...t[s],e]:t[s]?t[s]=[t[s],e]:t[s]=e})),t}sw.addEventListener("install",(()=>{sw.skipWaiting()})),sw.addEventListener("activate",(e=>{e.waitUntil(sw.clients.claim())})),sw.addEventListener("fetch",(e=>{const{request:t,clientId:s}=e,n=new URL(t.url);if(s&&n.pathname.startsWith("/api/"))return e.respondWith(createResponse(s,t))})),sw.addEventListener("message",(async({data:e})=>{if(e&&"CLIENT_CLOSED"===e.type){const e=await sw.clients.matchAll({includeUncontrolled:!0,type:"window"});e&&e.length&&1!==e.length||sw.registration.unregister()}}));
+"use strict";
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-floating-promises */
+// eslint-disable-next-line no-restricted-globals
+const sw = self;
+sw.addEventListener('install', () => {
+    sw.skipWaiting();
+});
+sw.addEventListener('activate', (event) => {
+    event.waitUntil(sw.clients.claim());
+});
+sw.addEventListener('fetch', (event) => {
+    const { request, clientId } = event;
+    const url = new URL(request.url);
+    if (!clientId || !url.pathname.startsWith('/api/')) {
+        return;
+    }
+    return event.respondWith(createResponse(clientId, request));
+});
+sw.addEventListener('message', async ({ data }) => {
+    if (data && data.type === 'CLIENT_CLOSED') {
+        const clients = await sw.clients.matchAll({
+            includeUncontrolled: true,
+            type: 'window',
+        });
+        if (!clients || !clients.length || clients.length === 1) {
+            sw.registration.unregister();
+        }
+    }
+});
+function sendToClient(client, message) {
+    return new Promise((resolve) => {
+        const channel = new MessageChannel();
+        channel.port1.onmessage = (event) => resolve(event.data);
+        client.postMessage(message, [channel.port2]);
+    });
+}
+async function createResponse(clientId, request) {
+    const getOriginalResponse = () => fetch(request);
+    const client = await sw.clients.get(clientId);
+    if (!client) {
+        return getOriginalResponse();
+    }
+    const { url, method } = request;
+    const body = await request.text();
+    const headers = getHeaders(request);
+    const { type, response } = await sendToClient(client, {
+        type: 'REQUEST',
+        request: {
+            url,
+            method,
+            body,
+            headers,
+        },
+    });
+    if (type !== 'MOCK_SUCCESS') {
+        return getOriginalResponse();
+    }
+    return new Response(response.body, { status: response.status });
+}
+function getHeaders(request) {
+    const headers = {};
+    request.headers.forEach((value, name) => {
+        if (Array.isArray(headers[name])) {
+            headers[name] = [...headers[name], value];
+            return;
+        }
+        if (headers[name]) {
+            headers[name] = [headers[name], value];
+            return;
+        }
+        headers[name] = value;
+    });
+    return headers;
+}
