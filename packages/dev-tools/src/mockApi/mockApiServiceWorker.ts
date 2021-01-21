@@ -13,14 +13,9 @@ sw.addEventListener('activate', (event) => {
 
 sw.addEventListener('fetch', (event) => {
   const { request, clientId } = event;
-  const { cache, mode } = request;
+  const url = new URL(request.url);
 
-  if (
-    !clientId ||
-    (cache === 'only-if-cached' && mode !== 'same-origin') ||
-    !request.url.startsWith('http') ||
-    request.url.includes('webpack')
-  ) {
+  if (!clientId || !url.pathname.startsWith('/api/')) {
     return;
   }
 

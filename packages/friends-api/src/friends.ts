@@ -4,7 +4,7 @@ export type Friend = {
 };
 
 export async function getFriends(): Promise<Friend[]> {
-  const response = await window.fetch('/friends');
+  const response = await window.fetch('api/friends');
 
   if (!response.ok) {
     throw new Error('Failed to load friends');

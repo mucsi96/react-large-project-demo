@@ -17,7 +17,7 @@ export function setFriendsMock(value: FriendsMockSwitch): void {
 export function setupApiMocks(): void {
   registerApiMocks([
     {
-      path: '/friends',
+      path: '/api/friends',
       callback: (_request, response) => {
         switch (mockSwitch) {
           case FriendsMockSwitch.EMPTY:
