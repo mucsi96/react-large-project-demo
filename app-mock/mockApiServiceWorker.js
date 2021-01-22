@@ -12,23 +12,20 @@ sw.addEventListener('activate', (event) => {
 sw.addEventListener('fetch', (event) => {
     const { request, clientId } = event;
     const url = new URL(request.url);
-    const basePathname = sw.location.pathname.slice(0, sw.location.pathname.lastIndexOf('/'));
-    if (!clientId || !url.pathname.startsWith(`${basePathname}/api/`)) {
+    if (!clientId || !url.pathname.startsWith('/api/')) {
         return;
     }
     return event.respondWith(createResponse(clientId, request));
 });
-sw.addEventListener('message', async ({ data }) => {
-    if (data && data.type === 'CLIENT_CLOSED') {
-        const clients = await sw.clients.matchAll({
-            includeUncontrolled: true,
-            type: 'window',
-        });
-        if (!clients || !clients.length || clients.length === 1) {
-            sw.registration.unregister();
-        }
+sw.setInterval(async () => {
+    const clients = await sw.clients.matchAll({
+        includeUncontrolled: true,
+        type: 'window',
+    });
+    if (!clients || !clients.length) {
+        sw.registration.unregister();
     }
-});
+}, 500);
 function sendToClient(client, message) {
     return new Promise((resolve) => {
         const channel = new MessageChannel();
