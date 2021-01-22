@@ -26,6 +26,9 @@ sw.setInterval(async () => {
     if (!clients || !clients.length) {
         sw.registration.unregister();
     }
+    else {
+        clients.forEach((client) => sendToClient(client, { type: 'READY' }));
+    }
 }, 500);
 function sendToClient(client, message) {
     return new Promise((resolve) => {
