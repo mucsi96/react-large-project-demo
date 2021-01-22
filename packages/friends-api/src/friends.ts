@@ -4,6 +4,7 @@ export type Friend = {
 };
 
 export async function getFriends(): Promise<Friend[]> {
+  console.log('fetching friends....');
   const response = await window.fetch('/api/friends');
 
   if (!response.ok) {

@@ -7,10 +7,7 @@ import { WaitForMockApi } from 'dev-tools';
 
 let app = <App />;
 
-if (
-  process.env.REACT_APP_USE_MOCK_API ||
-  process.env.NODE_ENV === 'development'
-) {
+if (process.env.REACT_APP_USE_MOCK_API) {
   setupApiMocks();
 
   app = <WaitForMockApi>{app}</WaitForMockApi>;

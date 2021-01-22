@@ -28,6 +28,8 @@ export async function enableMockApi(): Promise<void> {
   };
 
   await navigator.serviceWorker.ready;
+
+  console.log('SW is ready. registered mocks', mocks);
 }
 
 export function registerApiMocks(newMocks: Mock[]): void {
