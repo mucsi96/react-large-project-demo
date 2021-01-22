@@ -97,5 +97,3 @@ function getHeaders(request: Request) {
   });
   return headers;
 }
-
-export {};

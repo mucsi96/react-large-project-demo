@@ -1,9 +1,0 @@
-{
-  "extends": "../config/tsconfig.json",
-  "include": ["mockApiServiceWorker.ts"],
-  "compilerOptions": {
-    "lib": ["ES2019", "DOM", "WebWorker"],
-    "module": "commonjs",
-    "target": "ES2019"
-  }
-}

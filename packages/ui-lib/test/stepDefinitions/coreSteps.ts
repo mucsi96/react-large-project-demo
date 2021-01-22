@@ -1,7 +1,7 @@
-import { Given, page } from "dev-tools/lib/intTest";
+import { Given, page } from 'dev-tools/intTest';
 
-Given("I am on the page", async () => {
+Given('I am on the page', async () => {
   await page.goto(
-    "http://localhost:9009/iframe.html?id=friendslist--with-text"
+    'http://localhost:9009/iframe.html?id=friendslist--with-text'
   );
 });

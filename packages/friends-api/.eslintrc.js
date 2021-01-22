@@ -1,4 +1,4 @@
-const { eslintConfig, setupEslintParser } = require("dev-tools");
+const { eslintConfig, setupEslintParser } = require('dev-tools/eslint');
 
 module.exports = {
   extends: eslintConfig,

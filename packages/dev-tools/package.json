@@ -7,6 +7,10 @@
   "types": "lib/index.d.ts",
   "bin": "./bin.js",
   "files": [
+    "bin.js",
+    "eslint.js",
+    "intTest.js",
+    "nodeLib",
     "lib",
     "config"
   ],
@@ -14,10 +18,11 @@
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "lint": "eslint src mockApiServiceWorker --max-warnings 0",
-    "check-types": "tsc && tsc --project mockApiServiceWorker",
-    "build:sw": "tsc --project mockApiServiceWorker --noEmit false --outDir lib/mockApi",
-    "build": "del-cli lib && rollup --config config/rollup.config.js && yarn build:sw",
+    "lint": "eslint src nodeSrc --max-warnings 0",
+    "check-types": "tsc && tsc --project nodeSrc",
+    "build:lib": "rollup --config config/rollup.config.js",
+    "build:nodeLib": "tsc --project nodeSrc --noEmit false --declaration --outDir nodeLib",
+    "build": "del-cli lib nodeLib && yarn build:lib && yarn build:nodeLib",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",
     "qa": "npm-run-all lint check-types",

@@ -1,0 +1,10 @@
+{
+  "extends": "../config/tsconfig.json",
+  "include": ["*.ts", "intTest", "mockApi"],
+  "compilerOptions": {
+    "lib": ["ES2019", "DOM", "WebWorker"],
+    "target": "ES2019",
+    "module": "CommonJS",
+    "isolatedModules": false
+  }
+}

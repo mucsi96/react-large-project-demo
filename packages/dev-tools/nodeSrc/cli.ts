@@ -1,6 +1,6 @@
 import del from 'del';
 import { basename, resolve } from 'path';
-import { runPackageBinary, runReactScripts } from './utils';
+import { pickCommand, runPackageBinary, runReactScripts } from './utils';
 
 export function checkTypes(): void {
   runPackageBinary({
@@ -48,9 +48,9 @@ export function intTest(): void {
     binaryName: 'cucumber-js',
     args: [
       '--require-module',
-      'dev-tools/lib/intTest/enableTypeScript',
+      'dev-tools/intTest/enableTypeScript',
       '--require',
-      'dev-tools/lib/intTest/cucumberConfig',
+      'dev-tools/intTest/cucumberConfig',
       '--require',
       'test/stepDefinitions/**/*.ts',
       '--publish-quiet',
@@ -130,4 +130,17 @@ export function buildApp(): void {
   runReactScripts('build');
 }
 
-export { pickCommand } from './utils';
+pickCommand(
+  {
+    'check-types': checkTypes,
+    lint,
+    test,
+    'int-test': intTest,
+    'start-storybook': startStorybook,
+    'start-app': startApp,
+    'build-lib': buildLib,
+    'build-storybook': buildStorybook,
+    'build-app': buildApp,
+  },
+  process.argv[2]
+);
