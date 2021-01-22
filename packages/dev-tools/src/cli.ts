@@ -63,7 +63,7 @@ function intTest() {
   });
 }
 
-function storybook() {
+function startStorybook() {
   runPackageBinary({
     packageName: '@storybook/react',
     binaryName: 'start-storybook',
@@ -72,11 +72,13 @@ function storybook() {
       resolve(__dirname, '../config/.storybook'),
       '--port',
       '9009',
+      '--host',
+      'localhost',
     ],
   });
 }
 
-function start() {
+function startApp() {
   runReactScripts('start');
 }
 
@@ -105,7 +107,7 @@ function buildStorybook() {
   });
 }
 
-function build() {
+function buildApp() {
   del.sync([resolve(process.cwd(), 'build')]);
 
   runReactScripts('build');
@@ -117,11 +119,11 @@ pickCommand(
     lint,
     test,
     'int-test': intTest,
-    storybook,
-    start,
+    'start-storybook': startStorybook,
+    'start-app': startApp,
     'build-lib': buildLib,
     'build-storybook': buildStorybook,
-    build,
+    'build-app': buildApp,
   },
   process.argv[2]
 );

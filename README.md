@@ -40,7 +40,7 @@ Demonstration for large scale React application in TypeScript
 - `dev-tools start`
 - `dev-tools build-lib`
 - `dev-tools build-storybook`
-- `dev-tools build`
+- `dev-tools build-app`
 
 ## API mocking
 

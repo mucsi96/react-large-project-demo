@@ -8,7 +8,7 @@ describe('friends', () => {
         .fn()
         .mockResolvedValueOnce({ json: () => mockFriends, ok: true });
       const friends = await getFriends();
-      expect(window.fetch).toHaveBeenCalledWith('api/friends');
+      expect(window.fetch).toHaveBeenCalledWith('/api/friends');
       expect(friends).toMatchSnapshot();
     });
   });

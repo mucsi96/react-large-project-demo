@@ -15,14 +15,6 @@ export async function enableMockApi(): Promise<void> {
     .register('mockApiServiceWorker.js', { scope: './' })
     .catch((err) => console.error('error registering sw', err));
 
-  window.addEventListener('beforeunload', () => {
-    if (navigator.serviceWorker.controller) {
-      navigator.serviceWorker.controller.postMessage({
-        type: 'CLIENT_CLOSED',
-      });
-    }
-  });
-
   navigator.serviceWorker.onmessage = async ({
     data,
     ports,

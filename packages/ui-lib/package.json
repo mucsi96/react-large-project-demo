@@ -16,7 +16,7 @@
     "int:test": "dev-tools int-test",
     "int:test:update": "yarn int:test --update",
     "int:test:debug": "yarn int:test --debug",
-    "start": "dev-tools storybook",
+    "start": "dev-tools start-storybook",
     "build:storybook": "dev-tools build-storybook",
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch",
