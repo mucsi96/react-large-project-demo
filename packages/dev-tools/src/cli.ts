@@ -1,8 +1,8 @@
 import del from 'del';
 import { basename, resolve } from 'path';
-import { pickCommand, runPackageBinary, runReactScripts } from './utils';
+import { runPackageBinary, runReactScripts } from './utils';
 
-function checkTypes() {
+export function checkTypes(): void {
   runPackageBinary({
     packageName: 'typescript',
     binaryName: 'tsc',
@@ -10,7 +10,7 @@ function checkTypes() {
   });
 }
 
-function lint() {
+export function lint(): void {
   runPackageBinary({
     packageName: 'eslint',
     binaryName: 'eslint',
@@ -23,14 +23,14 @@ function lint() {
   });
 }
 
-function test() {
+export function test(): void {
   runReactScripts(
     'test',
     process.argv.includes('--watch') ? [] : ['--watchAll=false']
   );
 }
 
-function intTest() {
+export function intTest(): void {
   if (process.argv.includes('--update')) {
     process.env.SNAPSHOT_UPDATE = 'true';
   }
@@ -63,7 +63,7 @@ function intTest() {
   });
 }
 
-function startStorybook() {
+export function startStorybook(): void {
   process.env.REACT_APP_USE_MOCK_API = 'true';
 
   runPackageBinary({
@@ -80,13 +80,13 @@ function startStorybook() {
   });
 }
 
-function startApp() {
+export function startApp(): void {
   process.env.REACT_APP_USE_MOCK_API = 'true';
 
   runReactScripts('start');
 }
 
-function buildLib() {
+export function buildLib(): void {
   if (!process.argv.includes('--watch')) {
     del.sync([resolve(process.cwd(), 'lib')]);
   }
@@ -98,7 +98,7 @@ function buildLib() {
   });
 }
 
-function buildStorybook() {
+export function buildStorybook(): void {
   process.env.REACT_APP_USE_MOCK_API = 'true';
 
   runPackageBinary({
@@ -113,7 +113,7 @@ function buildStorybook() {
   });
 }
 
-function buildApp() {
+export function buildApp(): void {
   const useMockApi = process.argv.includes('--use-mock-api');
   process.argv = process.argv.filter((arg) => arg !== '--use-mock-api');
 
@@ -130,17 +130,4 @@ function buildApp() {
   runReactScripts('build');
 }
 
-pickCommand(
-  {
-    'check-types': checkTypes,
-    lint,
-    test,
-    'int-test': intTest,
-    'start-storybook': startStorybook,
-    'start-app': startApp,
-    'build-lib': buildLib,
-    'build-storybook': buildStorybook,
-    'build-app': buildApp,
-  },
-  process.argv[2]
-);
+export { pickCommand } from './utils';

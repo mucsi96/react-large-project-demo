@@ -2,8 +2,9 @@
   "name": "dev-tools",
   "version": "1.0.0",
   "license": "MIT",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "bin": "./bin.js",
   "files": [
     "lib",
@@ -15,7 +16,8 @@
   "scripts": {
     "lint": "eslint src --max-warnings 0",
     "check-types": "tsc --noEmit",
-    "build": "del-cli lib && tsc --declaration --outDir lib",
+    "build:sw": "cd sw && tsc --noEmit false --outDir ../lib/mockApi",
+    "build": "del-cli lib && rollup --config config/rollup.config.js && yarn build:sw",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",
     "qa": "npm-run-all lint check-types",

@@ -1,14 +1,15 @@
-import { resolve } from "path";
+import { resolve } from 'path';
 
-export const eslintConfig = resolve(__dirname, "../config/.eslintrc.json");
+export const eslintConfig = resolve(__dirname, '../config/.eslintrc.json');
 
 export function setupEslintParser(root: string): Record<string, unknown> {
   return {
-    files: ["*.ts", "*.tsx"],
+    files: ['*.ts', '*.tsx'],
     parserOptions: {
-      project: resolve(root, "tsconfig.json"),
+      project: resolve(root, 'tsconfig.json'),
     },
   };
 }
 
-export * from "./mockApi";
+export * from './mockApi';
+export * from './cli';

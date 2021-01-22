@@ -1,16 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Node 12",
-  "compilerOptions": {
-    "lib": ["ES2019", "DOM", "WebWorker"],
-    "module": "commonjs",
-    "target": "ES2019",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "jsx": "react"
-  },
+  "extends": "./config/tsconfig.json",
   "include": ["src"]
 }
