@@ -18,7 +18,7 @@ module.exports = {
       ...config,
       plugins: [
         ...config.plugins,
-        ...(process.env.REACT_APP_USE_MOCK_API
+        ...(process.env.REACT_APP_USE_MOCK_API === 'true'
           ? [new MockApiServiceWorkerWebpackPlugin()]
           : []),
       ].filter((plugin) => !(plugin instanceof ESLintPlugin)),
@@ -31,7 +31,7 @@ module.exports = {
       return paths;
     }
 
-    const useMockApi = !!process.env.REACT_APP_USE_MOCK_API;
+    const useMockApi = process.env.REACT_APP_USE_MOCK_API === 'true';
     return {
       ...paths,
       appBuild: resolve(

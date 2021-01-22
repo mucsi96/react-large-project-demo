@@ -88,7 +88,7 @@ function startApp() {
 
 function buildLib() {
   if (!process.argv.includes('--watch')) {
-    del.sync([resolve(process.cwd(), 'dist')]);
+    del.sync([resolve(process.cwd(), 'lib')]);
   }
 
   runPackageBinary({
@@ -121,6 +121,7 @@ function buildApp() {
     process.env.REACT_APP_USE_MOCK_API = 'true';
     process.env.PUBLIC_URL = '/react-large-project-demo/app-mock';
   } else {
+    process.env.REACT_APP_USE_MOCK_API = 'false';
     process.env.PUBLIC_URL = '/react-large-project-demo/app-prod';
   }
 
