@@ -12,7 +12,6 @@
     "typescript": "4.1.3",
     "@types/react": "17.0.0",
     "@types/react-dom": "17.0.0",
-    "cpr": "3.0.1",
     "cross-env": "7.0.3"
   },
   "scripts": {
@@ -24,8 +23,8 @@
     "start": "dev-tools start-app",
     "build": "dev-tools build-app",
     "qa": "npm-run-all lint check-types test build",
-    "build:prop:app": "cross-env PUBLIC_URL=/react-large-project-demo/app-prod yarn build && cpr build ../../dist/app-prod",
-    "build:mock:app": "cross-env PUBLIC_URL=/react-large-project-demo/app-mock cross-env REACT_APP_USE_MOCK_API=true yarn build && cpr build ../../dist/app-mock",
+    "build:prop:app": "yarn build",
+    "build:mock:app": "yarn build --use-mock-api",
     "build:app": "yarn build:prop:app && yarn build:mock:app"
   }
 }

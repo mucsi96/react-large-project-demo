@@ -18,10 +18,27 @@ module.exports = {
       ...config,
       plugins: [
         ...config.plugins,
-        new MockApiServiceWorkerWebpackPlugin(),
+        ...(process.env.REACT_APP_USE_MOCK_API
+          ? [new MockApiServiceWorkerWebpackPlugin()]
+          : []),
       ].filter((plugin) => !(plugin instanceof ESLintPlugin)),
     };
 
     return overridenConfig;
+  },
+  paths: function (paths, env) {
+    if (env !== 'production') {
+      return paths;
+    }
+
+    const useMockApi = !!process.env.REACT_APP_USE_MOCK_API;
+    return {
+      ...paths,
+      appBuild: resolve(
+        __dirname,
+        '../../../dist',
+        useMockApi ? 'app-mock' : 'app-prod'
+      ),
+    };
   },
 };

@@ -64,6 +64,8 @@ function intTest() {
 }
 
 function startStorybook() {
+  process.env.REACT_APP_USE_MOCK_API = 'true';
+
   runPackageBinary({
     packageName: '@storybook/react',
     binaryName: 'start-storybook',
@@ -79,6 +81,8 @@ function startStorybook() {
 }
 
 function startApp() {
+  process.env.REACT_APP_USE_MOCK_API = 'true';
+
   runReactScripts('start');
 }
 
@@ -95,6 +99,8 @@ function buildLib() {
 }
 
 function buildStorybook() {
+  process.env.REACT_APP_USE_MOCK_API = 'true';
+
   runPackageBinary({
     packageName: '@storybook/react',
     binaryName: 'build-storybook',
@@ -108,6 +114,16 @@ function buildStorybook() {
 }
 
 function buildApp() {
+  const useMockApi = process.argv.includes('--use-mock-api');
+  process.argv = process.argv.filter((arg) => arg !== '--use-mock-api');
+
+  if (useMockApi) {
+    process.env.REACT_APP_USE_MOCK_API = 'true';
+    process.env.PUBLIC_URL = '/react-large-project-demo/app-mock';
+  } else {
+    process.env.PUBLIC_URL = '/react-large-project-demo/app-prod';
+  }
+
   del.sync([resolve(process.cwd(), 'build')]);
 
   runReactScripts('build');
