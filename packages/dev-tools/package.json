@@ -14,9 +14,9 @@
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "lint": "eslint src --max-warnings 0",
-    "check-types": "tsc --noEmit",
-    "build:sw": "cd sw && tsc --noEmit false --outDir ../lib/mockApi",
+    "lint": "eslint src mockApiServiceWorker --max-warnings 0",
+    "check-types": "tsc && tsc --project mockApiServiceWorker",
+    "build:sw": "tsc --project mockApiServiceWorker --noEmit false --outDir lib/mockApi",
     "build": "del-cli lib && rollup --config config/rollup.config.js && yarn build:sw",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",

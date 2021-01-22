@@ -8,7 +8,7 @@ module.exports = {
       parserOptions: {
         project: [
           resolve(__dirname, 'tsconfig.json'),
-          resolve(__dirname, 'sw/tsconfig.json'),
+          resolve(__dirname, 'mockApiServiceWorker/tsconfig.json'),
         ],
       },
     },
