@@ -15,7 +15,20 @@ export async function enableMockApi(): Promise<void> {
     .register('mockApiServiceWorker.js', { scope: './' })
     .catch((err) => console.error('error registering sw', err));
 
-  navigator.serviceWorker.onmessage = async ({
+  await new Promise<void>((resolve) => {
+    navigator.serviceWorker.onmessage = ({
+      data,
+    }: {
+      data?: { type?: string };
+    }) => {
+      if (data && data.type === 'READY') {
+        console.log('SW is ready. Registered mocks', mocks);
+        resolve();
+      }
+    };
+  });
+
+  navigator.serviceWorker.onmessage = ({
     data,
     ports,
   }: {
@@ -26,10 +39,6 @@ export async function enableMockApi(): Promise<void> {
       return handleRequest({ ...data.request, port: ports[0], mocks });
     }
   };
-
-  await navigator.serviceWorker.ready;
-
-  console.log('SW is ready. registered mocks', mocks);
 }
 
 export function registerApiMocks(newMocks: Mock[]): void {
