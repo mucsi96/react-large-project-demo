@@ -36,8 +36,8 @@ Demonstration for large scale React application in TypeScript
 - `dev-tools lint`
 - `dev-tools test`
 - `dev-tools int-test`
-- `dev-tools storybook`
-- `dev-tools start`
+- `dev-tools start-storybook`
+- `dev-tools start-app`
 - `dev-tools build-lib`
 - `dev-tools build-storybook`
 - `dev-tools build-app`
