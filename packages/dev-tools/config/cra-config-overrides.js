@@ -1,5 +1,5 @@
 const { resolve } = require('path');
-const { MockApiServiceWorkerWebpackPlugin } = require('../lib');
+const { MockApiServiceWorkerWebpackPlugin } = require('../lib/index.cjs');
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = {
