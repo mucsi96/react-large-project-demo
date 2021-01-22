@@ -12,6 +12,7 @@ sw.addEventListener('activate', (event) => {
 sw.addEventListener('fetch', (event) => {
     const { request, clientId } = event;
     const url = new URL(request.url);
+    console.log('fetch', url.pathname);
     if (!clientId || !url.pathname.startsWith('/api/')) {
         return;
     }
