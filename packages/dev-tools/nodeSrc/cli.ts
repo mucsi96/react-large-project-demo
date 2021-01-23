@@ -48,9 +48,9 @@ export function intTest(): void {
     binaryName: 'cucumber-js',
     args: [
       '--require-module',
-      'dev-tools/intTest/enableTypeScript',
+      'dev-tools/nodeLib/intTest/enableTypeScript',
       '--require',
-      'dev-tools/intTest/cucumberConfig',
+      'dev-tools/nodeLib/intTest/cucumberConfig',
       '--require',
       'test/stepDefinitions/**/*.ts',
       '--publish-quiet',

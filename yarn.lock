@@ -1244,7 +1244,7 @@
   dependencies:
     becke-ch--regex--s0-0-v1--base--pl--lib "^1.4.0"
 
-"@cucumber/cucumber@^7.0.0":
+"@cucumber/cucumber@7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@cucumber/cucumber/-/cucumber-7.0.0.tgz#6dbcd301d25a6b864fb5b362ff5f35ca3dad96d0"
   integrity sha512-A2SmINqVy9MG8qjF7W7Nqn0rPYJWIBypcTAMiH0e4K8ZEDO5sJNQrv9uOBatAfwqHwK5Si0tUYmH6OnzQse9nQ==
@@ -1332,7 +1332,7 @@
     "@cucumber/messages" "^13.2.1"
     "@teppeis/multimaps" "^1.1.0"
 
-"@cucumber/react@^11.0.2":
+"@cucumber/react@11.0.2", "@cucumber/react@^11.0.2":
   version "11.0.2"
   resolved "https://registry.yarnpkg.com/@cucumber/react/-/react-11.0.2.tgz#f96b682484ee732814db0e70432a54df2806f550"
   integrity sha512-kT3T2zakMI9JDOHGpCxFgq54T/xkGFIvbEKm6vRjW5WjbDXV7pp5sMsxqeL5TS9MgmNRkZ3gNr1hX7MKytWb9g==
@@ -3800,7 +3800,7 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/puppeteer@^5.4.2":
+"@types/puppeteer@5.4.2":
   version "5.4.2"
   resolved "https://registry.yarnpkg.com/@types/puppeteer/-/puppeteer-5.4.2.tgz#80f3a1f54dedbbf750779716de81401549062072"
   integrity sha512-yjbHoKjZFOGqA6bIEI2dfBE5UPqU0YGWzP+ipDVP1iGzmlhksVKTBVZfT3Aj3wnvmcJ2PQ9zcncwOwyavmafBw==
@@ -6585,16 +6585,6 @@ cp-file@^7.0.0:
     nested-error-stacks "^2.0.0"
     p-event "^4.1.0"
 
-cpr@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/cpr/-/cpr-3.0.1.tgz#b9a55038b7cd81a35c17b9761895bd8496aef1e5"
-  integrity sha1-uaVQOLfNgaNcF7l2GJW9hJau8eU=
-  dependencies:
-    graceful-fs "^4.1.5"
-    minimist "^1.2.0"
-    mkdirp "~0.5.1"
-    rimraf "^2.5.4"
-
 cpy@^8.1.1:
   version "8.1.1"
   resolved "https://registry.yarnpkg.com/cpy/-/cpy-8.1.1.tgz#066ed4c6eaeed9577df96dae4db9438c1a90df62"
@@ -8282,7 +8272,7 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-expect@^26.6.0, expect@^26.6.2:
+expect@26.6.2, expect@^26.6.0, expect@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/expect/-/expect-26.6.2.tgz#c6b996bf26bf3fe18b67b2d0f51fc981ba934417"
   integrity sha512-9/hlOBkQl2l/PLHJx6JjoDF6xPKcJEsUlWKb23rKE7KzeDqUZKXKNMW27KIue5JMdBV9HgmoJPcc8HtO85t9IA==
@@ -9244,7 +9234,7 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.5, graceful-fs@^4.1.6, graceful-fs@^4.1.9, graceful-fs@^4.2.0, graceful-fs@^4.2.2, graceful-fs@^4.2.4:
+graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.1.9, graceful-fs@^4.2.0, graceful-fs@^4.2.2, graceful-fs@^4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
   integrity sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
@@ -11033,7 +11023,7 @@ jest-serializer@^26.6.2:
     "@types/node" "*"
     graceful-fs "^4.2.4"
 
-jest-snapshot@^26.6.0, jest-snapshot@^26.6.2:
+jest-snapshot@26.6.2, jest-snapshot@^26.6.0, jest-snapshot@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/jest-snapshot/-/jest-snapshot-26.6.2.tgz#f3b0af1acb223316850bd14e1beea9837fb39c84"
   integrity sha512-OLhxz05EzUtsAmOMzuupt1lHYXCNib0ECyuZ/PZOx9TrZcC8vL0x+DUG3TL+GLX3yHG45e6YGjIm0XwDc3q3og==
@@ -14501,7 +14491,7 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-puppeteer@^5.5.0:
+puppeteer@5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-5.5.0.tgz#331a7edd212ca06b4a556156435f58cbae08af00"
   integrity sha512-OM8ZvTXAhfgFA7wBIIGlPQzvyEETzDjeRa4mZRCRHxYL+GNH5WAuYUQdja3rpWZvkX/JKqmuVgbsxDNsDFjMEg==
