@@ -3,9 +3,8 @@ import {
   Given,
   page,
   Then,
-  getStoryUrl,
+  BaseWorld as World,
 } from 'dev-tools/intTest';
-import { World } from '../support/world';
 import expect from 'expect';
 
 Given('I have no friends', function (this: World) {
@@ -17,9 +16,7 @@ Given('The friends endpoint fails', function (this: World) {
 });
 
 Given('I open the friends list', async function (this: World) {
-  await page.goto(
-    getStoryUrl(`friendslist--normal&${this.getMockSwitchesQueryParam()}`)
-  );
+  await page.goto(this.getStoryUrl('friendslist--normal'));
 });
 
 Then('I see the list of friends', async () => {

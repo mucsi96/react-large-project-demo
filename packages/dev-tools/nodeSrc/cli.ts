@@ -39,8 +39,14 @@ export function intTest(): void {
     process.env.DEBUG = 'true';
   }
 
+  const distDir = process.argv.findIndex((arg) => arg === '--distDir') + 1;
+  if (distDir) {
+    process.env.DIST_DIR = process.argv[distDir];
+  }
+
   process.argv = process.argv.filter(
-    (arg) => !['--update', '--debug'].includes(arg)
+    (arg) =>
+      !['--update', '--debug', '--distDir', process.env.DIST_DIR].includes(arg)
   );
 
   runPackageBinary({
