@@ -2,16 +2,16 @@ import { Meta, Story } from '@storybook/react';
 import React from 'react';
 import { setupApiMocks } from '../../setupApiMocks';
 import { FriendsList } from './FriendsList';
-import { FriendsMockSwitch, setFriendsMock } from 'friends-api';
+import { setMockSwitch } from 'dev-tools';
 
-type StoryProps = { friendsMock: FriendsMockSwitch };
+type StoryProps = { friendsMock: string };
 
 setupApiMocks();
 
 export default { title: 'FriendsList', component: FriendsList } as Meta;
 
 const Template: Story<StoryProps> = ({ friendsMock, ...args }) => {
-  setFriendsMock(friendsMock);
+  setMockSwitch('friends', friendsMock);
   return <FriendsList {...args} />;
 };
 
@@ -22,17 +22,17 @@ function createStory(args: StoryProps) {
 }
 
 export const normal = createStory({
-  friendsMock: FriendsMockSwitch.NORMAL,
+  friendsMock: 'normal',
 });
 
 export const empty = createStory({
-  friendsMock: FriendsMockSwitch.EMPTY,
+  friendsMock: 'empty',
 });
 
 export const failure = createStory({
-  friendsMock: FriendsMockSwitch.FAILURE,
+  friendsMock: 'failure',
 });
 
 export const slow = createStory({
-  friendsMock: FriendsMockSwitch.SLOW,
+  friendsMock: 'slow',
 });

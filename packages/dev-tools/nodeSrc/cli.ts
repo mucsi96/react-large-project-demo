@@ -53,12 +53,14 @@ export function intTest(): void {
       'dev-tools/nodeLib/intTest/cucumberConfig',
       '--require',
       'test/stepDefinitions/**/*.ts',
+      '--require',
+      'test/support/**/*.ts',
       '--publish-quiet',
       '--format',
       'progress',
       '--format',
       'html:reports/cucumber_report.html',
-      'test/features/**/*.feature',
+      'test/features',
     ],
   });
 }

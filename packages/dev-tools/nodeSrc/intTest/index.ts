@@ -1,12 +1,12 @@
-import { Browser, launch, Page } from "puppeteer";
-import "./snapshot";
+import { Browser, launch, Page } from 'puppeteer';
+import './snapshot';
 
 const context: { browser?: Browser; page?: Page } = {};
 
 export async function start(): Promise<void> {
   context.browser = await launch({
     headless: false,
-    args: ["--disable-gpu", "--no-sandbox"],
+    args: ['--disable-gpu', '--no-sandbox'],
     timeout: process.env.DEBUG ? 0 : 60000,
   });
   const pages = await context.browser.pages();
@@ -37,5 +37,9 @@ export const browser = new Proxy(
   }
 ) as Browser;
 
-export * from "@cucumber/cucumber";
-export { getDataSnapshot } from "./dataSnapshot";
+export * from '@cucumber/cucumber';
+export { getDataSnapshot } from './dataSnapshot';
+
+export function getStoryUrl(storyId: string): string {
+  return `http://localhost:9009/iframe.html?id=${storyId}`;
+}

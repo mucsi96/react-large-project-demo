@@ -1,30 +1,17 @@
-import { registerApiMocks } from 'dev-tools';
+import { registerApiMocks, getMockSwitch } from 'dev-tools';
 import mockFriends from './mockFriends';
-
-export enum FriendsMockSwitch {
-  NORMAL = 'NORMAL',
-  EMPTY = 'EMPTY',
-  FAILURE = 'FAILURE',
-  SLOW = 'SLOW',
-}
-
-let mockSwitch: FriendsMockSwitch = FriendsMockSwitch.NORMAL;
-
-export function setFriendsMock(value: FriendsMockSwitch): void {
-  mockSwitch = value;
-}
 
 export function setupApiMocks(): void {
   registerApiMocks([
     {
       path: '/api/friends',
       callback: (_request, response) => {
-        switch (mockSwitch) {
-          case FriendsMockSwitch.EMPTY:
+        switch (getMockSwitch('friends')) {
+          case 'empty':
             return [];
-          case FriendsMockSwitch.FAILURE:
+          case 'failure':
             return response.mockError(true);
-          case FriendsMockSwitch.SLOW:
+          case 'slow':
             response.delay(5000);
             return mockFriends;
           default:
