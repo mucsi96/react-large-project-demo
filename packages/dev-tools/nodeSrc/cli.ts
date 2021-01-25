@@ -117,6 +117,7 @@ export function buildStorybook(): void {
       resolve(__dirname, '../config/.storybook'),
       '-o',
       resolve(__dirname, '../../../dist', basename(process.cwd())),
+      '--quiet',
     ],
   });
 }
