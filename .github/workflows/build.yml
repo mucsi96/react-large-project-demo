@@ -18,6 +18,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '12'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Run push checks
@@ -35,6 +39,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '12'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Prepare deployment
