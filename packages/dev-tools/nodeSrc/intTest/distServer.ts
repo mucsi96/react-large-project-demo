@@ -5,7 +5,11 @@ import { resolve } from 'path';
 const app = express();
 let server: Server;
 
-export async function startDistServer(distDir: string): Promise<void> {
+export async function startDistServer({
+  distDir,
+}: {
+  distDir: string;
+}): Promise<void> {
   console.log(`Starting dist server on folder ${distDir}`);
   app.use(express.static(resolve(process.cwd(), distDir)));
 

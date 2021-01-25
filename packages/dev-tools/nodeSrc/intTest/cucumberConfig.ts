@@ -40,7 +40,7 @@ function getScreenshotName() {
 
 BeforeAll(async () => {
   if (distDir) {
-    await startDistServer(distDir);
+    await startDistServer({ distDir });
   }
   await startBrowser({ headless: !!distDir });
 });
