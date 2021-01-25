@@ -20,9 +20,9 @@ jobs:
           node-version: '12'
       - uses: actions/cache@v2
         path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          node_modules
+          */*/node_modules
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Run push checks
