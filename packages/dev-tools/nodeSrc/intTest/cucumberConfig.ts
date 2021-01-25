@@ -13,6 +13,7 @@ import { basename, resolve } from 'path';
 import { page, startBrowser, stopBrowser } from './puppeteerConfig';
 import { startDistServer, stopDistServer } from './distServer';
 
+const distDir = process.env.DIST_DIR;
 let currentPickle: messages.IPickle;
 
 if (process.env.DEBUG) {
@@ -38,15 +39,15 @@ function getScreenshotName() {
 }
 
 BeforeAll(async () => {
-  if (process.env.DIST_DIR) {
-    await startDistServer(process.env.DIST_DIR);
+  if (distDir) {
+    await startDistServer(distDir);
   }
-  await startBrowser();
+  await startBrowser({ headless: !!distDir });
 });
 
 AfterAll(async () => {
   await stopBrowser();
-  if (process.env.DIST_DIR) {
+  if (distDir) {
     await stopDistServer();
   }
 });

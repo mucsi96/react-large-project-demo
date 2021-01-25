@@ -1,9 +1,13 @@
 import { Browser, launch, Page } from 'puppeteer';
 const context: { browser?: Browser; page?: Page } = {};
 
-export async function startBrowser(): Promise<void> {
+export async function startBrowser({
+  headless,
+}: {
+  headless: boolean;
+}): Promise<void> {
   context.browser = await launch({
-    headless: false,
+    headless,
     args: ['--disable-gpu', '--no-sandbox'],
     timeout: process.env.DEBUG ? 0 : 60000,
   });
