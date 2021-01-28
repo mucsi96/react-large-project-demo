@@ -1,31 +1,30 @@
 import { useEffect } from 'react';
-import { useState } from 'react';
 import React, { FC } from 'react';
-import { Friend, getFriends } from 'friends-api';
+import { getFriends } from 'friends-api';
+import { useApi } from 'core';
 
 export const FriendsList: FC = () => {
-  const [error, setError] = useState(false);
-  const [friends, setFriends] = useState<Friend[]>();
+  const { fetch: loadFriends, ...friends } = useApi(getFriends);
 
   useEffect(() => {
-    getFriends().then(setFriends).catch(setError);
-  }, []);
+    loadFriends();
+  }, [loadFriends]);
 
-  if (error) {
+  if (friends.error) {
     return <span>{'Failed to load friends'}</span>;
   }
 
-  if (!friends) {
+  if (friends.isLoading) {
     return <span>{'Loading...'}</span>;
   }
 
-  if (!friends.length) {
+  if (!friends.data?.length) {
     return <span>{'No friends found :('}</span>;
   }
 
   return (
     <ul>
-      {friends.map(({ firstName, lastName }) => {
+      {friends.data.map(({ firstName, lastName }) => {
         const friend = [firstName, lastName].join(' ');
         return (
           <li key={friend} data-name="name">
