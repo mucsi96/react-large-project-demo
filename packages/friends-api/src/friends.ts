@@ -1,3 +1,5 @@
+import { fetch } from 'core';
+
 export type Friend = {
   firstName: string;
   lastName: string;
@@ -5,7 +7,7 @@ export type Friend = {
 
 export async function getFriends(): Promise<Friend[]> {
   console.log('fetching friends....');
-  const response = await window.fetch('/api/friends');
+  const response = await fetch('/api/friends');
 
   if (!response.ok) {
     throw new Error('Failed to load friends');
