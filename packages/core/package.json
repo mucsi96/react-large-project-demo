@@ -19,7 +19,8 @@
     "prepare": "yarn build"
   },
   "peerDependencies": {
-    "react": "^16.13.1"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "dependencies": {
     "rxjs": "^6.6.3"

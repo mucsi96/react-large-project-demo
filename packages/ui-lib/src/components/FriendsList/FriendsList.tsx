@@ -4,11 +4,11 @@ import { getFriends } from 'friends-api';
 import { useApi } from 'core';
 
 export const FriendsList: FC = () => {
-  const { fetch: loadFriends, ...friends } = useApi(getFriends);
+  const friends = useApi(getFriends);
 
   useEffect(() => {
-    loadFriends();
-  }, [loadFriends]);
+    friends.fetch();
+  }, [friends]);
 
   if (friends.error) {
     return <span>{'Failed to load friends'}</span>;

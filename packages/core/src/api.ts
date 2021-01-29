@@ -1,29 +1,23 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { ajax } from 'rxjs/ajax';
-import { useState, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 
-export async function fetch(
-  input: RequestInfo,
-  init?: RequestInit
-): Promise<Response> {
-  const { url, method, body, headers } =
-    input instanceof Request ? input : new Request(input, init);
+export async function fetchJSON<T, B>(
+  url: string,
+  init: { method: string; headers: Record<string, string>; body?: B }
+): Promise<T> {
+  const { method, headers, body } = init;
   const result = await ajax({
     url,
     method,
     body,
-    headers,
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json',
+    },
   }).toPromise();
 
-  if (result.responseType === 'json') {
-    const blob = new Blob([JSON.stringify(result.response)], {
-      type: 'application/json',
-    });
-
-    return new Response(blob, { status: result.status });
-  }
-
-  return new Response();
+  return result.response as T;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,16 +41,18 @@ export function useApi<F extends Function, T>(
   const [error, setError] = useState<Error>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetch = useCallback(
-    (...args: ArgumentTypes<F>) => {
-      setIsLoading(true);
-      fetcher(...args)
-        .then(setData)
-        .catch(setError)
-        .finally(() => setIsLoading(false));
-    },
+  const result = useMemo(
+    () => ({
+      fetch(...args: ArgumentTypes<F>) {
+        setIsLoading(true);
+        fetcher(...args)
+          .then(setData)
+          .catch(setError)
+          .finally(() => setIsLoading(false));
+      },
+    }),
     [fetcher]
   );
 
-  return { fetch, data, error, isLoading };
+  return Object.assign(result, { data, error, isLoading });
 }

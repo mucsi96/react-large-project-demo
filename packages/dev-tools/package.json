@@ -28,6 +28,9 @@
     "qa": "npm-run-all lint check-types",
     "prepare": "yarn build"
   },
+  "peerDependencies": {
+    "react-dom": "^16.13.1"
+  },
   "dependencies": {
     "@storybook/addon-essentials": "6.1.14",
     "@storybook/addon-links": "6.1.14",
