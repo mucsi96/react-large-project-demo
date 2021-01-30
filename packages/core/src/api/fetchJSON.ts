@@ -1,9 +1,13 @@
 import { ajax, AjaxError } from 'rxjs/ajax';
 import { ApiError, ApiErrorResponse } from './types';
 
-export async function fetchJSON<T, B>(
+export async function fetchJSON<T>(
   url: string,
-  init: { method?: string; headers?: Record<string, string>; body?: B } = {}
+  init: {
+    method?: string;
+    headers?: Record<string, string>;
+    body?: Record<string, unknown>;
+  } = {}
 ): Promise<T> {
   const { method, headers, body } = init;
   try {
