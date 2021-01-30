@@ -11,7 +11,10 @@ export const FriendsList: FC = () => {
   }, [friends]);
 
   if (friends.error) {
-    return <span>{'Failed to load friends'}</span>;
+    const message = `${friends.error.response?.error?.message || ''}. Status: ${
+      friends.error.status || ''
+    }`;
+    return <span>{message}</span>;
   }
 
   if (friends.isLoading) {

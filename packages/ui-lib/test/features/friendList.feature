@@ -14,4 +14,4 @@ Feature: Friend List
     Scenario: Show error message if fetching friends fails
     Given The friends endpoint fails
     And I open the friends list
-    Then I see "Failed to load friends" message
+    Then I see "We couldn't process your request at this time. Status: 500" message
