@@ -8,36 +8,25 @@ import postcss from 'rollup-plugin-postcss';
 import visualizer from 'rollup-plugin-visualizer';
 
 const relativeBasePath = relative(__dirname, process.cwd()).replace(/\\/g, '/');
-const {
-  main,
-  module,
-  types,
-  peerDependencies,
-  dependencies,
-  devDependencies,
-} = require(`${relativeBasePath}/package.json`);
+const { main, module, types } = require(`${relativeBasePath}/package.json`);
 
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
-const externals = Object.keys({
-  ...peerDependencies,
-  ...dependencies,
-  ...devDependencies,
-});
 
 function isExternal(id) {
   if (id.startsWith('.')) {
     return false;
   }
 
-  const relativeId = isAbsolute(id) ? relative(process.cwd(), id) : id;
+  const path = (isAbsolute(id)
+    ? relative(process.cwd(), id).replace(/\\/g, '/')
+    : id
+  ).split('/');
 
-  if (isAbsolute(id) && relativeId.startsWith('..')) {
-    return true;
+  if (isAbsolute(id)) {
+    return path[0] === '..' && !path.includes('style-inject');
   }
 
-  const packageName = relativeId.split('/')[0];
-
-  return externals.includes(packageName);
+  return true;
 }
 
 const config = {
