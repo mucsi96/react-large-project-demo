@@ -1,11 +1,4 @@
 {
   "extends": "dev-tools/config/tsconfig.json",
-  "include": ["src", "test/stepDefinitions"],
-  "compilerOptions": {
-    "paths": {
-      "core": ["../core/src"],
-      "dev-tools": ["../dev-tools/src"],
-      "friends-api": ["../friends-api/src"]
-    }
-  }
+  "include": ["src", "test/stepDefinitions"]
 }

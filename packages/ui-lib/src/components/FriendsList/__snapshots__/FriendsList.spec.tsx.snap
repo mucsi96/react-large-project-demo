@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FriendsList renders error message in case of error 1`] = `
+<FriendsList>
+  <span>
+    We couldn't process your request at this time. Status: 500
+  </span>
+</FriendsList>
+`;
+
+exports[`FriendsList renders list of friends 1`] = `
+<FriendsList>
+  <ul>
+    <li
+      data-name="name"
+      key="Alyson Donnelly"
+    >
+      Alyson Donnelly
+    </li>
+    <li
+      data-name="name"
+      key="Carlee Kreiger"
+    >
+      Carlee Kreiger
+    </li>
+    <li
+      data-name="name"
+      key="Enrico Pouros"
+    >
+      Enrico Pouros
+    </li>
+  </ul>
+</FriendsList>
+`;
+
+exports[`FriendsList renders loading text on loading friends 1`] = `
+<FriendsList>
+  <span>
+    Loading...
+  </span>
+</FriendsList>
+`;
+
+exports[`FriendsList renders message if no friends are found 1`] = `
+<FriendsList>
+  <span>
+    No friends found :(
+  </span>
+</FriendsList>
+`;
