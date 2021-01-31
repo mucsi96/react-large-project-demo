@@ -1,11 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
-import { enableMockApi } from './mockApi';
+import { enableSwMockApi } from './swMockApi';
 
 export const WaitForMockApi: FC = ({ children }) => {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    enableMockApi()
+    enableSwMockApi()
       .then(() => setReady(true))
       .catch((error) =>
         setReady(() => {

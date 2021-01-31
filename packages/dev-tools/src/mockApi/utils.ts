@@ -1,12 +1,12 @@
-import { Key, pathToRegexp } from "path-to-regexp";
-import { Mock, MockWithRegexp } from "./types";
+import { Key, pathToRegexp } from 'path-to-regexp';
+import { getMocks } from './mocks';
+import { MockWithRegexp } from './types';
 
 export function findMatchingMock(
-  mocks: Mock[],
   url: URL,
   method: string
 ): { match: RegExpExecArray | null; mock: MockWithRegexp | null } {
-  const mock = mocks
+  const mock = getMocks()
     .map((mock) => {
       const keys: Key[] = [];
       const regexp = pathToRegexp(mock.path, keys);
@@ -19,7 +19,7 @@ export function findMatchingMock(
     })
     .find(
       (mock) =>
-        mock.regexp.test(url.pathname) && (mock.method || "GET") === method
+        mock.regexp.test(url.pathname) && (mock.method || 'GET') === method
     ) as MockWithRegexp;
   const match = mock && mock.regexp.exec(url.pathname);
   return { match, mock };

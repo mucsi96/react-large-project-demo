@@ -1,9 +1,7 @@
 {
   "extends": "dev-tools/config/tsconfig.json",
-  "include": ["src"],
-  "compilerOptions": {
-    "paths": {
-      "core": ["../core/src"]
-    }
-  }
+  "include": [
+    "src"
+  ],
+  "compilerOptions": {}
 }

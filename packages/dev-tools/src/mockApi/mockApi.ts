@@ -1,111 +1,6 @@
-import { Mock, MockMethod, MockWithRegexp } from './types';
-import { findMatchingMock, getParams, getQuery } from './utils';
-
-let mocks: Mock[] = [];
-const mockSwitches = getInitialMockSwitches();
-const hasInitialMockSwitches = !!Object.keys(mockSwitches).length;
-
-type RawRequest = {
-  url: string;
-  method: MockMethod;
-  body: string;
-  headers: Record<string, string | string[]>;
-};
-
-export async function enableMockApi(): Promise<void> {
-  navigator.serviceWorker
-    .register('mockApiServiceWorker.js', { scope: './' })
-    .catch((err) => console.error('error registering sw', err));
-
-  await new Promise<void>((resolve) => {
-    navigator.serviceWorker.onmessage = ({
-      data,
-    }: {
-      data?: { type?: string };
-    }) => {
-      if (data && data.type === 'READY') {
-        console.log('SW is ready. Registered mocks', mocks);
-        resolve();
-      }
-    };
-  });
-
-  navigator.serviceWorker.onmessage = ({
-    data,
-    ports,
-  }: {
-    data?: { type?: string; request: RawRequest };
-    ports: ReadonlyArray<MessagePort>;
-  }) => {
-    if (data && data.type === 'REQUEST') {
-      return handleRequest({ ...data.request, port: ports[0], mocks });
-    }
-  };
-}
-
-export function registerApiMocks(newMocks: Mock[]): void {
-  mocks = [...mocks, ...newMocks];
-}
-
-export function getInitialMockSwitches(): Record<string, string> {
-  const searchParams = new URLSearchParams(window.location.search);
-  return Object.fromEntries(
-    [...searchParams.entries()]
-      .filter(([name]) => name === 'mock')
-      .map(([, value]) => value.split('--'))
-  ) as Record<string, string>;
-}
-
-export function setMockSwitch(name: string, value: string): void {
-  if (hasInitialMockSwitches) {
-    return;
-  }
-
-  mockSwitches[name] = value;
-}
-
-export function getMockSwitch(name: string): string {
-  return mockSwitches[name];
-}
-
-async function handleRequest({
-  url: fullUrl,
-  method,
-  body,
-  headers,
-  port,
-  mocks,
-}: {
-  url: string;
-  method: MockMethod;
-  body: string;
-  headers: Record<string, string | string[]>;
-  port: MessagePort;
-  mocks: Mock[];
-}) {
-  const url = new URL(fullUrl);
-  const { match, mock } = findMatchingMock(mocks, url, method);
-
-  if (!match || !mock) {
-    return port.postMessage({
-      type: 'MOCK_NOT_FOUND',
-    });
-  }
-
-  const response = await createMockResponse({
-    mock,
-    match,
-    method,
-    headers,
-    url,
-    body,
-  });
-
-  port.postMessage({
-    response,
-    type: 'MOCK_SUCCESS',
-  });
-}
+import { MockMethod, MockWithRegexp } from './types';
+import { Key, pathToRegexp } from 'path-to-regexp';
+import { getMocks } from './mocks';
 
 export async function createMockResponse({
   mock,
@@ -121,7 +16,7 @@ export async function createMockResponse({
   method: MockMethod;
   body: string;
   headers: Record<string, string | string[]>;
-}): Promise<{ body: unknown; status: number }> {
+}): Promise<{ body: string; status: number }> {
   let status = 200;
   let delay: number | undefined;
   let mockError = false;
@@ -164,7 +59,70 @@ export async function createMockResponse({
   return {
     body: mockHTML
       ? '<html></html>'
-      : responseBody && JSON.stringify(responseBody),
+      : ((responseBody && JSON.stringify(responseBody)) as string),
     status: mockError ? 500 : status,
   };
+}
+
+export function findMatchingMock(
+  url: URL,
+  method: string
+): { match: RegExpExecArray | null; mock: MockWithRegexp | null } {
+  const mock = getMocks()
+    .map((mock) => {
+      const keys: Key[] = [];
+      const regexp = pathToRegexp(mock.path, keys);
+
+      return {
+        regexp,
+        keys: keys.map((key) => key.name),
+        ...mock,
+      };
+    })
+    .find(
+      (mock) =>
+        mock.regexp.test(url.pathname) && (mock.method || 'GET') === method
+    ) as MockWithRegexp;
+  const match = mock && mock.regexp.exec(url.pathname);
+  return { match, mock };
+}
+
+function getParams(
+  match: RegExpExecArray,
+  mock: MockWithRegexp
+): Record<string, string> {
+  return match.reduce((acc, val, i) => {
+    const prop = mock.keys[i - 1];
+
+    if (!prop) {
+      return acc;
+    }
+
+    if (val !== undefined || !(prop in acc)) {
+      acc[prop] = val;
+    }
+
+    return acc;
+  }, {} as Record<string, string>);
+}
+
+function getQuery(
+  searchParams: URLSearchParams
+): Record<string, string | string[]> {
+  const query = {} as Record<string, string | string[]>;
+
+  searchParams.forEach((value, name) => {
+    if (Array.isArray(query[name])) {
+      query[name] = [...query[name], value];
+      return;
+    }
+
+    if (query[name]) {
+      query[name] = [query[name] as string, value];
+      return;
+    }
+
+    query[name] = value;
+  });
+  return query;
 }
