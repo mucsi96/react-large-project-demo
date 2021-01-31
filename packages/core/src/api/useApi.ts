@@ -1,19 +1,16 @@
 import { useState, useMemo } from 'react';
 import { ApiError } from './types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AnyArray = any[];
+type Fetcher<A extends unknown[], T> = (...args: A) => Promise<T>;
 
-type Fetcher<A extends AnyArray, T> = (...args: A) => Promise<T>;
-
-type UseApiResult<A extends AnyArray, T> = {
+type UseApiResult<A extends unknown[], T> = {
   fetch: (...args: A) => void;
   data?: T;
   error?: ApiError;
   isLoading: boolean;
 };
 
-export function useApi<A extends AnyArray, T>(
+export function useApi<A extends unknown[], T>(
   fetcher: Fetcher<A, T>
 ): UseApiResult<A, T> {
   const [data, setData] = useState<T>();
