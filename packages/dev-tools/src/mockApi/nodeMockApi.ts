@@ -18,62 +18,70 @@ export function enableNodeMockApi(): void {
     } = options as RequestOptions & {
       uri: { href: string };
     };
+    const bodyChunks: Buffer[] = [];
+    let sendResponse: (res: IncomingMessage) => void;
 
     return {
       on(event: string, callback: (res: IncomingMessage) => void) {
         if (event === 'response') {
-          handleRequest({
-            method: method as MockMethod,
-            headers: headers as Record<string, string | string[]>,
-            url: new URL(href),
-            options,
-            callback,
-          });
+          sendResponse = callback;
         }
       },
       abort() {},
-      end() {},
+      end() {
+        handleRequest({
+          method: method as MockMethod,
+          headers: headers as Record<string, string | string[]>,
+          url: new URL(href),
+          request: options,
+          body: Buffer.concat(bodyChunks).toString('utf-8'),
+        })
+          .then(sendResponse)
+          .catch((error) => console.error(error));
+      },
+      write(chunk: Buffer) {
+        bodyChunks.push(chunk);
+      },
     } as ClientRequest;
   };
 }
 
-function handleRequest({
+async function handleRequest({
   method,
   headers,
   url,
-  options,
-  callback,
+  request,
+  body,
 }: {
   method: MockMethod;
   headers: Record<string, string | string[]>;
   url: URL;
-  options: RequestOptions;
-  callback: (res: IncomingMessage) => void;
+  body: string;
+  request: RequestOptions;
 }) {
   const { match, mock } = findMatchingMock(url, method);
 
   if (!match || !mock) {
-    return;
+    throw new Error(`No matching mock for ${method} ${url.pathname}`);
   }
-  createMockResponse({
+  const result = await createMockResponse({
     mock,
     match,
     method,
     headers,
     url,
-    body: '',
-  })
-    .then(({ body, status }) => {
-      const response = IncomingMessage.from([
-        Buffer.from(body, 'utf-8'),
-      ]) as IncomingMessage & {
-        request: RequestOptions;
-      };
-      response.request = options;
-      response.statusCode = status;
-      response.headers = {};
-      response.rawHeaders = [];
-      callback(response);
-    })
-    .catch((err) => console.error(err));
+    body,
+  });
+
+  const response = IncomingMessage.from([
+    Buffer.from(result.body, 'utf-8'),
+  ]) as IncomingMessage & {
+    request: RequestOptions;
+  };
+  response.request = request;
+  response.statusCode = result.status;
+  response.headers = {};
+  response.rawHeaders = [];
+
+  return response;
 }
