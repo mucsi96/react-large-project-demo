@@ -53,17 +53,25 @@ export const FriendsList: FC = () => {
         const { id, firstName, lastName, image } = friend;
         const fullName = [firstName, lastName].join(' ');
         return (
-          <div key={id} data-name="name" className={styles.friend}>
+          <div key={id} data-name="friend" className={styles.friend}>
             <img src={image} alt={fullName} />
             <span>{fullName}</span>
             <div className={styles.actions}>
               {!favorites.includes(id) && (
-                <Button primary onClick={() => addToFavorites(friend)}>
+                <Button
+                  primary
+                  onClick={() => addToFavorites(friend)}
+                  data-name="add-to-favorite"
+                >
                   Add to favorite
                 </Button>
               )}
               {favorites.includes(id) && (
-                <Button secondary onClick={() => removeFromFavorites(friend)}>
+                <Button
+                  secondary
+                  onClick={() => removeFromFavorites(friend)}
+                  data-name="remove-from-favorite"
+                >
                   Remove from favorite
                 </Button>
               )}

@@ -59,7 +59,9 @@ export async function createMockResponse({
   return {
     body: mockHTML
       ? '<html></html>'
-      : ((responseBody && JSON.stringify(responseBody)) as string),
+      : responseBody
+      ? JSON.stringify(responseBody)
+      : '',
     status: mockError ? 500 : status,
   };
 }

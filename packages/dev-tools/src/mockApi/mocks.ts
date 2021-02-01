@@ -1,7 +1,7 @@
 import { Mock } from './types';
 
 let mocks: Mock[] = [];
-const mockSwitches = getInitialMockSwitches();
+let mockSwitches = getInitialMockSwitches();
 const hasInitialMockSwitches = !!Object.keys(mockSwitches).length;
 
 export function registerApiMocks(newMocks: Mock[]): void {
@@ -31,4 +31,31 @@ export function setMockSwitch(name: string, value: string): void {
 
 export function getMockSwitch(name: string): string {
   return mockSwitches[name];
+}
+
+export function clearMockSwitches(): void {
+  mockSwitches = {};
+}
+
+export function saveInMockStorage<T>(key: string, value: T): void {
+  const storage = JSON.parse(
+    sessionStorage.getItem('mock-api-storage') || '{}'
+  ) as Record<string, T>;
+
+  sessionStorage.setItem(
+    'mock-api-storage',
+    JSON.stringify({ ...storage, [key]: value })
+  );
+}
+
+export function getFromMockStorage<T>(key: string): T {
+  const storage = JSON.parse(
+    sessionStorage.getItem('mock-api-storage') || '{}'
+  ) as Record<string, T>;
+
+  return storage[key];
+}
+
+export function clearMockStorage(): void {
+  sessionStorage.removeItem('mock-api-storage');
 }

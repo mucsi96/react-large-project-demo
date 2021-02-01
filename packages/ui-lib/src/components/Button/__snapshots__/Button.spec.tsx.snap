@@ -2,7 +2,7 @@
 
 exports[`render 1`] = `
 <button
-  className="primary"
+  className="container primary"
   onClick={[MockFunction]}
   type="button"
 />

@@ -1,15 +1,18 @@
-import { registerApiMocks, getMockSwitch } from 'dev-tools';
+import {
+  registerApiMocks,
+  getMockSwitch,
+  getFromMockStorage,
+  saveInMockStorage,
+} from 'dev-tools';
 import { Friend } from './friends';
 import mockFriends from './mockFriends';
 
 function getFavorites(): string[] {
-  return JSON.parse(
-    sessionStorage.getItem('friend-favories') || '[]'
-  ) as string[];
+  return getFromMockStorage('friend-favories') ?? [];
 }
 
 function setFavorites(favorites: string[]): void {
-  sessionStorage.setItem('friend-favories', JSON.stringify(favorites));
+  saveInMockStorage('friend-favories', favorites);
 }
 
 function getFriends(): Friend[] {

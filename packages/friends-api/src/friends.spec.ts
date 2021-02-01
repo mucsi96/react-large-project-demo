@@ -23,5 +23,13 @@ describe('friends', () => {
       const processedFriends = await getFriends();
       expect(processedFriends[1].isFavorite).toBe(true);
     });
+
+    it('removes friend from favorite', async () => {
+      const friends = await getFriends();
+      await processFriend(friends[1], FriendActions.ADD_TO_FAVORITE);
+      await processFriend(friends[1], FriendActions.REMOVE_FROM_FAVORITE);
+      const processedFriends = await getFriends();
+      expect(processedFriends[1].isFavorite).toBe(false);
+    });
   });
 });
