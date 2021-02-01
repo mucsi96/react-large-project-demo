@@ -1,0 +1,19 @@
+.container {
+  display: grid;
+  gap: 30px;
+  max-width: 600px;
+}
+
+.friend {
+  text-decoration: initial;
+  color: initial;
+  display: grid;
+  font-size: 2em;
+  font-family: system-ui;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+}
+
+.actions {
+  margin: 5px;
+}

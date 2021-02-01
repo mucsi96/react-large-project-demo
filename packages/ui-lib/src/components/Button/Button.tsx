@@ -1,6 +1,6 @@
-import classNames from "classnames";
-import React, { FC } from "react";
-import styles from "./Button.module.scss";
+import classNames from 'classnames';
+import React, { FC } from 'react';
+import styles from './Button.module.scss';
 
 export type ButtonProps = {
   /**
@@ -16,7 +16,7 @@ export type ButtonProps = {
   /**
    * default is false
    */
-  
+
   secondary?: boolean;
 };
 
@@ -29,7 +29,7 @@ export const Button: FC<ButtonProps> = ({
   <button
     type="button"
     onClick={onClick}
-    className={classNames({
+    className={classNames(styles.container, {
       [styles.primary]: primary,
       [styles.secondary]: secondary,
     })}

@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import React, { FC } from 'react';
 import { getFriends } from 'friends-api';
 import { useApi } from 'core';
+import styles from './FriendsList.module.scss';
+import { Button } from '../Button';
 
 export const FriendsList: FC = () => {
   const friends = useApi(getFriends);
@@ -26,13 +28,22 @@ export const FriendsList: FC = () => {
   }
 
   return (
-    <ul>
-      {friends.data.map(({ firstName, lastName }) => {
+    <ul className={styles.container}>
+      {friends.data.map(({ id, firstName, lastName, image }) => {
         const friend = [firstName, lastName].join(' ');
         return (
-          <li key={friend} data-name="name">
-            {friend}
-          </li>
+          <a
+            key={id}
+            data-name="name"
+            href={`#${id}`}
+            className={styles.friend}
+          >
+            <img src={image} alt={friend} />
+            <span>{friend}</span>
+            <div className={styles.actions}>
+              <Button primary>Add to favourite</Button>
+            </div>
+          </a>
         );
       })}
     </ul>
