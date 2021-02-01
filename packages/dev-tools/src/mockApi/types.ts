@@ -1,11 +1,11 @@
-export type MockMethod = "GET" | "POST" | "DELETE" | "PUT";
+export type MockMethod = 'GET' | 'POST' | 'DELETE' | 'PUT';
 
 export type MockRequest = {
   url: string;
   method: MockMethod;
   headers: Record<string, string | string[]>;
   body?: unknown;
-  params: Record<string, string | string[]>;
+  params: Record<string, string>;
   query: Record<string, string | string[]>;
 };
 

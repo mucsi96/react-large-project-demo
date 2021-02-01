@@ -1,16 +1,17 @@
 .container {
   vertical-align: top;
   font-family: inherit;
-}
-
-.primary {
-  background-color: chocolate;
-  color: white;
   padding: 10px 20px;
   border: 1px solid white;
   border-radius: 10px;
 }
 
+.primary {
+  background-color: chocolate;
+  color: white;
+}
+
 .secondary {
-  background-color: lightskyblue;
+  background-color: #cecece;
+  color: black;
 }

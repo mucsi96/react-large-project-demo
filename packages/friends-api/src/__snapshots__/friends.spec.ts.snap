@@ -3,15 +3,54 @@
 exports[`friends getFriends fetches the list of friends 1`] = `
 Array [
   Object {
+    "_links": Object {
+      "addToFavorite": Object {
+        "href": "/api/friends/alyson/add-to-favorite",
+        "method": "POST",
+      },
+      "removeFromFavorite": Object {
+        "href": "/api/friends/alyson/remove-from-favorite",
+        "method": "POST",
+      },
+    },
     "firstName": "Alyson",
+    "id": "alyson",
+    "image": "wNMM9flXbj/x7NR6y5ku5Jm5eRy5PuTmiirk37OPzM6atVl6L9StE0gf7/atXTr6WK42g9BRRWDOpGy1w0sal+frRRRWYmkf/9k=",
+    "isFavorite": false,
     "lastName": "Donnelly",
   },
   Object {
+    "_links": Object {
+      "addToFavorite": Object {
+        "href": "/api/friends/carlee/add-to-favorite",
+        "method": "POST",
+      },
+      "removeFromFavorite": Object {
+        "href": "/api/friends/carlee/remove-from-favorite",
+        "method": "POST",
+      },
+    },
     "firstName": "Carlee",
+    "id": "carlee",
+    "image": "c3czsJTjpmuX8UzHyHJoooA8S1XXPMvRbSW6kxyN8+eSCMVJb3UcEcAkWR03naobAGetFFAHfadZWUcKmONwGGe3eiiigD//2Q==",
+    "isFavorite": false,
     "lastName": "Kreiger",
   },
   Object {
+    "_links": Object {
+      "addToFavorite": Object {
+        "href": "/api/friends/enrico/add-to-favorite",
+        "method": "POST",
+      },
+      "removeFromFavorite": Object {
+        "href": "/api/friends/enrico/remove-from-favorite",
+        "method": "POST",
+      },
+    },
     "firstName": "Enrico",
+    "id": "enrico",
+    "image": "QueHjW3USKipufaxyB8ze9cN41u2u9UNjyI4MM3+0xGfyAP6miiljpNUnYvARTrK5jpaqopTAooorwbn0NkMaIZoooqkRY//2Q==",
+    "isFavorite": false,
     "lastName": "Pouros",
   },
 ]

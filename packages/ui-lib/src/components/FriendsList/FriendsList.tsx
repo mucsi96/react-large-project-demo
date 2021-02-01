@@ -1,16 +1,36 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import React, { FC } from 'react';
-import { getFriends } from 'friends-api';
+import { Friend, FriendActions, getFriends, processFriend } from 'friends-api';
 import { useApi } from 'core';
 import styles from './FriendsList.module.scss';
 import { Button } from '../Button';
 
 export const FriendsList: FC = () => {
   const friends = useApi(getFriends);
+  const processFriends = useApi(processFriend);
+  const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
     friends.fetch();
   }, [friends]);
+
+  useEffect(() => {
+    if (friends.data) {
+      setFavorites(
+        friends.data.filter(({ isFavorite }) => isFavorite).map(({ id }) => id)
+      );
+    }
+  }, [friends.data]);
+
+  function addToFavorites(friend: Friend) {
+    setFavorites([...favorites, friend.id]);
+    processFriends.fetch(friend, FriendActions.ADD_TO_FAVORITE);
+  }
+
+  function removeFromFavorites(friend: Friend) {
+    setFavorites(favorites.filter((id) => id !== friend.id));
+    processFriends.fetch(friend, FriendActions.REMOVE_FROM_FAVORITE);
+  }
 
   if (friends.error) {
     const message = `${friends.error.response?.error?.message || ''}. Status: ${
@@ -29,21 +49,26 @@ export const FriendsList: FC = () => {
 
   return (
     <ul className={styles.container}>
-      {friends.data.map(({ id, firstName, lastName, image }) => {
-        const friend = [firstName, lastName].join(' ');
+      {friends.data.map((friend) => {
+        const { id, firstName, lastName, image } = friend;
+        const fullName = [firstName, lastName].join(' ');
         return (
-          <a
-            key={id}
-            data-name="name"
-            href={`#${id}`}
-            className={styles.friend}
-          >
-            <img src={image} alt={friend} />
-            <span>{friend}</span>
+          <div key={id} data-name="name" className={styles.friend}>
+            <img src={image} alt={fullName} />
+            <span>{fullName}</span>
             <div className={styles.actions}>
-              <Button primary>Add to favourite</Button>
+              {!favorites.includes(id) && (
+                <Button primary onClick={() => addToFavorites(friend)}>
+                  Add to favorite
+                </Button>
+              )}
+              {favorites.includes(id) && (
+                <Button secondary onClick={() => removeFromFavorites(friend)}>
+                  Remove from favorite
+                </Button>
+              )}
             </div>
-          </a>
+          </div>
         );
       })}
     </ul>
