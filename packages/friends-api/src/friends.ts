@@ -2,7 +2,7 @@ import { fetchJSON } from 'core';
 
 type Link = {
   href: string;
-  method: string;
+  method?: string;
 };
 
 export enum FriendActions {
@@ -19,14 +19,25 @@ export type Friend = {
   _links: Record<FriendActions, Link>;
 };
 
-export async function getFriends(): Promise<Friend[]> {
-  return await fetchJSON<Friend[]>('/api/friends');
+export type FriendsResponse = {
+  _embedded: Friend[];
+  _links: {
+    next?: Link;
+  };
+};
+
+export async function getFriends(
+  next: Link = {
+    href: '/api/friends',
+  }
+): Promise<FriendsResponse> {
+  return await fetchJSON<FriendsResponse>(next.href);
 }
 
 export async function processFriend(
   friend: Friend,
   action: FriendActions
 ): Promise<void> {
-  const { href, method } = friend._links[action];
+  const { href, method = 'GET' } = friend._links[action];
   await fetchJSON<void>(href, { method });
 }

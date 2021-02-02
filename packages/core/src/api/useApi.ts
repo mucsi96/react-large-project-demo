@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { ApiError } from './types';
 
-type Fetcher<A extends unknown[], T> = (...args: A) => Promise<T>;
+export type Fetcher<A extends unknown[], T> = (...args: A) => Promise<T>;
 
-type UseApiResult<A extends unknown[], T> = {
+export type UseApiResult<A extends unknown[], T> = {
   fetch: (...args: A) => void;
   data?: T;
   error?: ApiError;
