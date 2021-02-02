@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import http, { ClientRequest, IncomingMessage } from 'http';
 import { RequestOptions } from 'https';
+import { finished, Readable, Writable } from 'stream';
 import { URL } from 'url';
 import { createMockResponse, findMatchingMock } from './mockApi';
 import { MockMethod } from './types';
@@ -19,16 +20,14 @@ export function enableNodeMockApi(): void {
       uri: { href: string };
     };
     const bodyChunks: Buffer[] = [];
-    let sendResponse: (res: IncomingMessage) => void;
-
-    return {
-      on(event: string, callback: (res: IncomingMessage) => void) {
-        if (event === 'response') {
-          sendResponse = callback;
+    const clientRequest = new Writable({
+      write(chunk: Buffer, _encoding, callback) {
+        bodyChunks.push(chunk);
+        if (callback) {
+          callback();
         }
       },
-      abort() {},
-      end() {
+      final(callback) {
         handleRequest({
           method: method as MockMethod,
           headers: headers as Record<string, string | string[]>,
@@ -36,13 +35,22 @@ export function enableNodeMockApi(): void {
           request: options,
           body: Buffer.concat(bodyChunks).toString('utf-8'),
         })
-          .then(sendResponse)
-          .catch((error) => console.error(error));
+          .then((response) => {
+            clientRequest.emit('response', response);
+            if (callback) {
+              callback();
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            if (callback) {
+              callback(error);
+            }
+          });
       },
-      write(chunk: Buffer) {
-        bodyChunks.push(chunk);
-      },
-    } as ClientRequest;
+    }) as ClientRequest;
+
+    return clientRequest;
   };
 }
 
