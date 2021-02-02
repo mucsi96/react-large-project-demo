@@ -70,7 +70,7 @@ export function setupApiMocks(): void {
           case 'failure':
             return response.mockError(true);
           case 'slow':
-            response.delay(5000);
+            response.delay(750);
             return getFriends(query.from as string);
           default:
             return getFriends(query.from as string);

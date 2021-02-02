@@ -22,7 +22,7 @@ function createStory(args: StoryProps) {
 }
 
 export const normal = createStory({
-  friendsMock: 'normal',
+  friendsMock: 'slow',
 });
 
 export const empty = createStory({
@@ -31,8 +31,4 @@ export const empty = createStory({
 
 export const failure = createStory({
   friendsMock: 'failure',
-});
-
-export const slow = createStory({
-  friendsMock: 'slow',
 });
