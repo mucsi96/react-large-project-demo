@@ -52,27 +52,27 @@ export const FriendsList: FC = () => {
           const message = `${error.response?.error?.message || ''}. Status: ${
             error.status || ''
           }`;
-          return <span>{message}</span>;
+          return <span data-name="message">{message}</span>;
         }
 
         if (isLoading) {
-          return <Button secondary>Loading...</Button>;
+          return (
+            <Button secondary data-name="loading">
+              Loading...
+            </Button>
+          );
         }
 
         if (loadMore) {
           return (
-            <Button
-              secondary
-              onClick={loadMore}
-              data-name="remove-from-favorite"
-            >
+            <Button secondary onClick={loadMore} data-name="load-more">
               Load more...
             </Button>
           );
         }
 
         if (isEmpty) {
-          return <span>{'No friends found :('}</span>;
+          return <span data-name="message">{'No friends found :('}</span>;
         }
 
         return null;

@@ -45,6 +45,12 @@ async function removeFromFavorite(wrapper: ReactWrapper, index: number) {
   wrapper.update();
 }
 
+function loadMore(wrapper: ReactWrapper) {
+  act(() => {
+    wrapper.find('[data-name="load-more"]').simulate('click');
+  });
+}
+
 function isFavorite(wrapper: ReactWrapper, index: number): boolean {
   return wrapper
     .find('[data-name="friend"]')
@@ -64,7 +70,7 @@ function isNotFavorite(wrapper: ReactWrapper, index: number): boolean {
 describe('FriendsList', () => {
   test('renders loading text on loading friends', () => {
     const wrapper = mount(<FriendsList />);
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('[data-name="loading"]')).toMatchSnapshot();
   });
 
   test('renders list of friends', async () => {
@@ -75,13 +81,13 @@ describe('FriendsList', () => {
   test('renders message if no friends are found', async () => {
     setMockSwitch('friends', 'empty');
     const wrapper = await renderFriends();
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('[data-name="message"]')).toMatchSnapshot();
   });
 
   test('renders error message in case of error', async () => {
     setMockSwitch('friends', 'failure');
     const wrapper = await renderFriends();
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('[data-name="message"]')).toMatchSnapshot();
   });
 
   test('adds friend as favorite by clicking on "Add to favorite" button', async () => {
@@ -101,5 +107,42 @@ describe('FriendsList', () => {
     const wrapper = await renderFriends();
     await removeFromFavorite(wrapper, 1);
     expect(isNotFavorite(wrapper, 1)).toBe(true);
+  });
+
+  test('shows loading message on clicking load more button', async () => {
+    const wrapper = await renderFriends();
+    act(() => {
+      loadMore(wrapper);
+    });
+    wrapper.update();
+    expect(wrapper.find('[data-name="friend"]')).toHaveLength(5);
+    expect(wrapper.find('[data-name="loading"]').exists()).toBe(true);
+  });
+
+  test('loads more friends clicking load more button', async () => {
+    const wrapper = await renderFriends();
+    await act(async () => {
+      loadMore(wrapper);
+      await Promise.resolve();
+    });
+    wrapper.update();
+    expect(wrapper.find('[data-name="friend"]')).toHaveLength(10);
+    expect(wrapper.find('[data-name="load-more"]').exists()).toBe(true);
+  });
+
+  test('shows no load more button if all friends are loaded', async () => {
+    const wrapper = await renderFriends();
+    await act(async () => {
+      loadMore(wrapper);
+      await Promise.resolve();
+    });
+    wrapper.update();
+    await act(async () => {
+      loadMore(wrapper);
+      await Promise.resolve();
+    });
+    wrapper.update();
+    expect(wrapper.find('[data-name="friend"]')).toHaveLength(15);
+    expect(wrapper.find('[data-name="load-more"]').exists()).toBe(false);
   });
 });
