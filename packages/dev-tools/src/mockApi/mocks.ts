@@ -37,25 +37,25 @@ export function clearMockSwitches(): void {
   mockSwitches = {};
 }
 
-export function saveInMockStorage<T>(key: string, value: T): void {
+export function saveInMockDB<T>(key: string, value: T): void {
   const storage = JSON.parse(
-    sessionStorage.getItem('mock-api-storage') || '{}'
+    sessionStorage.getItem('mock-api-db') || '{}'
   ) as Record<string, T>;
 
   sessionStorage.setItem(
-    'mock-api-storage',
+    'mock-api-db',
     JSON.stringify({ ...storage, [key]: value })
   );
 }
 
-export function getFromMockStorage<T>(key: string): T {
+export function loadFromMockDB<T>(key: string): T {
   const storage = JSON.parse(
-    sessionStorage.getItem('mock-api-storage') || '{}'
+    sessionStorage.getItem('mock-api-db') || '{}'
   ) as Record<string, T>;
 
   return storage[key];
 }
 
-export function clearMockStorage(): void {
-  sessionStorage.removeItem('mock-api-storage');
+export function clearMockDB(): void {
+  sessionStorage.removeItem('mock-api-db');
 }

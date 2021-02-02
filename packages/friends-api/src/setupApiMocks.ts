@@ -1,18 +1,18 @@
 import {
   registerApiMocks,
   getMockSwitch,
-  getFromMockStorage,
-  saveInMockStorage,
+  loadFromMockDB,
+  saveInMockDB,
 } from 'dev-tools';
 import { FriendsResponse } from './friends';
 import mockFriends from './mockFriends';
 
 function getFavorites(): string[] {
-  return getFromMockStorage('friend-favories') ?? [];
+  return loadFromMockDB('friend-favories') ?? [];
 }
 
 function setFavorites(favorites: string[]): void {
-  saveInMockStorage('friend-favories', favorites);
+  saveInMockDB('friend-favories', favorites);
 }
 
 function getPage(from?: string) {
