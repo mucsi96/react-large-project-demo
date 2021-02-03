@@ -34,26 +34,17 @@ export function useFriends(): {
   }, [friends.data]);
 
   useEffect(() => {
-    if (processFriends.error && processFriends.fetchArgs) {
-      const [friend, action] = processFriends.fetchArgs;
-      dispatch({
-        type: 'PROCESSING_FAILED',
-        friend,
-        action,
-      });
+    if (!processFriends.fetchArgs) {
+      return;
     }
-  }, [processFriends.error, processFriends.fetchArgs]);
 
-  useEffect(() => {
-    if (processFriends.data && processFriends.fetchArgs) {
-      const [friend, action] = processFriends.fetchArgs;
-      dispatch({
-        type: 'PROCESSING_SUCCEED',
-        friend,
-        action,
-      });
-    }
-  }, [processFriends.data, processFriends.fetchArgs]);
+    const [friend, action] = processFriends.fetchArgs;
+    dispatch({
+      type: processFriends.error ? 'PROCESSING_FAILED' : 'PROCESSING_SUCCEED',
+      friend,
+      action,
+    });
+  }, [processFriends.data, processFriends.error, processFriends.fetchArgs]);
 
   function addToFavorites(friend: Friend) {
     dispatch({ type: 'ADD_TO_FAVORITES', id: friend.id });
