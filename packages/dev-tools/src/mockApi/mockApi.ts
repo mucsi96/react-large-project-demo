@@ -1,6 +1,6 @@
 import { MockMethod, MockWithRegexp } from './types';
 import { Key, pathToRegexp } from 'path-to-regexp';
-import { getMocks } from './mocks';
+import { getMocks, getMockApiDelay } from './mocks';
 
 export async function createMockResponse({
   mock,
@@ -18,7 +18,7 @@ export async function createMockResponse({
   headers: Record<string, string | string[]>;
 }): Promise<{ body: string; status: number }> {
   let status = 200;
-  let delay: number | undefined;
+  let delay = getMockApiDelay();
   let mockError = false;
   let mockHTML = false;
   let responseBody = await mock.callback(

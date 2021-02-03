@@ -3,6 +3,7 @@ import { Mock } from './types';
 let mocks: Mock[] = [];
 let mockSwitches = getInitialMockSwitches();
 const hasInitialMockSwitches = !!Object.keys(mockSwitches).length;
+let globalDelay = 0;
 
 export function registerApiMocks(newMocks: Mock[]): void {
   mocks = [...mocks, ...newMocks];
@@ -58,4 +59,12 @@ export function loadFromMockDB<T>(key: string): T {
 
 export function clearMockDB(): void {
   sessionStorage.removeItem('mock-api-db');
+}
+
+export function setMockApiDelay(delay: number): void {
+  globalDelay = delay;
+}
+
+export function getMockApiDelay(): number {
+  return globalDelay;
 }

@@ -8,6 +8,7 @@ export type UseApiResult<A extends unknown[], T> = {
   data?: T;
   error?: ApiError;
   isLoading: boolean;
+  fetchArgs?: A;
 };
 
 export function useApi<A extends unknown[], T>(
@@ -15,6 +16,7 @@ export function useApi<A extends unknown[], T>(
 ): UseApiResult<A, T> {
   const [data, setData] = useState<T>();
   const [error, setError] = useState<ApiError>();
+  const [fetchArgs, setFetchArgs] = useState<A>();
   const [isLoading, setIsLoading] = useState(false);
 
   const result = useMemo(
@@ -24,11 +26,14 @@ export function useApi<A extends unknown[], T>(
         fetcher(...args)
           .then(setData)
           .catch(setError)
-          .finally(() => setIsLoading(false));
+          .finally(() => {
+            setIsLoading(false);
+            setFetchArgs(args);
+          });
       },
     }),
     [fetcher]
   );
 
-  return Object.assign(result, { data, error, isLoading });
+  return Object.assign(result, { data, error, isLoading, fetchArgs });
 }

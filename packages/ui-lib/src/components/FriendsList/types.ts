@@ -1,4 +1,4 @@
-import { Friend, FriendsResponse } from 'friends-api';
+import { Friend, FriendsResponse, FriendActions } from 'friends-api';
 
 export type LoadFriendsAction = {
   type: 'LOAD_FRIENDS';
@@ -15,7 +15,21 @@ export type RemoveFromFavoritesAction = {
   id: string;
 };
 
+export type ProcessingSucceedAction = {
+  type: 'PROCESSING_SUCCEED';
+  friend: Friend;
+  action: FriendActions;
+};
+
+export type ProcessingFailedAction = {
+  type: 'PROCESSING_FAILED';
+  friend: Friend;
+  action: FriendActions;
+};
+
 export type FriendsState = {
   favorites: string[];
   friends: Friend[];
+  processing: string[];
+  lastProcessingError?: string;
 };

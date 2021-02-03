@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import styles from './Button.module.scss';
 
 export type ButtonProps = {
+  disabled?: boolean;
   /**
    * Simple click handler
    */
@@ -23,6 +24,7 @@ export type ButtonProps = {
 export const Button: FC<ButtonProps> = ({
   children,
   onClick,
+  disabled,
   primary,
   secondary,
 }) => (
@@ -33,6 +35,7 @@ export const Button: FC<ButtonProps> = ({
       [styles.primary]: primary,
       [styles.secondary]: secondary,
     })}
+    disabled={disabled}
   >
     {children}
   </button>

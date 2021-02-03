@@ -67,10 +67,9 @@ export function setupApiMocks(): void {
               _embedded: [],
               _links: {},
             };
-          case 'failure':
+          case 'loadingFailure':
             return response.mockError(true);
           case 'slow':
-            response.delay(750);
             return getFriends(query.from as string);
           default:
             return getFriends(query.from as string);
@@ -80,15 +79,25 @@ export function setupApiMocks(): void {
     {
       path: '/api/friends/:id/add-to-favorite',
       method: 'POST',
-      callback: ({ params }) => {
-        setFavorites([...getFavorites(), params.id]);
+      callback: ({ params }, response) => {
+        switch (getMockSwitch('friends')) {
+          case 'processingFailure':
+            return response.mockError(true);
+          default:
+            setFavorites([...getFavorites(), params.id]);
+        }
       },
     },
     {
       path: '/api/friends/:id/remove-from-favorite',
       method: 'POST',
-      callback: ({ params }) => {
-        setFavorites(getFavorites().filter((id) => id !== params.id));
+      callback: ({ params }, response) => {
+        switch (getMockSwitch('friends')) {
+          case 'processingFailure':
+            return response.mockError(true);
+          default:
+            setFavorites(getFavorites().filter((id) => id !== params.id));
+        }
       },
     },
   ]);

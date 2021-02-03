@@ -7,16 +7,19 @@ export const FriendsList: FC = () => {
   const {
     isLoading,
     isEmpty,
-    error,
+    loadingErrorMessage,
+    lastProcessingError,
     friends,
     loadMore,
     isFavorite,
+    isProcessing,
     addToFavorites,
     removeFromFavorites,
   } = useFriends();
 
   return (
     <ul className={styles.container}>
+      <span>{lastProcessingError}</span>
       {friends.map((friend) => {
         const { id, firstName, lastName, image } = friend;
         const fullName = [firstName, lastName].join(' ');
@@ -30,6 +33,7 @@ export const FriendsList: FC = () => {
                   primary
                   onClick={() => addToFavorites(friend)}
                   data-name="add-to-favorite"
+                  disabled={isProcessing(friend)}
                 >
                   Add to favorite
                 </Button>
@@ -39,6 +43,7 @@ export const FriendsList: FC = () => {
                   secondary
                   onClick={() => removeFromFavorites(friend)}
                   data-name="remove-from-favorite"
+                  disabled={isProcessing(friend)}
                 >
                   Remove from favorite
                 </Button>
@@ -48,11 +53,8 @@ export const FriendsList: FC = () => {
         );
       })}
       {(() => {
-        if (error) {
-          const message = `${error.response?.error?.message || ''}. Status: ${
-            error.status || ''
-          }`;
-          return <span data-name="message">{message}</span>;
+        if (loadingErrorMessage) {
+          return <span data-name="message">{loadingErrorMessage}</span>;
         }
 
         if (isLoading) {

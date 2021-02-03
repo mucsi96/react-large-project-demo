@@ -29,6 +29,10 @@ export const empty = createStory({
   friendsMock: 'empty',
 });
 
-export const failure = createStory({
-  friendsMock: 'failure',
+export const loadingFailure = createStory({
+  friendsMock: 'loadingFailure',
+});
+
+export const processingFailure = createStory({
+  friendsMock: 'processingFailure',
 });
