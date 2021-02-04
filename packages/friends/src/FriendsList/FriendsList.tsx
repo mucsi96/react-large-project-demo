@@ -4,7 +4,7 @@ import styles from './FriendsList.module.scss';
 import { useFriends } from './useFriends';
 
 export const FriendsList: FC = () => {
-  const { friends = [], isLoading } = useFriends();
+  const { friends = [], isLoading, loadingErrorMessage } = useFriends();
 
   return (
     <div className={styles.container}>
@@ -21,6 +21,14 @@ export const FriendsList: FC = () => {
       {(() => {
         if (isLoading) {
           return <Spinner />;
+        }
+
+        if (loadingErrorMessage) {
+          return (
+            <span data-name="message" className={styles.error}>
+              {loadingErrorMessage}
+            </span>
+          );
         }
       })()}
     </div>

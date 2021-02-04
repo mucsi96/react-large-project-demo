@@ -24,3 +24,7 @@ function createStory(args: StoryProps) {
 export const normal = createStory({
   friendsMock: 'normal',
 });
+
+export const processingFailure = createStory({
+  friendsMock: 'processingFailure',
+});

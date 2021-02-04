@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 export function useFriends(): {
   friends?: Friend[];
   isLoading: boolean;
+  loadingErrorMessage?: string;
 } {
   const friends = useApi(getFriends);
 
@@ -15,5 +16,10 @@ export function useFriends(): {
   return {
     friends: friends.data,
     isLoading: friends.isLoading,
+    loadingErrorMessage:
+      friends.error &&
+      `${friends.error.response?.error?.message ?? ''} Status: ${
+        friends.error.status ?? ''
+      }`,
   };
 }
