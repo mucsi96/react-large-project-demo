@@ -27,6 +27,7 @@ export function useFriends(): {
   return {
     friends: state.friends,
     isLoading: friends.isLoading,
+    isEmpty: !state.friends.length,
     loadingErrorMessage:
       friends.error &&
       `${friends.error.response?.error?.message ?? ''} Status: ${
