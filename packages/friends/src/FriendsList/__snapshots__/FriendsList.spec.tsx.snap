@@ -203,3 +203,13 @@ exports[`FriendsList renders list of friends 1`] = `
   </div>
 </FriendsList>
 `;
+
+exports[`FriendsList renders spinner during loading of friends 1`] = `
+<FriendsList>
+  <div
+    className="container"
+  >
+    <Spinner- />
+  </div>
+</FriendsList>
+`;

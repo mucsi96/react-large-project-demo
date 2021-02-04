@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 export function useFriends(): {
   friends?: Friend[];
+  isLoading: boolean;
 } {
   const friends = useApi(getFriends);
 
@@ -13,5 +14,6 @@ export function useFriends(): {
 
   return {
     friends: friends.data,
+    isLoading: friends.isLoading,
   };
 }

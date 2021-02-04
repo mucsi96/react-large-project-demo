@@ -1,9 +1,10 @@
+import { Spinner } from 'core';
 import React, { FC } from 'react';
 import styles from './FriendsList.module.scss';
 import { useFriends } from './useFriends';
 
 export const FriendsList: FC = () => {
-  const { friends = [] } = useFriends();
+  const { friends = [], isLoading } = useFriends();
 
   return (
     <div className={styles.container}>
@@ -17,6 +18,11 @@ export const FriendsList: FC = () => {
           </div>
         );
       })}
+      {(() => {
+        if (isLoading) {
+          return <Spinner />;
+        }
+      })()}
     </div>
   );
 };
