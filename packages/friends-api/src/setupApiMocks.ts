@@ -18,7 +18,7 @@ export function setupApiMocks(): void {
 
 function getFriends({ query }: MockRequest, response: MockResponse) {
   switch (getMockSwitch('friends')) {
-    case 'processingFailure':
+    case 'loadingFailure':
       return response.mockError(true);
     default:
       const from = parseInt((query.from as string) ?? '0');
