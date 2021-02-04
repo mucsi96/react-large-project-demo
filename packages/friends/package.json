@@ -1,0 +1,41 @@
+{
+  "name": "friends",
+  "version": "1.0.0",
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "lint": "dev-tools lint",
+    "check-types": "dev-tools check-types",
+    "test": "dev-tools test",
+    "test:watch": "yarn test --watch",
+    "int-test": "dev-tools int-test",
+    "int-test:update": "yarn int-test --update",
+    "int-test:debug": "yarn int-test --debug",
+    "int-test:fromDistDir": "yarn int-test --distDir ../../dist/friends",
+    "start": "dev-tools start-storybook",
+    "build:storybook": "dev-tools build-storybook",
+    "build": "dev-tools build-lib",
+    "build:watch": "yarn build --watch",
+    "qa": "npm-run-all lint check-types test build:storybook int-test:fromDistDir",
+    "prepare": "yarn build"
+  },
+  "dependencies": {
+    "friends-api": "^1.0.0",
+    "core": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "dev-tools": "^1.0.0",
+    "typescript": "^4.1.3",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0"
+  }
+}

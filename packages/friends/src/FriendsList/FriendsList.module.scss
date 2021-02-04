@@ -1,0 +1,44 @@
+.container {
+  display: grid;
+  gap: 30px;
+  max-width: 600px;
+}
+
+.friend {
+  text-decoration: initial;
+  color: initial;
+  display: grid;
+  font-size: 2em;
+  grid-template-columns: auto 1fr auto;
+  gap: 20px;
+}
+
+.actions {
+  margin: 5px;
+}
+
+.notifications {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+.error {
+  background-color: #c14f24;
+  padding: 10px 20px;
+  border: 1px solid white;
+  border-radius: 10px;
+  color: white;
+}
+
+.info {
+  background-color: #5168abf2;
+  padding: 10px 20px;
+  border: 1px solid white;
+  border-radius: 10px;
+  color: white;
+}
+
+.loadMore {
+  text-align: center;
+}
