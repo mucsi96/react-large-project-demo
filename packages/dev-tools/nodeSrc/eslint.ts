@@ -1,12 +1,19 @@
 import { resolve } from 'path';
 
-export const eslintConfig = resolve(__dirname, '../config/.eslintrc.json');
+const eslintConfig = resolve(__dirname, '../config/.eslintrc.json');
 
-export function setupEslintParser(root: string): Record<string, unknown> {
+function getESlintConfig(root: string): Record<string, unknown> {
   return {
-    files: ['*.ts', '*.tsx'],
-    parserOptions: {
-      project: resolve(root, 'tsconfig.json'),
-    },
+    extends: eslintConfig,
+    overrides: [
+      {
+        files: ['*.ts', '*.tsx'],
+        parserOptions: {
+          project: resolve(root, 'tsconfig.json'),
+        },
+      },
+    ],
   };
 }
+
+export default getESlintConfig;

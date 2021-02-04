@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import styles from './FriendsList.module.scss';
 import { Button } from '../Button';
 import { useFriends } from './useFriends';
+import { Spinner } from '../Spinner/Spinner';
 
 export const FriendsList: FC = () => {
   const {
@@ -18,7 +19,7 @@ export const FriendsList: FC = () => {
   } = useFriends();
 
   return (
-    <ul className={styles.container}>
+    <div className={styles.container}>
       <div data-name="notifications" className={styles.notifications}>
         {notifications.map(({ key, message }) => (
           <p key={key} className={styles.error}>
@@ -68,27 +69,29 @@ export const FriendsList: FC = () => {
         }
 
         if (isLoading) {
-          return (
-            <Button secondary data-name="loading" disabled>
-              Loading...
-            </Button>
-          );
+          return <Spinner />;
         }
 
         if (loadMore) {
           return (
-            <Button secondary onClick={loadMore} data-name="load-more">
-              Load more...
-            </Button>
+            <div className={styles.loadMore}>
+              <Button secondary onClick={loadMore} data-name="load-more">
+                Load more...
+              </Button>
+            </div>
           );
         }
 
         if (isEmpty) {
-          return <span data-name="message">{'No friends found :('}</span>;
+          return (
+            <span data-name="message" className={styles.info}>
+              {'No friends found :('}
+            </span>
+          );
         }
 
         return null;
       })()}
-    </ul>
+    </div>
   );
 };

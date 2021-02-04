@@ -34,6 +34,7 @@ export const Button: FC<ButtonProps> = ({
     className={classNames(styles.container, {
       [styles.primary]: primary,
       [styles.secondary]: secondary,
+      [styles.disabled]: disabled,
     })}
     disabled={disabled}
   >

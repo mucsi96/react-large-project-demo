@@ -9,9 +9,12 @@ export function friendsReducer(
     case 'LOAD_FRIENDS':
       return {
         ...state,
-        favorites: action.payload._embedded
-          .filter(({ isFavorite }) => isFavorite)
-          .map(({ id }) => id),
+        favorites: [
+          ...state.favorites,
+          ...action.payload._embedded
+            .filter(({ isFavorite }) => isFavorite)
+            .map(({ id }) => id),
+        ],
         friends: [...state.friends, ...action.payload._embedded],
       };
     case 'ADD_TO_FAVORITES':
