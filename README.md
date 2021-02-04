@@ -58,3 +58,10 @@ Based on Cucumber and Puppetier
 Additional features
 
 - snapshot testing
+
+## Demo steps
+
+- [Simple list](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-0..demo-step-1-simple-list)
+- [Loading spinner](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-1-simple-list..demo-step-2-loading)
+- [Loading failure](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-2-loading..demo-step-3-loading-failure)
+- [Lazy loading](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-3-loading-failure..demo-step-4-lazy-loading)
