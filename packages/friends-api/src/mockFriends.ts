@@ -1,4 +1,4 @@
-import { Friend } from './friends';
+import { Friend } from './types';
 
 // Image source: https://pravatar.cc/
 

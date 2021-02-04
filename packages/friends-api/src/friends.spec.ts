@@ -1,10 +1,6 @@
-import {
-  FriendActions,
-  FriendsResponse,
-  getFriends,
-  processFriend,
-} from './friends';
+import { getFriends, processFriend } from './friends';
 import { setupApiMocks } from './setupApiMocks';
+import { FriendActions, FriendsResponse } from './types';
 
 setupApiMocks();
 

@@ -4,7 +4,7 @@ import {
   loadFromMockDB,
   saveInMockDB,
 } from 'dev-tools';
-import { FriendsResponse } from './friends';
+import { FriendsResponse } from './types';
 import mockFriends from './mockFriends';
 
 function getFavorites(): string[] {

@@ -51,7 +51,7 @@ Object {
       "firstName": "Enrico",
       "id": "enrico",
       "image": "QueHjW3USKipufaxyB8ze9cN41u2u9UNjyI4MM3+0xGfyAP6miiljpNUnYvARTrK5jpaqopTAooorwbn0NkMaIZoooqkRY//2Q==",
-      "isFavorite": false,
+      "isFavorite": true,
       "lastName": "Pouros",
     },
     Object {
@@ -148,7 +148,7 @@ Object {
       "firstName": "Michelle",
       "id": "michelle",
       "image": "NT/6H+lfVn7PsS2HhR7VQCBO5BHpuOM0UUou8gklynqm7jHvTYWzF+JH60UVsc4+gnFFFAETHiqdyOKKKQzFuQBIfeiiikM//9k=",
-      "isFavorite": false,
+      "isFavorite": true,
       "lastName": "Gibson",
     },
     Object {
