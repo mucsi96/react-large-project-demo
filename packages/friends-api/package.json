@@ -1,0 +1,28 @@
+{
+  "name": "friends-api",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "lint": "dev-tools lint",
+    "check-types": "dev-tools check-types",
+    "test": "dev-tools test",
+    "test:watch": "yarn test --watch",
+    "build": "dev-tools build-lib",
+    "build:watch": "yarn build --watch",
+    "qa": "npm-run-all lint check-types test",
+    "prepare": "yarn build"
+  },
+  "devDependencies": {
+    "dev-tools": "1.0.0",
+    "typescript": "4.1.3"
+  },
+  "dependencies": {
+    "core": "1.0.0"
+  }
+}
