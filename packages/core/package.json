@@ -13,6 +13,8 @@
     "check-types": "dev-tools check-types",
     "test": "dev-tools test",
     "test:watch": "yarn test --watch",
+    "start": "dev-tools start-storybook",
+    "build:storybook": "dev-tools build-storybook",
     "build": "dev-tools build-lib",
     "build:watch": "yarn build --watch",
     "qa": "npm-run-all lint check-types test",
@@ -23,10 +25,14 @@
     "react-dom": "^16.13.1"
   },
   "dependencies": {
-    "rxjs": "^6.6.3"
+    "rxjs": "^6.6.3",
+    "classnames": "^2.2.6"
   },
   "devDependencies": {
     "dev-tools": "^1.0.0",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/classnames": "^2.2.11"
   }
 }

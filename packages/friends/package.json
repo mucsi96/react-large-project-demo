@@ -1,5 +1,5 @@
 {
-  "name": "ui-lib",
+  "name": "friends",
   "version": "1.0.0",
   "main": "lib/index.cjs",
   "module": "lib/index.js",
@@ -16,7 +16,7 @@
     "int-test": "dev-tools int-test",
     "int-test:update": "yarn int-test --update",
     "int-test:debug": "yarn int-test --debug",
-    "int-test:fromDistDir": "yarn int-test --distDir ../../dist/ui-lib",
+    "int-test:fromDistDir": "yarn int-test --distDir ../../dist/friends",
     "start": "dev-tools start-storybook",
     "build:storybook": "dev-tools build-storybook",
     "build": "dev-tools build-lib",

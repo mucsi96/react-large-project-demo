@@ -17508,6 +17508,11 @@ uglify-js@^3.1.4:
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.12.5.tgz#83241496087c640efe9dfc934832e71725aba008"
   integrity sha512-SgpgScL4T7Hj/w/GexjnBHi3Ien9WS1Rpfg5y91WXMj9SY997ZCQU76mH4TpLwwfmMvoOU8wiaRkIf6NaH3mtg==
 
+ui-lib@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/ui-lib/-/ui-lib-1.0.0.tgz#85e345fae1bc595445da3c828fa8f650b0219dbb"
+  integrity sha1-heNF+uG8WVRF2jyCj6j2ULAhnbs=
+
 uid-number@0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/uid-number/-/uid-number-0.0.6.tgz#0ea10e8035e8eb5b8e4449f06da1c730663baa81"

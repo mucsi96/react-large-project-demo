@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react';
 import React from 'react';
-import { setupApiMocks } from '../../setupApiMocks';
+import { setupApiMocks } from '../setupApiMocks';
 import { FriendsList } from './FriendsList';
 import { setMockSwitch } from 'dev-tools';
 

@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import styles from './FriendsList.module.scss';
-import { Button } from '../Button';
+import { Button, Spinner } from 'core';
 import { useFriends } from './useFriends';
-import { Spinner } from '../Spinner/Spinner';
 
 export const FriendsList: FC = () => {
   const {

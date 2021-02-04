@@ -8,7 +8,7 @@ import { FriendsResponse } from './friends';
 import mockFriends from './mockFriends';
 
 function getFavorites(): string[] {
-  return loadFromMockDB('friend-favories') ?? ['enrico'];
+  return loadFromMockDB('friend-favories') ?? ['enrico', 'michelle'];
 }
 
 function setFavorites(favorites: string[]): void {
