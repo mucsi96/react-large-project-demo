@@ -66,3 +66,4 @@ Additional features
 - [Loading failure](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-2-loading..demo-step-3-loading-failure)
 - [Lazy loading](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-3-loading-failure..demo-step-4-lazy-loading)
 - [Empty list](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-4-lazy-loading..demo-step-5-empty-list)
+- [Add to favorite](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-5-empty-list..demo-step-6-add-to-favorite)
