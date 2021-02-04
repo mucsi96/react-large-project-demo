@@ -1,6 +1,8 @@
 import { fetchJSON } from 'core';
-import { Friend } from './types';
+import { FriendsResponse, Link } from './types';
 
-export function getFriends(): Promise<Friend[]> {
-  return fetchJSON('/api/friends');
+export function getFriends(
+  link: Link = { href: '/api/friends' }
+): Promise<FriendsResponse> {
+  return fetchJSON(link.href);
 }

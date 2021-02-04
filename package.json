@@ -14,6 +14,7 @@
   },
   "scripts": {
     "qa": "lerna run qa",
+    "build:watch": "lerna run build:watch --parallel",
     "prepare": "lerna run prepare",
     "prepare:deploy": "lerna run build:storybook && lerna run build:app"
   },
