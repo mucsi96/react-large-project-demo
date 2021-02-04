@@ -4,33 +4,88 @@ exports[`friends getFriends fetches friends 1`] = `
 Object {
   "_embedded": Array [
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/alyson/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/alyson/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Alyson",
       "id": "alyson",
       "image": "wNMM9flXbj/x7NR6y5ku5Jm5eRy5PuTmiirk37OPzM6atVl6L9StE0gf7/atXTr6WK42g9BRRWDOpGy1w0sal+frRRRWYmkf/9k=",
+      "isFavorite": false,
       "lastName": "Donnelly",
     },
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/carlee/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/carlee/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Carlee",
       "id": "carlee",
       "image": "c3czsJTjpmuX8UzHyHJoooA8S1XXPMvRbSW6kxyN8+eSCMVJb3UcEcAkWR03naobAGetFFAHfadZWUcKmONwGGe3eiiigD//2Q==",
+      "isFavorite": false,
       "lastName": "Kreiger",
     },
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/enrico/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/enrico/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Enrico",
       "id": "enrico",
       "image": "QueHjW3USKipufaxyB8ze9cN41u2u9UNjyI4MM3+0xGfyAP6miiljpNUnYvARTrK5jpaqopTAooorwbn0NkMaIZoooqkRY//2Q==",
+      "isFavorite": true,
       "lastName": "Pouros",
     },
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/patricia/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/patricia/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Patricia",
       "id": "patricia",
       "image": "XkUaZSIMVBOcc0UV1YZ6tHBjErXPrT4datFc2DadBbLbx2KKkYTps7D68V1znIINFFclZWk0jSk7xTZnz8NxRRRXnS3O6Ox//9k=",
+      "isFavorite": false,
       "lastName": "Barrows",
     },
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/bergstrom/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/bergstrom/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Steven",
       "id": "bergstrom",
       "image": "+IVAcRQr92JPQe/HJ70UUAUEkXKhQdp5+p96Gb5SQMFTng9aKKAIInL3B2jsTyaspM6qN2OOp9RxRRQBOHYncmAenIooooA//9k=",
+      "isFavorite": false,
       "lastName": "Bergstrom",
     },
   ],
@@ -46,33 +101,88 @@ exports[`friends getFriends fetches the next page of friends 1`] = `
 Object {
   "_embedded": Array [
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/carol/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/carol/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Carol",
       "id": "carol",
       "image": "TLBRKTkHkY9PeiisurOxbI9t+HQNvr17aYUhVaQMB2ZkYA/TJrrtdhB1KbnrjP5CiivMqblSdpmFe2bbV2OBz3oooqEaJn//2Q==",
+      "isFavorite": false,
       "lastName": "Fahey",
     },
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/kevin/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/kevin/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Kevin",
       "id": "kevin",
       "image": "biiilIEfbXhGcyeFdIeUl3a0iLE9zsGai8R2kNzYzFVMcoU4dTgiiivOkkehHY8LvLlNWd7HVI/OltnJD9c9qKKKzsiVqtT/2Q==",
+      "isFavorite": false,
       "lastName": "Flatley",
     },
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/michelle/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/michelle/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Michelle",
       "id": "michelle",
       "image": "NT/6H+lfVn7PsS2HhR7VQCBO5BHpuOM0UUou8gklynqm7jHvTYWzF+JH60UVsc4+gnFFFAETHiqdyOKKKQzFuQBIfeiiikM//9k=",
+      "isFavorite": true,
       "lastName": "Gibson",
     },
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/larry/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/larry/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Larry",
       "id": "larry",
       "image": "a1OnP6s4KMIuye5kpzj0NQXLFyFPQUUV7Utj5aHxD5VwY19qRQMkUUUuodBVba4I78GrBj+Y4PWiiqRMgi5Y56elFFFNbEPc/9k=",
+      "isFavorite": false,
       "lastName": "Goodwin",
     },
     Object {
+      "_links": Object {
+        "addToFavorite": Object {
+          "href": "/api/friends/sarah/add-to-favorite",
+          "method": "POST",
+        },
+        "removeFromFavorite": Object {
+          "href": "/api/friends/sarah/remove-from-favorite",
+          "method": "POST",
+        },
+      },
       "firstName": "Sarah",
       "id": "sarah",
       "image": "te6HKXadbm2bl0YYJ9x71fe4R7iFzvAkwAR1wexoopT96Km92KEFCcqcdlYxtbRoJ3idstGwG4DqCMiiiiuum/dR5VWK52f/2Q==",
+      "isFavorite": false,
       "lastName": "Graham",
     },
   ],

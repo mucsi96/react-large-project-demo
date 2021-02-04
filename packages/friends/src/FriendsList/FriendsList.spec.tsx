@@ -4,6 +4,7 @@ import { FriendsList } from './FriendsList';
 import { act } from 'react-dom/test-utils';
 import { setupApiMocks } from '../setupApiMocks';
 import { setMockSwitch } from 'dev-tools';
+import { Spinner } from 'core';
 
 jest.mock('core', () => {
   const actual = jest.requireActual<Record<string, unknown>>('core');
@@ -29,7 +30,7 @@ describe('FriendsList', () => {
   });
 
   test('renders error message in case of loading failure', async () => {
-    setMockSwitch('friends', 'processingFailure');
+    setMockSwitch('friends', 'loadingFailure');
     const wrapper = await renderFriends();
     expect(wrapper).toMatchSnapshot();
   });
@@ -41,7 +42,7 @@ describe('FriendsList', () => {
     });
     wrapper.update();
     expect(wrapper.find('[data-name="friend"]')).toHaveLength(5);
-    expect(wrapper.find('[data-name="loading"]').exists()).toBe(true);
+    expect(wrapper.find(Spinner).exists()).toBe(true);
   });
 
   test('loads more friends clicking load more button', async () => {
@@ -70,6 +71,25 @@ describe('FriendsList', () => {
     expect(wrapper.find('[data-name="friend"]')).toHaveLength(15);
     expect(wrapper.find('[data-name="load-more"]').exists()).toBe(false);
   });
+
+  test('adds friend as favorite by clicking on "Add to favorite" button', async () => {
+    const wrapper = await renderFriends();
+    await addToFavorite(wrapper, 1);
+    expect(isFavorite(wrapper, 1)).toBe(true);
+  });
+
+  test('persits favories', async () => {
+    await addToFavorite(await renderFriends(), 1);
+    const wrapper = await renderFriends();
+    expect(isFavorite(wrapper, 1)).toBe(true);
+  });
+
+  test('remove friend from favorite by clicking on "Remove from favorite" button', async () => {
+    await addToFavorite(await renderFriends(), 1);
+    const wrapper = await renderFriends();
+    await removeFromFavorite(wrapper, 1);
+    expect(isNotFavorite(wrapper, 1)).toBe(true);
+  });
 });
 
 async function renderFriends() {
@@ -83,4 +103,46 @@ function loadMore(wrapper: ReactWrapper) {
   act(() => {
     wrapper.find('[data-name="load-more"]').simulate('click');
   });
+}
+
+function isFavorite(wrapper: ReactWrapper, index: number): boolean {
+  return wrapper
+    .find('[data-name="friend"]')
+    .at(index)
+    .find('[data-name="remove-from-favorite"]')
+    .exists();
+}
+
+function isNotFavorite(wrapper: ReactWrapper, index: number): boolean {
+  return wrapper
+    .find('[data-name="friend"]')
+    .at(index)
+    .find('[data-name="add-to-favorite"]')
+    .exists();
+}
+
+async function addToFavorite(wrapper: ReactWrapper, index: number) {
+  await act(() => {
+    wrapper
+      .find('[data-name="friend"]')
+      .at(index)
+      .find('[data-name="add-to-favorite"]')
+      .simulate('click');
+    return Promise.resolve();
+  });
+
+  wrapper.update();
+}
+
+async function removeFromFavorite(wrapper: ReactWrapper, index: number) {
+  await act(() => {
+    wrapper
+      .find('[data-name="friend"]')
+      .at(index)
+      .find('[data-name="remove-from-favorite"]')
+      .simulate('click');
+    return Promise.resolve();
+  });
+
+  wrapper.update();
 }

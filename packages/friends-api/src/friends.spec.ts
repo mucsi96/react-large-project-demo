@@ -1,6 +1,6 @@
-import { getFriends } from './friends';
+import { getFriends, processFriend } from './friends';
 import { setupApiMocks } from './setupApiMocks';
-import { FriendsResponse } from './types';
+import { FriendActions, FriendsResponse } from './types';
 
 setupApiMocks();
 
@@ -22,6 +22,26 @@ describe('friends', () => {
       const friends2 = await getFriends(friends1._links.next);
       const friends3 = await getFriends(friends2._links.next);
       expect(friends3._links.next).toBeUndefined();
+    });
+  });
+
+  describe('processFriend', () => {
+    it('adds friend to favorite', async () => {
+      const friends = await getFriends();
+      await processFriend(friends._embedded[1], FriendActions.ADD_TO_FAVORITE);
+      const processedFriends = await getFriends();
+      expect(processedFriends._embedded[1].isFavorite).toBe(true);
+    });
+
+    it('removes friend from favorite', async () => {
+      const friends = await getFriends();
+      await processFriend(friends._embedded[1], FriendActions.ADD_TO_FAVORITE);
+      await processFriend(
+        friends._embedded[1],
+        FriendActions.REMOVE_FROM_FAVORITE
+      );
+      const processedFriends = await getFriends();
+      expect(processedFriends._embedded[1].isFavorite).toBe(false);
     });
   });
 });

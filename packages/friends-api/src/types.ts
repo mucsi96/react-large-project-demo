@@ -8,6 +8,8 @@ export type Friend = {
   firstName: string;
   lastName: string;
   image: string;
+  isFavorite: boolean;
+  _links: Record<FriendActions, Link>;
 };
 
 export type FriendsResponse = {
@@ -16,3 +18,8 @@ export type FriendsResponse = {
     next?: Link;
   };
 };
+
+export enum FriendActions {
+  ADD_TO_FAVORITE = 'addToFavorite',
+  REMOVE_FROM_FAVORITE = 'removeFromFavorite',
+}

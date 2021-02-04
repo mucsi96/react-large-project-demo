@@ -5,6 +5,10 @@ exports[`FriendsList renders error message in case of loading failure 1`] = `
   <div
     className="container"
   >
+    <div
+      className="notifications"
+      data-name="notifications"
+    />
     <span
       className="error"
       data-name="message"
@@ -21,6 +25,10 @@ exports[`FriendsList renders list of friends 1`] = `
     className="container"
   >
     <div
+      className="notifications"
+      data-name="notifications"
+    />
+    <div
       className="friend"
       data-name="friend"
       key="alyson"
@@ -32,6 +40,18 @@ exports[`FriendsList renders list of friends 1`] = `
       <span>
         Alyson Donnelly
       </span>
+      <div
+        className="actions"
+      >
+        <Button-
+          data-name="add-to-favorite"
+          disabled={false}
+          onClick={[Function]}
+          primary={true}
+        >
+          Add to favorite
+        </Button->
+      </div>
     </div>
     <div
       className="friend"
@@ -45,6 +65,18 @@ exports[`FriendsList renders list of friends 1`] = `
       <span>
         Carlee Kreiger
       </span>
+      <div
+        className="actions"
+      >
+        <Button-
+          data-name="add-to-favorite"
+          disabled={false}
+          onClick={[Function]}
+          primary={true}
+        >
+          Add to favorite
+        </Button->
+      </div>
     </div>
     <div
       className="friend"
@@ -58,6 +90,18 @@ exports[`FriendsList renders list of friends 1`] = `
       <span>
         Enrico Pouros
       </span>
+      <div
+        className="actions"
+      >
+        <Button-
+          data-name="remove-from-favorite"
+          disabled={false}
+          onClick={[Function]}
+          secondary={true}
+        >
+          Remove from favorite
+        </Button->
+      </div>
     </div>
     <div
       className="friend"
@@ -71,6 +115,18 @@ exports[`FriendsList renders list of friends 1`] = `
       <span>
         Patricia Barrows
       </span>
+      <div
+        className="actions"
+      >
+        <Button-
+          data-name="add-to-favorite"
+          disabled={false}
+          onClick={[Function]}
+          primary={true}
+        >
+          Add to favorite
+        </Button->
+      </div>
     </div>
     <div
       className="friend"
@@ -84,6 +140,18 @@ exports[`FriendsList renders list of friends 1`] = `
       <span>
         Steven Bergstrom
       </span>
+      <div
+        className="actions"
+      >
+        <Button-
+          data-name="add-to-favorite"
+          disabled={false}
+          onClick={[Function]}
+          primary={true}
+        >
+          Add to favorite
+        </Button->
+      </div>
     </div>
     <div
       className="loadMore"
@@ -105,6 +173,10 @@ exports[`FriendsList renders spinner during loading of friends 1`] = `
   <div
     className="container"
   >
+    <div
+      className="notifications"
+      data-name="notifications"
+    />
     <Spinner- />
   </div>
 </FriendsList>
