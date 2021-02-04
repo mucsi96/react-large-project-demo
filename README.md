@@ -65,3 +65,4 @@ Additional features
 - [Loading spinner](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-1-simple-list..demo-step-2-loading)
 - [Loading failure](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-2-loading..demo-step-3-loading-failure)
 - [Lazy loading](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-3-loading-failure..demo-step-4-lazy-loading)
+- [Empty list](https://github.com/mucsi96/react-large-project-demo/compare/demo-step-4-lazy-loading..demo-step-5-empty-list)
