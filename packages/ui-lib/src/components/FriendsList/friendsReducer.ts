@@ -1,21 +1,9 @@
 import { FriendActions } from 'friends-api';
-import {
-  FriendsState,
-  AddToFavoritesAction,
-  LoadFriendsAction,
-  RemoveFromFavoritesAction,
-  ProcessingSucceedAction,
-  ProcessingFailedAction,
-} from './types';
+import { FriendsAction, FriendsState } from './types';
 
 export function friendsReducer(
   state: FriendsState,
-  action:
-    | LoadFriendsAction
-    | AddToFavoritesAction
-    | RemoveFromFavoritesAction
-    | ProcessingSucceedAction
-    | ProcessingFailedAction
+  action: FriendsAction
 ): FriendsState {
   switch (action.type) {
     case 'LOAD_FRIENDS':
@@ -52,7 +40,13 @@ export function friendsReducer(
             processing: state.processing.filter(
               (id) => id !== action.friend.id
             ),
-            lastProcessingError: 'Adding to favorite was not successful',
+            notifications: [
+              {
+                key: action.notificationKey,
+                message: `Adding ${action.friend.firstName} to favorite was not successful`,
+              },
+              ...state.notifications,
+            ],
           };
         case FriendActions.REMOVE_FROM_FAVORITE:
           return {
@@ -61,11 +55,24 @@ export function friendsReducer(
             processing: state.processing.filter(
               (id) => id !== action.friend.id
             ),
-            lastProcessingError: 'Removing from favorite was not successful',
+            notifications: [
+              {
+                key: action.notificationKey,
+                message: `Removing ${action.friend.firstName} from favorite was not successful`,
+              },
+              ...state.notifications,
+            ],
           };
         default:
           return state;
       }
+    case 'CLEAR_NOTIFICATION':
+      return {
+        ...state,
+        notifications: state.notifications.filter(
+          ({ key }) => key !== action.key
+        ),
+      };
     default:
       return state;
   }

@@ -1,35 +1,52 @@
 import { Friend, FriendsResponse, FriendActions } from 'friends-api';
 
-export type LoadFriendsAction = {
+type LoadFriendsAction = {
   type: 'LOAD_FRIENDS';
   payload: FriendsResponse;
 };
 
-export type AddToFavoritesAction = {
+type AddToFavoritesAction = {
   type: 'ADD_TO_FAVORITES';
   id: string;
 };
 
-export type RemoveFromFavoritesAction = {
+type RemoveFromFavoritesAction = {
   type: 'REMOVE_FROM_FAVORITES';
   id: string;
 };
 
-export type ProcessingSucceedAction = {
+type ProcessingSucceedAction = {
   type: 'PROCESSING_SUCCEED';
   friend: Friend;
   action: FriendActions;
+  notificationKey: string;
 };
 
-export type ProcessingFailedAction = {
+type ProcessingFailedAction = {
   type: 'PROCESSING_FAILED';
   friend: Friend;
   action: FriendActions;
+  notificationKey: string;
 };
+
+type ClearNotificationAction = {
+  type: 'CLEAR_NOTIFICATION';
+  key: string;
+};
+
+export type FriendsAction =
+  | LoadFriendsAction
+  | AddToFavoritesAction
+  | RemoveFromFavoritesAction
+  | ProcessingSucceedAction
+  | ProcessingFailedAction
+  | ClearNotificationAction;
+
+export type Notification = { key: string; message: string };
 
 export type FriendsState = {
   favorites: string[];
   friends: Friend[];
   processing: string[];
-  lastProcessingError?: string;
+  notifications: Notification[];
 };

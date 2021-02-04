@@ -2,12 +2,13 @@ import { useApi } from 'core';
 import { Friend, FriendActions, getFriends, processFriend } from 'friends-api';
 import { useEffect, useReducer } from 'react';
 import { friendsReducer } from './friendsReducer';
+import { Notification } from './types';
 
 export function useFriends(): {
   isLoading: boolean;
   isEmpty: boolean;
   loadingErrorMessage?: string;
-  lastProcessingError?: string;
+  notifications: Notification[];
   loadMore?: () => void;
   friends: Friend[];
   isFavorite: (firend: Friend) => boolean;
@@ -21,6 +22,7 @@ export function useFriends(): {
     favorites: [],
     friends: [],
     processing: [],
+    notifications: [],
   });
 
   useEffect(() => {
@@ -39,11 +41,17 @@ export function useFriends(): {
     }
 
     const [friend, action] = processFriends.fetchArgs;
+    const notificationKey = Date.now().toString();
     dispatch({
       type: processFriends.error ? 'PROCESSING_FAILED' : 'PROCESSING_SUCCEED',
       friend,
       action,
+      notificationKey,
     });
+    setTimeout(
+      () => dispatch({ type: 'CLEAR_NOTIFICATION', key: notificationKey }),
+      3000
+    );
   }, [processFriends.data, processFriends.error, processFriends.fetchArgs]);
 
   function addToFavorites(friend: Friend) {
@@ -64,7 +72,7 @@ export function useFriends(): {
       `${friends.error?.response?.error?.message || ''}. Status: ${
         friends.error?.status || ''
       }`,
-    lastProcessingError: state.lastProcessingError,
+    notifications: state.notifications,
     loadMore:
       friends.data?._links.next &&
       (() => friends.fetch(friends.data?._links.next)),

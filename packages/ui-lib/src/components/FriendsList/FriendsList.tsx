@@ -8,7 +8,7 @@ export const FriendsList: FC = () => {
     isLoading,
     isEmpty,
     loadingErrorMessage,
-    lastProcessingError,
+    notifications,
     friends,
     loadMore,
     isFavorite,
@@ -19,7 +19,13 @@ export const FriendsList: FC = () => {
 
   return (
     <ul className={styles.container}>
-      <span>{lastProcessingError}</span>
+      <div data-name="notifications" className={styles.notifications}>
+        {notifications.map(({ key, message }) => (
+          <p key={key} className={styles.error}>
+            {message}
+          </p>
+        ))}
+      </div>
       {friends.map((friend) => {
         const { id, firstName, lastName, image } = friend;
         const fullName = [firstName, lastName].join(' ');
@@ -54,12 +60,16 @@ export const FriendsList: FC = () => {
       })}
       {(() => {
         if (loadingErrorMessage) {
-          return <span data-name="message">{loadingErrorMessage}</span>;
+          return (
+            <span data-name="message" className={styles.error}>
+              {loadingErrorMessage}
+            </span>
+          );
         }
 
         if (isLoading) {
           return (
-            <Button secondary data-name="loading">
+            <Button secondary data-name="loading" disabled>
               Loading...
             </Button>
           );
