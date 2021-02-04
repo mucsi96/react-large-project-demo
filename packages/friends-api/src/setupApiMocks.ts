@@ -17,7 +17,7 @@ export function setupApiMocks(): void {
 
 function getFriends(_request: MockRequest, response: MockResponse) {
   switch (getMockSwitch('friends')) {
-    case 'processingFailure':
+    case 'loadingFailure':
       return response.mockError(true);
     default:
       return mockFriends;

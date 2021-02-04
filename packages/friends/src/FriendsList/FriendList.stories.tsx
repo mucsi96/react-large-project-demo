@@ -25,6 +25,6 @@ export const normal = createStory({
   friendsMock: 'normal',
 });
 
-export const processingFailure = createStory({
-  friendsMock: 'processingFailure',
+export const loadingFailure = createStory({
+  friendsMock: 'loadingFailure',
 });
