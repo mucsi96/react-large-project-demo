@@ -1,16 +1,14 @@
 import { useApi } from 'core';
-import { Friend, getFriends, processFriend, FriendActions } from 'friends-api';
+import { getFriends, processFriend, FriendActions } from 'friends-api';
 import { useEffect, useReducer } from 'react';
 import { friendsReducer } from './friendsReducer';
-import { Notification } from './types';
+import { Notification, Friend } from './types';
 
 export function useFriends(): {
   friends?: Friend[];
   isLoading: boolean;
   loadingErrorMessage?: string;
   loadMore?: () => void;
-  isFavorite: (firend: Friend) => boolean;
-  isProcessing: (firend: Friend) => boolean;
   addToFavorites: (friend: Friend) => void;
   removeFromFavorites: (friend: Friend) => void;
   notifications: Notification[];
@@ -19,8 +17,6 @@ export function useFriends(): {
   const processFriends = useApi(processFriend);
   const [state, dispatch] = useReducer(friendsReducer, {
     friends: [],
-    favorites: [],
-    processing: [],
     notifications: [],
   });
 
@@ -64,8 +60,6 @@ export function useFriends(): {
     loadMore:
       friends.data?._links.next &&
       (() => friends.fetch(friends.data?._links.next)),
-    isFavorite: (friend: Friend) => state.favorites.includes(friend.id),
-    isProcessing: (friend: Friend) => state.processing.includes(friend.id),
     addToFavorites: (friend: Friend) => {
       dispatch({ type: 'ADD_TO_FAVORITES', id: friend.id });
       processFriends.fetch(friend, FriendActions.ADD_TO_FAVORITE);

@@ -45,7 +45,6 @@ exports[`FriendsList renders list of friends 1`] = `
       >
         <Button-
           data-name="add-to-favorite"
-          disabled={false}
           onClick={[Function]}
           primary={true}
         >
@@ -70,7 +69,6 @@ exports[`FriendsList renders list of friends 1`] = `
       >
         <Button-
           data-name="add-to-favorite"
-          disabled={false}
           onClick={[Function]}
           primary={true}
         >
@@ -95,7 +93,6 @@ exports[`FriendsList renders list of friends 1`] = `
       >
         <Button-
           data-name="remove-from-favorite"
-          disabled={false}
           onClick={[Function]}
           secondary={true}
         >
@@ -120,7 +117,6 @@ exports[`FriendsList renders list of friends 1`] = `
       >
         <Button-
           data-name="add-to-favorite"
-          disabled={false}
           onClick={[Function]}
           primary={true}
         >
@@ -145,7 +141,6 @@ exports[`FriendsList renders list of friends 1`] = `
       >
         <Button-
           data-name="add-to-favorite"
-          disabled={false}
           onClick={[Function]}
           primary={true}
         >

@@ -1,4 +1,8 @@
-import { Friend, FriendsResponse, FriendActions } from 'friends-api';
+import {
+  Friend as ApiFriend,
+  FriendsResponse,
+  FriendActions,
+} from 'friends-api';
 
 type LoadFriendsAction = {
   type: 'LOAD_FRIENDS';
@@ -44,9 +48,11 @@ export type FriendsAction =
 
 export type Notification = { key: string; message: string };
 
+export type Friend = ApiFriend & {
+  isProcessing?: boolean;
+};
+
 export type FriendsState = {
   friends: Friend[];
-  favorites: string[];
-  processing: string[];
   notifications: Notification[];
 };

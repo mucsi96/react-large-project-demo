@@ -9,8 +9,6 @@ export const FriendsList: FC = () => {
     isLoading,
     loadingErrorMessage,
     loadMore,
-    isFavorite,
-    isProcessing,
     addToFavorites,
     removeFromFavorites,
     notifications,
@@ -33,22 +31,22 @@ export const FriendsList: FC = () => {
             <img src={image} alt={fullName} />
             <span>{fullName}</span>
             <div className={styles.actions}>
-              {!isFavorite(friend) && (
+              {!friend.isFavorite && (
                 <Button
                   primary
                   onClick={() => addToFavorites(friend)}
                   data-name="add-to-favorite"
-                  disabled={isProcessing(friend)}
+                  disabled={friend.isProcessing}
                 >
                   Add to favorite
                 </Button>
               )}
-              {isFavorite(friend) && (
+              {friend.isFavorite && (
                 <Button
                   secondary
                   onClick={() => removeFromFavorites(friend)}
                   data-name="remove-from-favorite"
-                  disabled={isProcessing(friend)}
+                  disabled={friend.isProcessing}
                 >
                   Remove from favorite
                 </Button>
