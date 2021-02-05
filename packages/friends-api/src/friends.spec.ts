@@ -1,4 +1,4 @@
-import { getFriends, processFriend } from './friends';
+import { getFriends, hasMore, processFriend } from './friends';
 import { setupApiMocks } from './setupApiMocks';
 import { FriendActions, FriendsResponse } from './types';
 
@@ -13,15 +13,15 @@ describe('friends', () => {
 
     it('fetches the next page of friends', async () => {
       const friends1 = await getFriends();
-      const friends2 = await getFriends(friends1._links.next);
+      const friends2 = await getFriends(friends1);
       expect(reduceImages(friends2)).toMatchSnapshot();
     });
 
     it('returns no next link if there are no more friends', async () => {
       const friends1 = await getFriends();
-      const friends2 = await getFriends(friends1._links.next);
-      const friends3 = await getFriends(friends2._links.next);
-      expect(friends3._links.next).toBeUndefined();
+      const friends2 = await getFriends(friends1);
+      const friends3 = await getFriends(friends2);
+      expect(hasMore(friends3)).toBe(false);
     });
   });
 

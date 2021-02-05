@@ -1,5 +1,5 @@
 import { useApi } from 'core';
-import { getFriends, processFriend, FriendActions } from 'friends-api';
+import { getFriends, processFriend, FriendActions, hasMore } from 'friends-api';
 import { useEffect, useReducer } from 'react';
 import { friendsReducer } from './friendsReducer';
 import { Notification, Friend } from './types';
@@ -58,8 +58,9 @@ export function useFriends(): {
         friends.error.status ?? ''
       }`,
     loadMore:
-      friends.data?._links.next &&
-      (() => friends.fetch(friends.data?._links.next)),
+      friends.data && hasMore(friends.data)
+        ? () => friends.fetch(friends.data)
+        : undefined,
     addToFavorites: (friend: Friend) => {
       dispatch({ type: 'ADD_TO_FAVORITES', id: friend.id });
       processFriends.fetch(friend, FriendActions.ADD_TO_FAVORITE);
