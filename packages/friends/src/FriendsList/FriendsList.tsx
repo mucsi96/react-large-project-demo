@@ -1,20 +1,17 @@
+import { Button, Spinner } from 'core';
 import React, { FC } from 'react';
 import styles from './FriendsList.module.scss';
-import { Button, Spinner } from 'core';
 import { useFriends } from './useFriends';
 
 export const FriendsList: FC = () => {
   const {
+    friends = [],
     isLoading,
-    isEmpty,
     loadingErrorMessage,
-    notifications,
-    friends,
     loadMore,
-    isFavorite,
-    isProcessing,
     addToFavorites,
     removeFromFavorites,
+    notifications,
   } = useFriends();
 
   return (
@@ -34,22 +31,22 @@ export const FriendsList: FC = () => {
             <img src={image} alt={fullName} />
             <span>{fullName}</span>
             <div className={styles.actions}>
-              {!isFavorite(friend) && (
+              {!friend.isFavorite && (
                 <Button
                   primary
                   onClick={() => addToFavorites(friend)}
                   data-name="add-to-favorite"
-                  disabled={isProcessing(friend)}
+                  disabled={friend.isProcessing}
                 >
                   Add to favorite
                 </Button>
               )}
-              {isFavorite(friend) && (
+              {friend.isFavorite && (
                 <Button
                   secondary
                   onClick={() => removeFromFavorites(friend)}
                   data-name="remove-from-favorite"
-                  disabled={isProcessing(friend)}
+                  disabled={friend.isProcessing}
                 >
                   Remove from favorite
                 </Button>
@@ -59,16 +56,16 @@ export const FriendsList: FC = () => {
         );
       })}
       {(() => {
+        if (isLoading) {
+          return <Spinner />;
+        }
+
         if (loadingErrorMessage) {
           return (
             <span data-name="message" className={styles.error}>
               {loadingErrorMessage}
             </span>
           );
-        }
-
-        if (isLoading) {
-          return <Spinner />;
         }
 
         if (loadMore) {
@@ -80,16 +77,6 @@ export const FriendsList: FC = () => {
             </div>
           );
         }
-
-        if (isEmpty) {
-          return (
-            <span data-name="message" className={styles.info}>
-              {'No friends found :('}
-            </span>
-          );
-        }
-
-        return null;
       })()}
     </div>
   );

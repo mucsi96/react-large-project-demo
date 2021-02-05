@@ -6,7 +6,7 @@ setupApiMocks();
 
 describe('friends', () => {
   describe('getFriends', () => {
-    it('fetches the list of friends', async () => {
+    test('fetches friends', async () => {
       const friends = await getFriends();
       expect(reduceImages(friends)).toMatchSnapshot();
     });

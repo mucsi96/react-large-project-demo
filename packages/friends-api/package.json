@@ -1,13 +1,13 @@
 {
   "name": "friends-api",
   "version": "1.0.0",
+  "license": "MIT",
   "main": "lib/index.cjs",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib"
   ],
-  "license": "MIT",
   "scripts": {
     "lint": "dev-tools lint",
     "check-types": "dev-tools check-types",

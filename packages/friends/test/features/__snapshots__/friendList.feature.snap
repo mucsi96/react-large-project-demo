@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Show the list of friends 1`] = `
-"[
-  { name: 'name', value: 'Alyson Donnelly' },
-  { name: 'name', value: 'Carlee Kreiger' },
-  { name: 'name', value: 'Enrico Pouros' }
-]"
-`;

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`friends getFriends fetches the list of friends 1`] = `
+exports[`friends getFriends fetches friends 1`] = `
 Object {
   "_embedded": Array [
     Object {
@@ -91,7 +91,7 @@ Object {
   ],
   "_links": Object {
     "next": Object {
-      "href": "/api/friends?from=carol",
+      "href": "/api/friends?from=5",
     },
   },
 }
@@ -188,7 +188,7 @@ Object {
   ],
   "_links": Object {
     "next": Object {
-      "href": "/api/friends?from=jeffrey",
+      "href": "/api/friends?from=10",
     },
   },
 }

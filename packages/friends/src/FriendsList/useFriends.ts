@@ -1,27 +1,22 @@
 import { useApi } from 'core';
-import { Friend, FriendActions, getFriends, processFriend } from 'friends-api';
+import { getFriends, processFriend, FriendActions } from 'friends-api';
 import { useEffect, useReducer } from 'react';
 import { friendsReducer } from './friendsReducer';
-import { Notification } from './types';
+import { Notification, Friend } from './types';
 
 export function useFriends(): {
+  friends?: Friend[];
   isLoading: boolean;
-  isEmpty: boolean;
   loadingErrorMessage?: string;
-  notifications: Notification[];
   loadMore?: () => void;
-  friends: Friend[];
-  isFavorite: (firend: Friend) => boolean;
-  isProcessing: (firend: Friend) => boolean;
   addToFavorites: (friend: Friend) => void;
   removeFromFavorites: (friend: Friend) => void;
+  notifications: Notification[];
 } {
   const friends = useApi(getFriends);
   const processFriends = useApi(processFriend);
   const [state, dispatch] = useReducer(friendsReducer, {
-    favorites: [],
     friends: [],
-    processing: [],
     notifications: [],
   });
 
@@ -54,32 +49,25 @@ export function useFriends(): {
     );
   }, [processFriends.data, processFriends.error, processFriends.fetchArgs]);
 
-  function addToFavorites(friend: Friend) {
-    dispatch({ type: 'ADD_TO_FAVORITES', id: friend.id });
-    processFriends.fetch(friend, FriendActions.ADD_TO_FAVORITE);
-  }
-
-  function removeFromFavorites(friend: Friend) {
-    dispatch({ type: 'REMOVE_FROM_FAVORITES', id: friend.id });
-    processFriends.fetch(friend, FriendActions.REMOVE_FROM_FAVORITE);
-  }
-
   return {
+    friends: state.friends,
     isLoading: friends.isLoading,
-    isEmpty: !state.friends.length,
     loadingErrorMessage:
       friends.error &&
-      `${friends.error?.response?.error?.message || ''}. Status: ${
-        friends.error?.status || ''
+      `${friends.error.response?.error?.message ?? ''} Status: ${
+        friends.error.status ?? ''
       }`,
-    notifications: state.notifications,
     loadMore:
       friends.data?._links.next &&
       (() => friends.fetch(friends.data?._links.next)),
-    friends: state.friends,
-    isFavorite: (friend: Friend) => state.favorites.includes(friend.id),
-    isProcessing: (friend: Friend) => state.processing.includes(friend.id),
-    addToFavorites,
-    removeFromFavorites,
+    addToFavorites: (friend: Friend) => {
+      dispatch({ type: 'ADD_TO_FAVORITES', id: friend.id });
+      processFriends.fetch(friend, FriendActions.ADD_TO_FAVORITE);
+    },
+    removeFromFavorites: (friend: Friend) => {
+      dispatch({ type: 'REMOVE_FROM_FAVORITES', id: friend.id });
+      processFriends.fetch(friend, FriendActions.REMOVE_FROM_FAVORITE);
+    },
+    notifications: state.notifications,
   };
 }

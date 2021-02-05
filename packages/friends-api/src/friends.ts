@@ -1,12 +1,10 @@
 import { fetchJSON } from 'core';
-import { Friend, FriendActions, FriendsResponse, Link } from './types';
+import { Friend, FriendsResponse, Link, FriendActions } from './types';
 
-export async function getFriends(
-  next: Link = {
-    href: '/api/friends',
-  }
+export function getFriends(
+  link: Link = { href: '/api/friends' }
 ): Promise<FriendsResponse> {
-  return await fetchJSON<FriendsResponse>(next.href);
+  return fetchJSON(link.href);
 }
 
 export async function processFriend(

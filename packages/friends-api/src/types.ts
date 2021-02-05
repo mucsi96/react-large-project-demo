@@ -3,11 +3,6 @@ export type Link = {
   method?: string;
 };
 
-export enum FriendActions {
-  ADD_TO_FAVORITE = 'addToFavorite',
-  REMOVE_FROM_FAVORITE = 'removeFromFavorite',
-}
-
 export type Friend = {
   id: string;
   firstName: string;
@@ -23,3 +18,8 @@ export type FriendsResponse = {
     next?: Link;
   };
 };
+
+export enum FriendActions {
+  ADD_TO_FAVORITE = 'addToFavorite',
+  REMOVE_FROM_FAVORITE = 'removeFromFavorite',
+}

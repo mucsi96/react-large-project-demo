@@ -1,18 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FriendsList renders error message in case of error 1`] = `
-<span
-  data-name="message"
->
-  We couldn't process your request at this time. Status: 500
-</span>
+exports[`FriendsList renders error message in case of loading failure 1`] = `
+<FriendsList>
+  <div
+    className="container"
+  >
+    <div
+      className="notifications"
+      data-name="notifications"
+    />
+    <span
+      className="error"
+      data-name="message"
+    >
+      We couldn't process your request at this time Status: 500
+    </span>
+  </div>
+</FriendsList>
 `;
 
 exports[`FriendsList renders list of friends 1`] = `
 <FriendsList>
-  <ul
+  <div
     className="container"
   >
+    <div
+      className="notifications"
+      data-name="notifications"
+    />
     <div
       className="friend"
       data-name="friend"
@@ -77,11 +92,11 @@ exports[`FriendsList renders list of friends 1`] = `
         className="actions"
       >
         <Button-
-          data-name="add-to-favorite"
+          data-name="remove-from-favorite"
           onClick={[Function]}
-          primary={true}
+          secondary={true}
         >
-          Add to favorite
+          Remove from favorite
         </Button->
       </div>
     </div>
@@ -133,30 +148,31 @@ exports[`FriendsList renders list of friends 1`] = `
         </Button->
       </div>
     </div>
-    <Button-
-      data-name="load-more"
-      onClick={[Function]}
-      secondary={true}
+    <div
+      className="loadMore"
     >
-      Load more...
-    </Button->
-  </ul>
+      <Button-
+        data-name="load-more"
+        onClick={[Function]}
+        secondary={true}
+      >
+        Load more...
+      </Button->
+    </div>
+  </div>
 </FriendsList>
 `;
 
-exports[`FriendsList renders loading text on loading friends 1`] = `
-<Button-
-  data-name="loading"
-  secondary={true}
->
-  Loading...
-</Button->
-`;
-
-exports[`FriendsList renders message if no friends are found 1`] = `
-<span
-  data-name="message"
->
-  No friends found :(
-</span>
+exports[`FriendsList renders spinner during loading of friends 1`] = `
+<FriendsList>
+  <div
+    className="container"
+  >
+    <div
+      className="notifications"
+      data-name="notifications"
+    />
+    <Spinner- />
+  </div>
+</FriendsList>
 `;

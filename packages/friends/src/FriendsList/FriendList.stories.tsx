@@ -22,11 +22,7 @@ function createStory(args: StoryProps) {
 }
 
 export const normal = createStory({
-  friendsMock: 'slow',
-});
-
-export const empty = createStory({
-  friendsMock: 'empty',
+  friendsMock: 'normal',
 });
 
 export const loadingFailure = createStory({
