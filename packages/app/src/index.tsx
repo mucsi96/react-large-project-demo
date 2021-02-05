@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { setupApiMocks } from 'friends';
-import { WaitForMockApi, setMockApiDelay } from 'dev-tools';
+import { WaitForMockApi, setMockApiDelay } from 'mock-api';
 
 let app = <App />;
 
