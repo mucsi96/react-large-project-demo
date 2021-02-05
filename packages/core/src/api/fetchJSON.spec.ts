@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { ajax, AjaxResponse } from 'rxjs/ajax';
 import { fetchJSON } from './fetchJSON';
-import { asMock } from 'dev-tools';
+import { asMock } from 'core';
 import { ApiError } from './types';
 
 jest.mock('rxjs/ajax');
