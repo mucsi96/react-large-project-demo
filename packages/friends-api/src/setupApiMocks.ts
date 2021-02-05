@@ -5,9 +5,25 @@ import {
   MockResponse,
   loadFromMockDB,
   saveInMockDB,
+  setMockSwitch,
 } from 'mock-api';
 import mockFriends from './mockFriends';
 import { FriendsResponse } from './types';
+
+export enum FriendsMockSwitch {
+  NORMAL = 'NORMAL',
+  EMPTY = 'EMPTY',
+  LOADING_FAILURE = 'LOADING_FAILURE',
+  PROCESSING_FAILURE = 'PROCESSING_FAILURE',
+}
+
+export function setFriendsMockSwitch(mockSwitch: FriendsMockSwitch): void {
+  setMockSwitch('friends', mockSwitch);
+}
+
+export function getFriendsMockSwitck(): FriendsMockSwitch {
+  return getMockSwitch('friends') as FriendsMockSwitch;
+}
 
 export function setupApiMocks(): void {
   registerApiMocks([
@@ -30,12 +46,12 @@ export function setupApiMocks(): void {
 
 function getFriends({ query }: MockRequest, response: MockResponse) {
   switch (getMockSwitch('friends')) {
-    case 'empty':
+    case FriendsMockSwitch.EMPTY:
       return {
         _embedded: [],
         _links: {},
       };
-    case 'loadingFailure':
+    case FriendsMockSwitch.LOADING_FAILURE:
       return response.mockError(true);
     default:
       const from = parseInt((query.from as string) ?? '0');
@@ -76,7 +92,7 @@ function setFavorites(favorites: string[]): void {
 
 function addToFavorite({ params }: MockRequest, response: MockResponse) {
   switch (getMockSwitch('friends')) {
-    case 'processingFailure':
+    case FriendsMockSwitch.PROCESSING_FAILURE:
       return response.mockError(true);
     default:
       setFavorites([...getFavorites(), params.id]);
@@ -85,7 +101,7 @@ function addToFavorite({ params }: MockRequest, response: MockResponse) {
 
 function removeFromFavorite({ params }: MockRequest, response: MockResponse) {
   switch (getMockSwitch('friends')) {
-    case 'processingFailure':
+    case FriendsMockSwitch.PROCESSING_FAILURE:
       return response.mockError(true);
     default:
       setFavorites(getFavorites().filter((id) => id !== params.id));

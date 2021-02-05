@@ -3,7 +3,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import { FriendsList } from './FriendsList';
 import { act } from 'react-dom/test-utils';
 import { setupApiMocks } from '../setupApiMocks';
-import { setMockSwitch } from 'mock-api';
+import { FriendsMockSwitch, setFriendsMockSwitch } from 'friends-api';
 import { Spinner } from 'core';
 
 jest.mock('core', () => {
@@ -30,7 +30,7 @@ describe('FriendsList', () => {
   });
 
   test('renders error message in case of loading failure', async () => {
-    setMockSwitch('friends', 'loadingFailure');
+    setFriendsMockSwitch(FriendsMockSwitch.LOADING_FAILURE);
     const wrapper = await renderFriends();
     expect(wrapper).toMatchSnapshot();
   });
