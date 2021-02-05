@@ -7,6 +7,7 @@ export const FriendsList: FC = () => {
   const {
     friends = [],
     isLoading,
+    isEmpty,
     loadingErrorMessage,
     loadMore,
     addToFavorites,
@@ -64,6 +65,14 @@ export const FriendsList: FC = () => {
           return (
             <span data-name="message" className={styles.error}>
               {loadingErrorMessage}
+            </span>
+          );
+        }
+
+        if (isEmpty) {
+          return (
+            <span data-name="message" className={styles.info}>
+              {'No friends found :('}
             </span>
           );
         }

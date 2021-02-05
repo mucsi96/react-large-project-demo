@@ -1,5 +1,5 @@
 import React from 'react';
-import { setMockApiDelay, WaitForMockApi } from 'dev-tools';
+import { setMockApiDelay, WaitForMockApi } from 'mock-api';
 import { Story } from '@storybook/react';
 import './preview.scss';
 

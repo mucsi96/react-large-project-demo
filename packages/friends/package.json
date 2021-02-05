@@ -26,7 +26,8 @@
   },
   "dependencies": {
     "friends-api": "^1.0.0",
-    "core": "^1.0.0"
+    "core": "^1.0.0",
+    "mock-api": "^1.0.0"
   },
   "peerDependencies": {
     "react": "^16.13.1",

@@ -2,7 +2,7 @@ import { Meta, Story } from '@storybook/react';
 import React from 'react';
 import { setupApiMocks } from '../setupApiMocks';
 import { FriendsList } from './FriendsList';
-import { setMockSwitch } from 'dev-tools';
+import { setMockSwitch } from 'mock-api';
 
 type StoryProps = { friendsMock: string };
 
@@ -27,6 +27,10 @@ export const normal = createStory({
 
 export const loadingFailure = createStory({
   friendsMock: 'loadingFailure',
+});
+
+export const empty = createStory({
+  friendsMock: 'empty',
 });
 
 export const processingFailure = createStory({

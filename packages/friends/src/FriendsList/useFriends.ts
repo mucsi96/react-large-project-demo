@@ -7,6 +7,7 @@ import { Notification, Friend } from './types';
 export function useFriends(): {
   friends?: Friend[];
   isLoading: boolean;
+  isEmpty: boolean;
   loadingErrorMessage?: string;
   loadMore?: () => void;
   addToFavorites: (friend: Friend) => void;
@@ -52,6 +53,7 @@ export function useFriends(): {
   return {
     friends: state.friends,
     isLoading: friends.isLoading,
+    isEmpty: !state.friends.length,
     loadingErrorMessage:
       friends.error &&
       `${friends.error.response?.error?.message ?? ''} Status: ${

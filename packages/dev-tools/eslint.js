@@ -1,1 +1,1 @@
-module.exports = require('./nodeLib/eslint');
+module.exports = require('./lib/eslint');

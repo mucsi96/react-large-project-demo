@@ -1,1 +1,1 @@
-module.exports = require('./nodeLib/intTest');
+module.exports = require('./lib/intTest');

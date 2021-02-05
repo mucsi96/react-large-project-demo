@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require('./nodeLib/cli');
+require('./lib/cli');

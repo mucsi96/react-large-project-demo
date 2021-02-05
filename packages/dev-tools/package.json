@@ -10,7 +10,6 @@
     "bin.js",
     "eslint.js",
     "intTest.js",
-    "nodeLib",
     "lib",
     "config"
   ],
@@ -18,18 +17,17 @@
     "node": ">= 10.0.0"
   },
   "scripts": {
-    "lint": "eslint src nodeSrc --max-warnings 0",
-    "check-types": "tsc && tsc --project nodeSrc",
-    "build:lib": "rollup --config config/rollup.config.js",
-    "build:nodeLib": "tsc --project nodeSrc --noEmit false --declaration --outDir nodeLib",
-    "build": "del-cli lib nodeLib && yarn build:lib && yarn build:nodeLib",
+    "lint": "eslint src --max-warnings 0",
+    "check-types": "tsc && tsc --project",
+    "build": "del-cli lib && tsc --noEmit false --declaration --outDir lib",
     "prepack": "npm run build",
     "update:dependencies": "npx npm-check-updates -u",
     "qa": "npm-run-all lint check-types",
     "prepare": "yarn build"
   },
   "peerDependencies": {
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "mock-api": "1.0.0"
   },
   "dependencies": {
     "@storybook/addon-essentials": "6.1.14",
@@ -77,5 +75,6 @@
     "ts-node": "9.1.1",
     "express": "4.17.1",
     "@types/express": "4.11.1"
-  }
+  },
+  "devDependencies": {}
 }

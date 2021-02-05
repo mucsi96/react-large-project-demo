@@ -3,7 +3,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import { FriendsList } from './FriendsList';
 import { act } from 'react-dom/test-utils';
 import { setupApiMocks } from '../setupApiMocks';
-import { setMockSwitch } from 'dev-tools';
+import { setMockSwitch } from 'mock-api';
 import { Spinner } from 'core';
 
 jest.mock('core', () => {

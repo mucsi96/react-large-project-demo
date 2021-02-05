@@ -5,7 +5,7 @@ import {
   MockResponse,
   loadFromMockDB,
   saveInMockDB,
-} from 'dev-tools';
+} from 'mock-api';
 import mockFriends from './mockFriends';
 import { FriendsResponse } from './types';
 
@@ -30,6 +30,11 @@ export function setupApiMocks(): void {
 
 function getFriends({ query }: MockRequest, response: MockResponse) {
   switch (getMockSwitch('friends')) {
+    case 'empty':
+      return {
+        _embedded: [],
+        _links: {},
+      };
     case 'loadingFailure':
       return response.mockError(true);
     default:

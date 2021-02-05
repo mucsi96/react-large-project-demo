@@ -1,4 +1,10 @@
 {
   "extends": "./config/tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2019", "DOM", "WebWorker"],
+    "target": "ES2019",
+    "module": "CommonJS",
+    "isolatedModules": false
+  },
   "include": ["src"]
 }
