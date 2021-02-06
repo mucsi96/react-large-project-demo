@@ -1,0 +1,8 @@
+body{font-family:system-ui}
+
+.Button_container__1rzXu{vertical-align:top;font-family:inherit;padding:10px 20px;border:1px solid white;border-radius:10px}.Button_primary__2obaU{background-color:chocolate;color:white}.Button_secondary__2xVLZ{background-color:#cecece;color:black}.Button_disabled__1ZhhI{opacity:0.5}
+
+.Spinner_container__370AI{margin:0 auto;width:50px;height:60px;text-align:center;font-size:10px}.Spinner_container__370AI>*{background-color:chocolate;opacity:0.5;height:100%;width:7px;display:inline-block;margin-right:3px;-webkit-animation:Spinner_sk-stretchdelay__W6dca 1.2s infinite ease-in-out;animation:Spinner_sk-stretchdelay__W6dca 1.2s infinite ease-in-out}.Spinner_container__370AI :nth-child(2){-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.Spinner_container__370AI :nth-child(3){-webkit-animation-delay:-1s;animation-delay:-1s}.Spinner_container__370AI :nth-child(4){-webkit-animation-delay:-0.9s;animation-delay:-0.9s}.Spinner_container__370AI :nth-child(5){-webkit-animation-delay:-0.8s;animation-delay:-0.8s}@-webkit-keyframes Spinner_sk-stretchdelay__W6dca{0%,40%,100%{transform:scaleY(0.4)}20%{transform:scaleY(1)}}@keyframes Spinner_sk-stretchdelay__W6dca{0%,40%,100%{transform:scaleY(0.4)}20%{transform:scaleY(1)}}
+
+
+/*# sourceMappingURL=main.48acad47.chunk.css.map*/
