@@ -20,7 +20,7 @@ Given('I open the friends list', async function (this: World) {
 });
 
 Then('I see the list of friends', async () => {
-  await page.waitForSelector('[data-name="friend-list"]');
+  await page.waitForSelector('[data-name="friend-list"] [data-name="friend"]');
   expect(await getDataSnapshot('[data-name="friend-list"]')).toMatchSnapshot();
 });
 
