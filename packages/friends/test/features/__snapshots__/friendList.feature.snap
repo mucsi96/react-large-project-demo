@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Show the list of friends 1`] = `
+"[
+  {
+    name: 'friend',
+    children: [
+      { name: 'full-name', value: 'Alyson Donnelly' },
+      { name: 'add-to-favorite', value: 'Add to favorite' }
+    ]
+  },
+  {
+    name: 'friend',
+    children: [
+      { name: 'full-name', value: 'Carlee Kreiger' },
+      { name: 'add-to-favorite', value: 'Add to favorite' }
+    ]
+  },
+  {
+    name: 'friend',
+    children: [
+      { name: 'full-name', value: 'Enrico Pouros' },
+      { name: 'remove-from-favorite', value: 'Remove from favorite' }
+    ]
+  },
+  {
+    name: 'friend',
+    children: [
+      { name: 'full-name', value: 'Patricia Barrows' },
+      { name: 'add-to-favorite', value: 'Add to favorite' }
+    ]
+  },
+  {
+    name: 'friend',
+    children: [
+      { name: 'full-name', value: 'Steven Bergstrom' },
+      { name: 'add-to-favorite', value: 'Add to favorite' }
+    ]
+  },
+  { name: 'load-more', value: 'Load more...' }
+]"
+`;

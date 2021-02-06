@@ -16,21 +16,23 @@ export const FriendsList: FC = () => {
   } = useFriends();
 
   return (
-    <div className={styles.container}>
-      <div data-name="notifications" className={styles.notifications}>
-        {notifications.map(({ key, message }) => (
-          <p key={key} className={styles.error}>
-            {message}
-          </p>
-        ))}
-      </div>
+    <div data-name="friend-list" className={styles.container}>
+      {notifications.length && (
+        <div data-name="notifications" className={styles.notifications}>
+          {notifications.map(({ key, message }) => (
+            <p key={key} className={styles.error}>
+              {message}
+            </p>
+          ))}
+        </div>
+      )}
       {friends.map((friend) => {
         const { id, firstName, lastName, image } = friend;
         const fullName = [firstName, lastName].join(' ');
         return (
           <div key={id} data-name="friend" className={styles.friend}>
             <img src={image} alt={fullName} />
-            <span>{fullName}</span>
+            <span data-name="full-name">{fullName}</span>
             <div className={styles.actions}>
               {!friend.isFavorite && (
                 <Button

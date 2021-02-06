@@ -23,14 +23,14 @@ export type ButtonProps = {
 
 export const Button: FC<ButtonProps> = ({
   children,
-  onClick,
   disabled,
   primary,
   secondary,
+  ...props
 }) => (
   <button
+    {...props}
     type="button"
-    onClick={onClick}
     className={classNames(styles.container, {
       [styles.primary]: primary,
       [styles.secondary]: secondary,

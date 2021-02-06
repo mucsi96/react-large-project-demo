@@ -1,1 +1,1 @@
-export * from './nodeLib/intTest';
+export * from './lib/intTest';
