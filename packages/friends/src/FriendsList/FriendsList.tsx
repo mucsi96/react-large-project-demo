@@ -17,7 +17,7 @@ export const FriendsList: FC = () => {
 
   return (
     <div data-name="friend-list" className={styles.container}>
-      {notifications.length && (
+      {!!notifications.length && (
         <div data-name="notifications" className={styles.notifications}>
           {notifications.map(({ key, message }) => (
             <p key={key} className={styles.error}>
