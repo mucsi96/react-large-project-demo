@@ -24,6 +24,12 @@ jobs:
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Check permissions 1
+        run: find . -name "*node_modules/.bin/*" -exec ls -l {} \;
+      - name: Set permissions
+        run: find . -name "*node_modules/.bin/*" -exec chmod +x {} \;
+      - name: Check permissions 2
+        run: find . -name "*node_modules/.bin/*" -exec ls -l {} \;
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Run push checks
@@ -47,12 +53,6 @@ jobs:
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Check permissions 1
-        run: find . -name "*node_modules/.bin/*" -exec ls -l {} \;
-      - name: Set permissions
-        run: find . -name "*node_modules/.bin/*" -exec chmod +x {} \;
-      - name: Check permissions 2
-        run: find . -name "*node_modules/.bin/*" -exec ls -l {} \;
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Prepare deployment
