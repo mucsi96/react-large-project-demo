@@ -4,7 +4,7 @@
 
 Demonstration for large scale React application in TypeScript
 
-[Live ui-lib storybook](https://mucsi96.github.io/react-large-project-demo/ui-lib)
+[Live friends storybook](https://mucsi96.github.io/react-large-project-demo/friends)
 
 [Live mock app](https://mucsi96.github.io/react-large-project-demo/app-mock)
 
@@ -13,8 +13,10 @@ Demonstration for large scale React application in TypeScript
 ## Packages
 
 - dev-tools
-- frinds-api
-- ui-lib
+- mock-api
+- core
+- friends-api
+- friends
 - app
 
 ## Features
