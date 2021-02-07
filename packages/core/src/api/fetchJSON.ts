@@ -1,5 +1,37 @@
-import { ajax, AjaxError } from 'rxjs/ajax';
+// import { ajax, AjaxError } from 'rxjs/ajax';
 import { ApiError, ApiErrorResponse } from './types';
+
+// export async function fetchJSON<T>(
+//   url: string,
+//   init: {
+//     method?: string;
+//     headers?: Record<string, string>;
+//     body?: Record<string, unknown>;
+//   } = {}
+// ): Promise<T> {
+//   const { method, headers, body } = init;
+//   try {
+//     const result = await ajax({
+//       url,
+//       ...(method && { method }),
+//       ...(body && { body }),
+//       headers: {
+//         ...headers,
+//         'Content-Type': 'application/json',
+//       },
+//     }).toPromise();
+
+//     return result.response as T;
+//   } catch (error) {
+//     const ajaxError = error as AjaxError;
+//     // eslint-disable-next-line no-throw-literal
+//     throw {
+//       message: ajaxError.message,
+//       response: ajaxError.response as ApiErrorResponse,
+//       status: ajaxError.status,
+//     } as ApiError;
+//   }
+// }
 
 export async function fetchJSON<T>(
   url: string,
@@ -10,25 +42,26 @@ export async function fetchJSON<T>(
   } = {}
 ): Promise<T> {
   const { method, headers, body } = init;
-  try {
-    const result = await ajax({
-      url,
-      ...(method && { method }),
-      ...(body && { body }),
-      headers: {
-        ...headers,
-        'Content-Type': 'application/json',
-      },
-    }).toPromise();
+  const response = await window.fetch(url, {
+    ...(method && { method }),
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json',
+    },
+    ...(body && { body: JSON.stringify(body) }),
+  });
 
-    return result.response as T;
-  } catch (error) {
-    const ajaxError = error as AjaxError;
+  const textResult = await response.text();
+  const result = (textResult ? JSON.parse(textResult) : null) as T;
+
+  if (!response.ok) {
     // eslint-disable-next-line no-throw-literal
     throw {
-      message: ajaxError.message,
-      response: ajaxError.response as ApiErrorResponse,
-      status: ajaxError.status,
+      message: 'Failed to fetch data',
+      response: result as ApiErrorResponse,
+      status: response.status,
     } as ApiError;
   }
+
+  return result;
 }
