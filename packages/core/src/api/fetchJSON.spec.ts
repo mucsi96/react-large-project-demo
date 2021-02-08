@@ -1,21 +1,20 @@
-import { Observable } from 'rxjs';
-import { ajax, AjaxResponse } from 'rxjs/ajax';
 import { fetchJSON } from './fetchJSON';
 import { asMock } from 'core';
 import { ApiError } from './types';
 
-jest.mock('rxjs/ajax');
+window.fetch = jest.fn();
 
-describe('fetchJSON', () => {
+describe('rxfetchJSON', () => {
   test('fetches using rxjs ajax', async () => {
-    asMock(ajax).mockReturnValue({
-      toPromise: () => Promise.resolve({ response: { test: 'response' } }),
-    } as Observable<AjaxResponse>);
+    asMock(window.fetch).mockResolvedValue(({
+      ok: true,
+      status: 200,
+      text: jest.fn().mockResolvedValue(JSON.stringify({ test: 'response' })),
+    } as unknown) as Response);
     const response = await fetchJSON('/test/url');
 
     expect(response).toEqual({ test: 'response' });
-    expect(ajax).toHaveBeenCalledWith({
-      url: '/test/url',
+    expect(window.fetch).toHaveBeenCalledWith('/test/url', {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -23,9 +22,11 @@ describe('fetchJSON', () => {
   });
 
   test('handles changing method, body and headers', async () => {
-    asMock(ajax).mockReturnValue({
-      toPromise: () => Promise.resolve({ response: { test: 'response' } }),
-    } as Observable<AjaxResponse>);
+    asMock(window.fetch).mockResolvedValue(({
+      ok: true,
+      status: 200,
+      text: jest.fn().mockResolvedValue(JSON.stringify({ test: 'response' })),
+    } as unknown) as Response);
     const response = await fetchJSON('/test/url', {
       method: 'POST',
       body: { test: 'body' },
@@ -33,10 +34,9 @@ describe('fetchJSON', () => {
     });
 
     expect(response).toEqual({ test: 'response' });
-    expect(ajax).toHaveBeenCalledWith({
-      url: '/test/url',
+    expect(window.fetch).toHaveBeenCalledWith('/test/url', {
       method: 'POST',
-      body: { test: 'body' },
+      body: JSON.stringify({ test: 'body' }),
       headers: {
         'Content-Type': 'application/json',
         'x-header-1': 'test value',
@@ -45,14 +45,11 @@ describe('fetchJSON', () => {
   });
 
   test('throw ApiError in case of an error', async () => {
-    asMock(ajax).mockReturnValue(({
-      toPromise: () =>
-        Promise.reject({
-          message: 'test error message',
-          status: 500,
-          response: { error: 'response' },
-        }),
-    } as unknown) as Observable<AjaxResponse>);
+    asMock(window.fetch).mockResolvedValue(({
+      ok: false,
+      status: 500,
+      text: jest.fn().mockResolvedValue(JSON.stringify({ error: 'response' })),
+    } as unknown) as Response);
 
     let coughtError: ApiError | null = null;
 
@@ -63,7 +60,7 @@ describe('fetchJSON', () => {
     }
 
     expect(coughtError).toEqual({
-      message: 'test error message',
+      message: 'Failed to fetch data',
       status: 500,
       response: { error: 'response' },
     });
