@@ -1,4 +1,4 @@
-import { ApiError, useApi } from 'core';
+import { useApi } from 'core';
 import { getFriends, processFriend, FriendActions, hasMore } from 'friends-api';
 import { useEffect, useReducer } from 'react';
 import { friendsReducer } from './friendsReducer';
@@ -8,7 +8,7 @@ export function useFriends(): {
   friends?: Friend[];
   isLoading: boolean;
   isEmpty: boolean;
-  loadingError?: ApiError;
+  loadingErrorMessage?: string;
   loadMore?: () => void;
   addToFavorites: (friend: Friend) => void;
   removeFromFavorites: (friend: Friend) => void;
@@ -20,10 +20,6 @@ export function useFriends(): {
     friends: [],
     notifications: [],
   });
-
-  if (friends.error) {
-    throw friends.error;
-  }
 
   useEffect(() => {
     friends.fetch();
@@ -58,7 +54,11 @@ export function useFriends(): {
     friends: state.friends,
     isLoading: friends.isLoading,
     isEmpty: !state.friends.length,
-    loadingError: friends.error,
+    loadingErrorMessage:
+      friends.error &&
+      `${friends.error.response?.error?.message ?? ''} Status: ${
+        friends.error.status ?? ''
+      }`,
     loadMore:
       friends.data && hasMore(friends.data)
         ? () => friends.fetch(friends.data)
