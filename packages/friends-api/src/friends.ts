@@ -1,10 +1,10 @@
-import { rxFetchJSON } from 'core';
+import { fetchJSON } from 'core';
 import { Friend, FriendsResponse, FriendActions } from './types';
 
 export function getFriends(
   reference?: FriendsResponse
 ): Promise<FriendsResponse> {
-  return rxFetchJSON(reference?._links.next?.href ?? '/api/friends');
+  return fetchJSON(reference?._links.next?.href ?? '/api/friends');
 }
 
 export function hasMore(reference: FriendsResponse): boolean {
@@ -16,5 +16,5 @@ export async function processFriend(
   action: FriendActions
 ): Promise<void> {
   const { href, method = 'GET' } = friend._links[action];
-  await rxFetchJSON<void>(href, { method });
+  await fetchJSON<void>(href, { method });
 }

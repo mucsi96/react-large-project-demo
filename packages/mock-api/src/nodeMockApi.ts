@@ -22,6 +22,27 @@ export function enableNodeMockApi(): void {
 
     return createRequest({ options, href, method, headers });
   };
+
+  window.fetch = mockFetch;
+}
+
+async function mockFetch(
+  input: RequestInfo,
+  init?: RequestInit
+): Promise<Response> {
+  const request = new Request(input, init);
+  const response = await handleRequest({
+    method: request.method as MockMethod,
+    headers: (request.headers as unknown) as Record<string, string | string[]>,
+    url: new URL(request.url, window.location.href),
+    body: request.body?.toString() || '',
+  });
+
+  return Promise.resolve({
+    ok: response.status >= 200 && response.status < 300,
+    status: response.status,
+    text: () => Promise.resolve(response.body),
+  } as Response);
 }
 
 function createRequest({

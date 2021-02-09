@@ -19,8 +19,9 @@ jest.mock('core', () => {
 setupApiMocks();
 
 describe('FriendsList', () => {
-  test('renders spinner during loading of friends', () => {
+  test('renders spinner during loading of friends', async () => {
     const wrapper = mount(<FriendsList />);
+    await act(() => Promise.resolve());
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -35,22 +36,19 @@ describe('FriendsList', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  test('shows loading message on clicking load more button', async () => {
+  test('shows spinner on clicking load more button', async () => {
     const wrapper = await renderFriends();
-    act(() => {
-      loadMore(wrapper);
-    });
+    act(() => loadMore(wrapper));
     wrapper.update();
+    await act(() => Promise.resolve());
     expect(wrapper.find('[data-name="friend"]')).toHaveLength(5);
     expect(wrapper.find(Spinner).exists()).toBe(true);
   });
 
   test('loads more friends clicking load more button', async () => {
     const wrapper = await renderFriends();
-    await act(async () => {
-      loadMore(wrapper);
-      await Promise.resolve();
-    });
+    act(() => loadMore(wrapper));
+    await act(() => Promise.resolve());
     wrapper.update();
     expect(wrapper.find('[data-name="friend"]')).toHaveLength(10);
     expect(wrapper.find('[data-name="load-more"]').exists()).toBe(true);
@@ -58,15 +56,11 @@ describe('FriendsList', () => {
 
   test('shows no load more button if all friends are loaded', async () => {
     const wrapper = await renderFriends();
-    await act(async () => {
-      loadMore(wrapper);
-      await Promise.resolve();
-    });
+    act(() => loadMore(wrapper));
+    await act(() => Promise.resolve());
     wrapper.update();
-    await act(async () => {
-      loadMore(wrapper);
-      await Promise.resolve();
-    });
+    act(() => loadMore(wrapper));
+    await act(() => Promise.resolve());
     wrapper.update();
     expect(wrapper.find('[data-name="friend"]')).toHaveLength(15);
     expect(wrapper.find('[data-name="load-more"]').exists()).toBe(false);
