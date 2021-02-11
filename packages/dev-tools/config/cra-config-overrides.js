@@ -12,6 +12,22 @@ const prodDistPath = resolve(
   '../../../dist',
   useMockApi ? 'app-mock' : 'app-prod'
 );
+const analyzerPlugins = [
+  new StatsWriterPlugin({
+    filename: relative(
+      prodDistPath,
+      resolve(process.cwd(), 'reports/log.json')
+    ),
+    fields: null,
+    stats: { chunkModules: true },
+  }),
+  new Visualizer({
+    filename: relative(
+      prodDistPath,
+      resolve(process.cwd(), 'reports/statistics.html')
+    ),
+  }),
+];
 
 module.exports = {
   jest: function (config) {
@@ -28,22 +44,7 @@ module.exports = {
       plugins: [
         ...config.plugins,
         ...(useMockApi ? [new MockApiServiceWorkerWebpackPlugin()] : []),
-        ...(env === 'production' && [
-          new StatsWriterPlugin({
-            filename: relative(
-              prodDistPath,
-              resolve(process.cwd(), 'reports/log.json')
-            ),
-            fields: null,
-            stats: { chunkModules: true },
-          }),
-          new Visualizer({
-            filename: relative(
-              prodDistPath,
-              resolve(process.cwd(), 'reports/statistics.html')
-            ),
-          }),
-        ]),
+        ...(env === 'production' && !useMockApi ? analyzerPlugins : []),
       ].filter((plugin) => !(plugin instanceof ESLintPlugin)),
     };
 
