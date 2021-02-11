@@ -20,20 +20,20 @@ setupApiMocks();
 
 describe('FriendsList', () => {
   test('renders spinner during loading of friends', async () => {
-    const wrapper = mount(<FriendsList />);
+    const wrapper = mount(<FriendsList fetch={fetch} />);
     await act(() => Promise.resolve());
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.children()).toMatchSnapshot();
   });
 
   test('renders list of friends', async () => {
     const wrapper = await renderFriends();
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.children()).toMatchSnapshot();
   });
 
   test('renders error message in case of loading failure', async () => {
     setFriendsMockSwitch(FriendsMockSwitch.LOADING_FAILURE);
     const wrapper = await renderFriends();
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.children()).toMatchSnapshot();
   });
 
   test('shows spinner on clicking load more button', async () => {
@@ -87,7 +87,7 @@ describe('FriendsList', () => {
 });
 
 async function renderFriends() {
-  const wrapper = mount(<FriendsList />);
+  const wrapper = mount(<FriendsList fetch={fetch} />);
   await act(() => Promise.resolve());
   wrapper.update();
   return wrapper;

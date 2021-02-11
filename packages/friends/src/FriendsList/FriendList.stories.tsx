@@ -12,7 +12,7 @@ export default { title: 'FriendsList', component: FriendsList } as Meta;
 
 const Template: Story<StoryProps> = ({ friendsMock, ...args }) => {
   setFriendsMockSwitch(friendsMock);
-  return <FriendsList {...args} />;
+  return <FriendsList fetch={fetch} {...args} />;
 };
 
 function createStory(args: StoryProps) {

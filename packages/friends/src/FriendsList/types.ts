@@ -4,6 +4,8 @@ import {
   FriendActions,
 } from 'friends-api';
 
+export type Fetch = (url: string, options?: RequestInit) => Promise<Response>;
+
 type LoadFriendsAction = {
   type: 'LOAD_FRIENDS';
   payload: FriendsResponse;

@@ -1,9 +1,9 @@
-import { Button, Spinner } from 'core';
+import { Button, Fetch, Spinner } from 'core';
 import React, { FC } from 'react';
 import styles from './FriendsList.module.scss';
 import { useFriends } from './useFriends';
 
-export const FriendsList: FC = () => {
+export const FriendsList: FC<{ fetch: Fetch }> = ({ fetch }) => {
   const {
     friends = [],
     isLoading,
@@ -13,7 +13,7 @@ export const FriendsList: FC = () => {
     addToFavorites,
     removeFromFavorites,
     notifications,
-  } = useFriends();
+  } = useFriends(fetch);
 
   return (
     <div data-name="friend-list" className={styles.container}>
