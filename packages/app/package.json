@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "ui-lib": "^1.0.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "friends": "^1.0.0",
+    "mock-api": "^1.0.0"
   },
   "devDependencies": {
     "dev-tools": "1.0.0",

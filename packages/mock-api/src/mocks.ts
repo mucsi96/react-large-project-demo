@@ -1,9 +1,7 @@
 import { Mock } from './types';
 
 let mocks: Mock[] = [];
-let mockSwitches = getInitialMockSwitches();
-const hasInitialMockSwitches = !!Object.keys(mockSwitches).length;
-let globalDelay = 0;
+let mockSwitches: Record<string, string> = {};
 
 export function registerApiMocks(newMocks: Mock[]): void {
   mocks = [...mocks, ...newMocks];
@@ -13,25 +11,19 @@ export function getMocks(): Mock[] {
   return mocks;
 }
 
-function getInitialMockSwitches(): Record<string, string> {
+export function setMockSwitch(switchName: string, value: string): void {
+  mockSwitches[switchName] = value;
+}
+
+export function getMockSwitch(switchName: string): string {
   const searchParams = new URLSearchParams(window.location.search);
-  return Object.fromEntries(
-    [...searchParams.entries()]
-      .filter(([name]) => name === 'mock')
-      .map(([, value]) => value.split('--'))
-  ) as Record<string, string>;
-}
 
-export function setMockSwitch(name: string, value: string): void {
-  if (hasInitialMockSwitches) {
-    return;
-  }
-
-  mockSwitches[name] = value;
-}
-
-export function getMockSwitch(name: string): string {
-  return mockSwitches[name];
+  return (
+    searchParams
+      .getAll('mock')
+      .map((value) => value.split('--'))
+      .find(([name]) => name === switchName)?.[1] ?? mockSwitches[switchName]
+  );
 }
 
 export function clearMockSwitches(): void {
@@ -62,9 +54,9 @@ export function clearMockDB(): void {
 }
 
 export function setMockApiDelay(delay: number): void {
-  globalDelay = delay;
+  setMockSwitch('global-delay', delay.toString());
 }
 
 export function getMockApiDelay(): number {
-  return globalDelay;
+  return parseInt(getMockSwitch('global-delay') ?? '0');
 }
