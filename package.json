@@ -20,6 +20,8 @@
   },
   "resolutions": {
     "node-notifier": "8.0.0",
-    "es-abstract": "1.18.0-next.1"
+    "es-abstract": "1.18.0-next.1",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
   }
 }

@@ -17,7 +17,15 @@
     "qa": "npm-run-all lint check-types",
     "prepare": "yarn build"
   },
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
   "devDependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
     "dev-tools": "1.0.0",
     "typescript": "4.1.3"
   },
