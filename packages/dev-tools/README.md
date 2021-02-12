@@ -57,6 +57,10 @@ Webpack setup is based on CRA
 
 Runs CRA build
 
+### dev-tools update-dependencies
+
+_Plan to add in the future_
+
 ## Integration testing
 
 Based on Cucumber and Puppetier
