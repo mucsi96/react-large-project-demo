@@ -12,9 +12,9 @@ Demonstration for large scale React application in TypeScript
 
 ## Packages
 
-- dev-tools
+- [dev-tools](packages/dev-tools/README.md)
 - [mock-api](packages/mock-api/README.md)
-- core
+- [core](packages/core/README.md)
 - friends-api
 - friends
 - app
