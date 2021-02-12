@@ -13,7 +13,7 @@ Demonstration for large scale React application in TypeScript
 ## Packages
 
 - dev-tools
-- mock-api
+- [mock-api](packages/mock-api/README.md)
 - core
 - friends-api
 - friends
