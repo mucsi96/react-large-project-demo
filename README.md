@@ -32,18 +32,6 @@ Demonstration for large scale React application in TypeScript
   - Api mocking
 - Supports React application and libraries developent
 
-## Commands
-
-- `dev-tools check-types`
-- `dev-tools lint`
-- `dev-tools test`
-- `dev-tools int-test`
-- `dev-tools start-storybook`
-- `dev-tools start-app`
-- `dev-tools build-lib`
-- `dev-tools build-storybook`
-- `dev-tools build-app`
-
 ## API mocking
 
 Based on service worker. Benefits:
