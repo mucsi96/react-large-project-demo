@@ -144,9 +144,41 @@ Used internally in Storybook configuration manually in application index.ts
 
 ### WaitForMockApi: FC;
 
-Delays the rendering of children until the service worker is ready to handle requests.
+React component which delays the rendering of children until the service worker is ready to handle requests.
 Used internally in Storybook configuration manually in application index.ts
+
+```ts
+function renderApp(): ReactNode {
+  const app = <App />;
+
+  if (process.env.REACT_APP_USE_MOCK_API !== 'true') {
+    return app;
+  }
+
+  setupApiMocks();
+  setMockApiDelay(750);
+  return <WaitForMockApi>{app}</WaitForMockApi>;
+}
+
+ReactDOM.render(
+  <React.StrictMode>{renderApp()}</React.StrictMode>,
+  document.getElementById('root')
+);
+```
 
 ## Flow
 
-1. Register service worker
+1. Client delays rendring of content, registers the service worker. And start listening for `READY` and `REQUEST` messages. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/mock-api/src/WaitForMockApi.tsx#L8)
+2. Service worker activates and starts listening for `fetch` events. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/dev-tools/src/mockApi/mockApiServiceWorker.ts#L6)
+3. Service worker sets up an interval to send a `READY` event every 500 miliseconds for any new joining client. Unregisters itself if no clients are found. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/dev-tools/src/mockApi/mockApiServiceWorker.ts#L27)
+4. Client receives the `READY` message and continues with rendering the content
+5. Client registers some mocks sing `registerApiMocks` [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/mock-api/src/mocks.ts#L8)
+6. Client fetches some data.
+7. Service worker receives a `fetch` event and sends a `REQUEST` message to the same client. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/dev-tools/src/mockApi/mockApiServiceWorker.ts#L14)
+8. Client receives the `REQUEST` message and calls the matching callback in previously registered mocks. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/mock-api/src/swMockApi.ts#L38)
+9. If there were no matching mock callback found client sends a `MOCK_NOT_FOUND` message to service worker. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/mock-api/src/swMockApi.ts#L61)
+10. Otherwise it sends the result of callback to in `MOCK_SUCCESS` message to service worker. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/mock-api/src/swMockApi.ts#L75)
+11. On `MOCK_NOT_FOUND` message the service worker fallbacks to default behavior and starts fetching data from server. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/dev-tools/src/mockApi/mockApiServiceWorker.ts#L75)
+12. Otherwise it respons to the request with mock response included in the message. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/dev-tools/src/mockApi/mockApiServiceWorker.ts#L79)
+
+![Flow diagram](docs/flow.png)

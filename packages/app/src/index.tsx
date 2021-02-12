@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { setupApiMocks } from 'friends';
 import { WaitForMockApi, setMockApiDelay } from 'mock-api';
 
-let app = <App />;
+function renderApp(): ReactNode {
+  const app = <App />;
 
-if (process.env.REACT_APP_USE_MOCK_API === 'true') {
+  if (process.env.REACT_APP_USE_MOCK_API !== 'true') {
+    return app;
+  }
+
   setupApiMocks();
   setMockApiDelay(750);
-
-  app = <WaitForMockApi>{app}</WaitForMockApi>;
+  return <WaitForMockApi>{app}</WaitForMockApi>;
 }
 
 ReactDOM.render(
-  <React.StrictMode>{app}</React.StrictMode>,
+  <React.StrictMode>{renderApp()}</React.StrictMode>,
   document.getElementById('root')
 );
