@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { useApi } from '../api';
-import { createMockPromise } from 'core';
+import { createMockPromise, Fetch } from 'core';
 import React, { FC } from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { ApiError } from './types';
 
 describe('useApi', () => {
-  function mountHook(fetcher: (input: string) => Promise<string>) {
+  function mountHook(
+    fetcher: (fetch: Fetch, input: string) => Promise<string>
+  ) {
     let hookResult: {
       fetch: (input: string) => void;
       data?: string;
@@ -16,7 +18,7 @@ describe('useApi', () => {
     };
 
     const TestComponent: FC = () => {
-      hookResult = useApi(fetcher);
+      hookResult = useApi(fetch, fetcher);
       return null;
     };
     mount(<TestComponent />);
@@ -31,6 +33,7 @@ describe('useApi', () => {
   function setupMocks() {
     const mockPromise = createMockPromise<string>();
     const fetcher = jest.fn().mockReturnValue(mockPromise) as (
+      fetch: Fetch,
       input: string
     ) => Promise<string>;
 
@@ -47,7 +50,7 @@ describe('useApi', () => {
       act(() => {
         getHookResult().fetch('test input');
       });
-      expect(fetcher).toHaveBeenCalledWith('test input');
+      expect(fetcher).toHaveBeenCalledWith(fetch, 'test input');
     });
   });
 
