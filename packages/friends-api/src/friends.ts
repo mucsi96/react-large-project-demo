@@ -1,4 +1,4 @@
-import { toJSON } from 'core';
+import { handleJSONResponse } from 'core';
 import { Friend, FriendsResponse, FriendActions } from './types';
 
 type Fetch = (url: string, options?: RequestInit) => Promise<Response>;
@@ -7,7 +7,7 @@ export function getFriends(
   fetch: Fetch,
   reference?: FriendsResponse
 ): Promise<FriendsResponse> {
-  return toJSON<FriendsResponse>(
+  return handleJSONResponse<FriendsResponse>(
     fetch(reference?._links.next?.href ?? '/api/friends')
   );
 }
@@ -22,5 +22,5 @@ export async function processFriend(
   action: FriendActions
 ): Promise<void> {
   const { href, method = 'GET' } = friend._links[action];
-  return toJSON<void>(fetch(href, { method }));
+  return handleJSONResponse<void>(fetch(href, { method }));
 }

@@ -182,3 +182,24 @@ ReactDOM.render(
 12. Otherwise it respons to the request with mock response included in the message. [code](https://github.com/mucsi96/react-large-project-demo/blob/3e162453e7ea3cbc2d7aea4981cd1748af2f14fc/packages/dev-tools/src/mockApi/mockApiServiceWorker.ts#L79)
 
 ![Flow diagram](docs/flow.png)
+
+## Debug
+
+1. FriendList.stories.tsx:16
+2. setupApiMocks.js:13
+3. mocks.js:10
+4. FriendList.stories.tsx:17
+5. useFriends.ts:27
+6. useApi.js:15
+7. friends.js:5
+8. mockApiServiceWorker.js:4
+9. mockApiServiceWorker.js:49
+10. swMockApi.js:19
+11. swMockApi.js:39
+12. mockApiServiceWorker.js:59
+13. handleJSONResponse.js:3
+14. friends.js:20
+15. useApi.js:20
+16. apiReducer.js:2
+17. useApi.js:30
+18. useFriends.ts:55

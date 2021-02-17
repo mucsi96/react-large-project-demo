@@ -1,6 +1,6 @@
 import { ApiError, ApiErrorResponse } from './types';
 
-export async function toJSON<T>(
+export async function handleJSONResponse<T>(
   responsePromise: Promise<Response>
 ): Promise<T> {
   const response = await responsePromise;
