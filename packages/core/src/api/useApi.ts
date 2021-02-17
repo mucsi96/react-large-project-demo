@@ -1,4 +1,4 @@
-import { useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { apiReducer } from './apiReducer';
 import { ApiError, ApiState, FetchApiAction } from './types';
 
@@ -18,29 +18,46 @@ export type UseApiResult<A extends unknown[], T> = {
 
 export function useApi<A extends unknown[], T>(
   fetch: Fetch,
-  fetcher: Fetcher<A, T>
+  fetcher: Fetcher<A, T>,
+  cache?: RequestCache
 ): UseApiResult<A, T> {
   const [state, dispatch] = useReducer<
     (state: ApiState<A, T>, action: FetchApiAction<A, T>) => ApiState<A, T>
   >(apiReducer, {
     isLoading: false,
   });
+  const abortController = useMemo(() => new AbortController(), []);
 
-  const result = useMemo(
-    () => ({
-      fetch(...fetchArgs: A) {
+  useEffect(() => {
+    return () => abortController.abort();
+  }, [abortController]);
+
+  const fetchData = useCallback(
+    async (...fetchArgs: A) => {
+      try {
         dispatch({ type: 'FETCH_API_START' });
-        fetcher(fetch, ...fetchArgs)
-          .then((payload) =>
-            dispatch({ type: 'FETCH_API_SUCCEED', payload, fetchArgs })
-          )
-          .catch((error: ApiError) =>
-            dispatch({ type: 'FETCH_API_FAILED', error, fetchArgs })
-          );
-      },
-    }),
-    [fetcher, fetch]
+        const payload = await fetcher(
+          (url: string, requestInit: RequestInit = {}) =>
+            fetch(url, {
+              ...requestInit,
+              cache,
+              signal: abortController.signal,
+            }),
+          ...fetchArgs
+        );
+        dispatch({ type: 'FETCH_API_SUCCEED', payload, fetchArgs });
+      } catch (err) {
+        const error = err as ApiError & { name: string };
+
+        if (error.name !== 'AbortError') {
+          dispatch({ type: 'FETCH_API_FAILED', error, fetchArgs });
+        }
+      }
+    },
+    [fetch, fetcher, cache, abortController]
   );
 
-  return Object.assign(result, state);
+  const result = useMemo(() => ({}), []);
+
+  return Object.assign(result, state, { fetch: fetchData });
 }

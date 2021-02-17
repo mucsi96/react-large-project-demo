@@ -15,6 +15,7 @@ export enum FriendsMockSwitch {
   EMPTY = 'EMPTY',
   LOADING_FAILURE = 'LOADING_FAILURE',
   PROCESSING_FAILURE = 'PROCESSING_FAILURE',
+  SLOW = 'SLOW',
 }
 
 export function setFriendsMockSwitch(mockSwitch: FriendsMockSwitch): void {
@@ -45,7 +46,13 @@ export function setupApiMocks(): void {
 }
 
 function getFriends({ query }: MockRequest, response: MockResponse) {
-  switch (getMockSwitch('friends')) {
+  const mockSwitch = getFriendsMockSwitck();
+
+  if (mockSwitch === FriendsMockSwitch.SLOW) {
+    response.delay(3000);
+  }
+
+  switch (mockSwitch) {
     case FriendsMockSwitch.EMPTY:
       return {
         _embedded: [],

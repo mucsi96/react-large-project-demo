@@ -3,6 +3,7 @@ import React from 'react';
 import { setupApiMocks } from '../setupApiMocks';
 import { FriendsList } from './FriendsList';
 import { FriendsMockSwitch, setFriendsMockSwitch } from 'friends-api';
+import { useState } from 'react';
 
 type StoryProps = { friendsMock: FriendsMockSwitch };
 
@@ -11,8 +12,20 @@ setupApiMocks();
 export default { title: 'FriendsList', component: FriendsList } as Meta;
 
 const Template: Story<StoryProps> = ({ friendsMock, ...args }) => {
+  const [count, setCount] = useState(0);
   setFriendsMockSwitch(friendsMock);
-  return <FriendsList fetch={fetch} {...args} />;
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setCount(count + 1)}
+        style={{ position: 'fixed', right: 10, top: 10 }}
+      >
+        {'Remount'}
+      </button>
+      <FriendsList fetch={fetch} {...args} key={count} />
+    </>
+  );
 };
 
 function createStory(args: StoryProps) {
@@ -35,4 +48,8 @@ export const loadingFailure = createStory({
 
 export const processingFailure = createStory({
   friendsMock: FriendsMockSwitch.PROCESSING_FAILURE,
+});
+
+export const slow = createStory({
+  friendsMock: FriendsMockSwitch.SLOW,
 });
