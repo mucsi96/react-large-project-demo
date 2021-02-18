@@ -61,6 +61,7 @@ describe('useApi', () => {
         method: 'POST',
         body: 'test body',
         cache: 'no-store',
+        signal: expect.any(AbortSignal) as AbortSignal,
       });
     });
   });
