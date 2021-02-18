@@ -9,7 +9,7 @@ import { ApiError } from './types';
 describe('useApi', () => {
   function mountHook(
     fetcher: (fetch: Fetch, input: string) => Promise<string>,
-    cache?: RequestCache
+    options?: { cache?: RequestCache }
   ) {
     let hookResult: {
       fetch: (input: string) => void;
@@ -19,7 +19,7 @@ describe('useApi', () => {
     };
 
     const TestComponent: FC = () => {
-      hookResult = useApi(window.fetch, fetcher, cache);
+      hookResult = useApi(window.fetch, fetcher, options);
       return null;
     };
     mount(<TestComponent />);
@@ -48,7 +48,7 @@ describe('useApi', () => {
   describe('fetch function', () => {
     test('passes through the arguments to fetcher', async () => {
       const { fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher, 'no-store');
+      const { getHookResult } = mountHook(fetcher, { cache: 'no-store' });
       act(() => {
         getHookResult().fetch('test input');
       });

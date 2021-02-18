@@ -16,7 +16,7 @@ export function useFriends(
   removeFromFavorites: (friend: Friend) => void;
   notifications: Notification[];
 } {
-  const friends = useApi(fetch, getFriends, 'force-cache');
+  const friends = useApi(fetch, getFriends, { cache: 'force-cache' });
   const processFriends = useApi(fetch, processFriend);
   const [state, dispatch] = useReducer(friendsReducer, {
     friends: [],

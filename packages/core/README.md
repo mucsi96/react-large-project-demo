@@ -72,13 +72,13 @@ export async function processFriend(
 }
 ```
 
-### function useApi<A extends unknown[], T>(fetch: Fetch, fetcher: Fetcher<A, T>, cache?: RequestCache): UseApiResult<A, T>
+### function useApi<A extends unknown[], T>(fetch: Fetch, fetcher: Fetcher<A, T>, options?: { cache?: RequestCache}): UseApiResult<A, T>
 
 Example:
 
 ```ts
 function useFriends(fetch: Fetch) {
-  const friends = useApi(fetch, getFriends, 'force-cache');
+  const friends = useApi(fetch, getFriends, { cache: 'force-cache' });
   const processFriends = useApi(fetch, processFriend);
 
   useEffect(() => {

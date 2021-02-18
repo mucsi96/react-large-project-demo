@@ -17,9 +17,9 @@ export type UseApiResult<A extends unknown[], T> = {
 };
 
 export function useApi<A extends unknown[], T>(
-  fetch: Fetch,
+  fetchImpl: Fetch,
   fetcher: Fetcher<A, T>,
-  cache?: RequestCache
+  { cache }: { cache?: RequestCache } = {}
 ): UseApiResult<A, T> {
   const [state, dispatch] = useReducer<
     (state: ApiState<A, T>, action: FetchApiAction<A, T>) => ApiState<A, T>
@@ -32,19 +32,21 @@ export function useApi<A extends unknown[], T>(
     return () => abortController.abort();
   }, [abortController]);
 
+  const fetch = useCallback(
+    (url: string, requestInit: RequestInit = {}) =>
+      fetchImpl(url, {
+        ...requestInit,
+        cache,
+        signal: abortController.signal,
+      }),
+    [fetchImpl, cache, abortController]
+  );
+
   const fetchData = useCallback(
     async (...fetchArgs: A) => {
       try {
         dispatch({ type: 'FETCH_API_START' });
-        const payload = await fetcher(
-          (url: string, requestInit: RequestInit = {}) =>
-            fetch(url, {
-              ...requestInit,
-              cache,
-              signal: abortController.signal,
-            }),
-          ...fetchArgs
-        );
+        const payload = await fetcher(fetch, ...fetchArgs);
         dispatch({ type: 'FETCH_API_SUCCEED', payload, fetchArgs });
       } catch (err) {
         const error = err as ApiError & { name: string };
@@ -54,7 +56,7 @@ export function useApi<A extends unknown[], T>(
         }
       }
     },
-    [fetch, fetcher, cache, abortController]
+    [fetcher, fetch]
   );
 
   const result = useMemo(() => ({}), []);
