@@ -1,3 +1,11 @@
+export type CallApiOptions = {
+  url: string;
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  headers?: HeadersInit;
+  signal?: AbortSignal | null;
+  body?: unknown;
+}
+
 export type ApiErrorResponse = {
   error?: {
     message?: string;
@@ -10,30 +18,9 @@ export type ApiError = {
   status?: number;
 };
 
-export type ApiState<A extends unknown[], T> = {
-  data?: T;
+export type ApiState<FetchArgs extends unknown[], ResponseBody> = {
+  data?: ResponseBody;
   error?: ApiError;
   isLoading: boolean;
-  fetchArgs?: A;
+  fetchArgs?: FetchArgs;
 };
-
-export type FetchApiStartAction = {
-  type: 'FETCH_API_START';
-};
-
-export type FetchApiSucceedAction<A extends unknown[], T> = {
-  type: 'FETCH_API_SUCCEED';
-  payload: T;
-  fetchArgs: A;
-};
-
-export type FetchApiFailedAction<A extends unknown[]> = {
-  type: 'FETCH_API_FAILED';
-  error: ApiError;
-  fetchArgs: A;
-};
-
-export type FetchApiAction<A extends unknown[], T> =
-  | FetchApiStartAction
-  | FetchApiSucceedAction<A, T>
-  | FetchApiFailedAction<A>;
