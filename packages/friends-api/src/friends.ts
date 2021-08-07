@@ -1,15 +1,14 @@
-import { handleJSONResponse } from 'core';
+import { ApiCaller } from 'core';
 import { Friend, FriendsResponse, FriendActions } from './types';
 
-type Fetch = (url: string, options?: RequestInit) => Promise<Response>;
-
-export function getFriends(
-  fetch: Fetch,
+export async function getFriends(
+  callApi: ApiCaller,
   reference?: FriendsResponse
 ): Promise<FriendsResponse> {
-  return handleJSONResponse<FriendsResponse>(
-    fetch(reference?._links.next?.href ?? '/api/friends')
-  );
+  const friends = (await callApi({
+    href: reference?._links.next?.href ?? '/api/friends',
+  })) as FriendsResponse;
+  return friends;
 }
 
 export function hasMore(reference: FriendsResponse): boolean {
@@ -17,10 +16,10 @@ export function hasMore(reference: FriendsResponse): boolean {
 }
 
 export async function processFriend(
-  fetch: Fetch,
+  callApi: ApiCaller,
   friend: Friend,
   action: FriendActions
 ): Promise<void> {
-  const { href, method = 'GET' } = friend._links[action];
-  return handleJSONResponse<void>(fetch(href, { method }));
+  const { href, method } = friend._links[action];
+  await callApi({ href, method });
 }

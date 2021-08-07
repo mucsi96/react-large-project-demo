@@ -1,6 +1,8 @@
+import { ApiMethod } from 'core';
+
 export type Link = {
   href: string;
-  method?: string;
+  method?: ApiMethod;
 };
 
 export type Friend = {

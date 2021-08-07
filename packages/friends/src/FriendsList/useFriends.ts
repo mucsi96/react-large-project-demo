@@ -1,11 +1,11 @@
-import { useApi, Fetch } from 'core';
+import { useApi, ApiCaller } from 'core';
 import { getFriends, processFriend, FriendActions, hasMore } from 'friends-api';
 import { useEffect, useReducer } from 'react';
 import { friendsReducer } from './friendsReducer';
 import { Notification, Friend } from './types';
 
 export function useFriends(
-  fetch: Fetch
+  callApi: ApiCaller
 ): {
   friends?: Friend[];
   isLoading: boolean;
@@ -16,8 +16,8 @@ export function useFriends(
   removeFromFavorites: (friend: Friend) => void;
   notifications: Notification[];
 } {
-  const friends = useApi(fetch, getFriends, { cache: 'force-cache' });
-  const processFriends = useApi(fetch, processFriend);
+  const friends = useApi(callApi, getFriends);
+  const processFriends = useApi(callApi, processFriend);
   const [state, dispatch] = useReducer(friendsReducer, {
     friends: [],
     notifications: [],

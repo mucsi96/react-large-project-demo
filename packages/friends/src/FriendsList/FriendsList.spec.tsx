@@ -4,7 +4,7 @@ import { FriendsList } from './FriendsList';
 import { act } from 'react-dom/test-utils';
 import { setupApiMocks } from '../setupApiMocks';
 import { FriendsMockSwitch, setFriendsMockSwitch } from 'friends-api';
-import { Spinner } from 'core';
+import { fetchJSON, Spinner } from 'core';
 
 jest.mock('core', () => {
   const actual = jest.requireActual<Record<string, unknown>>('core');
@@ -20,7 +20,7 @@ setupApiMocks();
 
 describe('FriendsList', () => {
   test('renders spinner during loading of friends', async () => {
-    const wrapper = mount(<FriendsList fetch={fetch} />);
+    const wrapper = mount(<FriendsList callApi={fetchJSON} />);
     await act(() => Promise.resolve());
     expect(wrapper.children()).toMatchSnapshot();
   });
@@ -87,7 +87,7 @@ describe('FriendsList', () => {
 });
 
 async function renderFriends() {
-  const wrapper = mount(<FriendsList fetch={fetch} />);
+  const wrapper = mount(<FriendsList callApi={fetchJSON} />);
   await act(() => Promise.resolve());
   wrapper.update();
   return wrapper;

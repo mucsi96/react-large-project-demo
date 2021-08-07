@@ -2,16 +2,27 @@
 
 ## API
 
-### type Fetch
-
+### type CallApiOptions
 ```ts
-(url: string, options?: RequestInit) => Promise<Response>
+{
+  href: string;
+  method?: ApiMethod;
+  headers?: HeadersInit;
+  signal?: AbortSignal | null;
+  body?: unknown;
+}
 ```
 
-### type Fetcher<A extends unknown[], T>
+### type ApiCaller<ResponseBody = unknown>
 
 ```ts
-(fetch: Fetch, ...args: A) => Promise<T>
+(options?: CallApiOptions) => Promise<ResponseBody>
+```
+
+### type Fetcher<FetchArgs extends unknown[], ResponseBody>
+
+```ts
+(fetch: Fetch, ...args: FetchArgs) => Promise<ResponseBody>
 ```
 
 ### type ApiErrorResponse
@@ -34,52 +45,26 @@
 }
 ```
 
-### function toJSON<T>(responsePromise: Promise<Response>): Promise<T>;
-
-Converts a native fetch Response promise to data Promise. Throws APIError based on not ok status.
-
-Example
-
-```ts
-export function getFriends(fetch: Fetch): Promise<FriendsResponse> {
-  return toJSON<FriendsResponse>(fetch('/api/friends'));
-}
-
-enum FriendActions {
-  ADD_TO_FAVORITE = 'addToFavorite',
-  REMOVE_FROM_FAVORITE = 'removeFromFavorite',
-}
-
-export async function processFriend(
-  fetch: Fetch,
-  friend: Friend,
-  action: FriendActions
-): Promise<void> {
-  const { href, method = 'GET' } = friend._links[action];
-  return toJSON<void>(fetch(href, { method }));
-}
-```
-
-### type UseApiResult<A extends unknown[], T>
+### type UseApiResult<FetchArgs extends unknown[], ResponseBody>
 
 ```ts
 {
-    fetch: (...args: A) => void;
-    data?: T;
+    fetch: (...args: FetchArgs) => void;
+    data?: ResponseBody;
     error?: ApiError;
     isLoading: boolean;
-    fetchArgs?: A;
+    fetchArgs?: FetchArgs;
 }
 ```
 
-### function useApi<A extends unknown[], T>(fetch: Fetch, fetcher: Fetcher<A, T>, options?: { cache?: RequestCache}): UseApiResult<A, T>
+### function useApi<FetchArgs extends unknown[], ResponseBody>(callApi: ApiCaller, fetcher: Fetcher<FetchArgs, ResponseBody>): UseApiResult<FetchArgs, ResponseBody>
 
 Example:
 
 ```ts
-function useFriends(fetch: Fetch) {
-  const friends = useApi(fetch, getFriends, { cache: 'force-cache' });
-  const processFriends = useApi(fetch, processFriend);
+function useFriends(callApi: ApiCaller) {
+  const friends = useApi(callApi, getFriends);
+  const processFriends = useApi(callApi, processFriend);
 
   useEffect(() => {
     friends.fetch();

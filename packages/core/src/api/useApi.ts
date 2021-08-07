@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ApiError, ApiState, CallApiOptions } from './types';
+import { ApiCaller, ApiError, ApiState, CallApiOptions } from './types';
 
-export type ApiCaller = (options: CallApiOptions) => Promise<unknown>;
 export type Fetcher<FetchArgs extends unknown[], ResponseBody> = (
   callApi: ApiCaller,
   ...args: FetchArgs

@@ -11,7 +11,7 @@ describe('rxfetchJSON', () => {
     asMock(ajax).mockReturnValue({
       toPromise: () => Promise.resolve({ response: { test: 'response' } }),
     } as Observable<AjaxResponse>);
-    const response = await rxFetchJSON('/test/url');
+    const response = await rxFetchJSON({ href: '/test/url' });
 
     expect(response).toEqual({ test: 'response' });
     expect(ajax).toHaveBeenCalledWith({
@@ -26,7 +26,8 @@ describe('rxfetchJSON', () => {
     asMock(ajax).mockReturnValue({
       toPromise: () => Promise.resolve({ response: { test: 'response' } }),
     } as Observable<AjaxResponse>);
-    const response = await rxFetchJSON('/test/url', {
+    const response = await rxFetchJSON({
+      href: '/test/url',
       method: 'POST',
       body: { test: 'body' },
       headers: { 'x-header-1': 'test value' },
@@ -57,7 +58,7 @@ describe('rxfetchJSON', () => {
     let coughtError: ApiError | null = null;
 
     try {
-      await rxFetchJSON('/test/url');
+      await rxFetchJSON({ href: '/test/url' });
     } catch (err) {
       coughtError = err as ApiError;
     }

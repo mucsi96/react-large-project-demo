@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { useApi } from '../api';
-import { asMock, createMockPromise, Fetch } from 'core';
+import { asMock, createMockPromise } from 'core';
 import React, { FC } from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
-import { ApiError } from './types';
+import { ApiCaller, ApiError } from './types';
 
 describe('useApi', () => {
   function mountHook(
-    fetcher: (fetch: Fetch, input: string) => Promise<string>,
-    options?: { cache?: RequestCache }
+    callApi: ApiCaller,
+    fetcher: (callApi: ApiCaller, input: string) => Promise<string>
   ) {
     let hookResult: {
       fetch: (input: string) => void;
@@ -19,7 +19,7 @@ describe('useApi', () => {
     };
 
     const TestComponent: FC = () => {
-      hookResult = useApi(window.fetch, fetcher, options);
+      hookResult = useApi(callApi, fetcher);
       return null;
     };
     mount(<TestComponent />);
@@ -32,14 +32,17 @@ describe('useApi', () => {
   }
 
   function setupMocks() {
-    window.fetch = jest.fn();
+    const callApi = jest
+      .fn()
+      .mockResolvedValue({ test: 'response' }) as ApiCaller;
     const mockPromise = createMockPromise<string>();
     const fetcher = jest.fn().mockReturnValue(mockPromise) as (
-      fetch: Fetch,
+      callApi: ApiCaller,
       input: string
     ) => Promise<string>;
 
     return {
+      callApi,
       mockPromise,
       fetcher,
     };
@@ -47,20 +50,21 @@ describe('useApi', () => {
 
   describe('fetch function', () => {
     test('passes through the arguments to fetcher', async () => {
-      const { fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher, { cache: 'no-store' });
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('test input');
       });
       expect(fetcher).toHaveBeenCalledWith(expect.any(Function), 'test input');
-      await asMock(fetcher).mock.calls[0][0]('/test/url', {
+      await asMock(fetcher).mock.calls[0][0]({
+        href: '/test/url',
         method: 'POST',
         body: 'test body',
       });
-      expect(window.fetch).toHaveBeenCalledWith('/test/url', {
+      expect(callApi).toHaveBeenCalledWith({
+        href: '/test/url',
         method: 'POST',
         body: 'test body',
-        cache: 'no-store',
         signal: expect.any(AbortSignal) as AbortSignal,
       });
     });
@@ -68,14 +72,14 @@ describe('useApi', () => {
 
   describe('isLoading property', () => {
     test('is false before fetch is called', () => {
-      const { fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       expect(getHookResult().isLoading).toBe(false);
     });
 
     test('is true during fetch', () => {
-      const { fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });
@@ -83,8 +87,8 @@ describe('useApi', () => {
     });
 
     test('is false after fetch success', async () => {
-      const { mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, mockPromise, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });
@@ -93,8 +97,8 @@ describe('useApi', () => {
     });
 
     test('is false after fetch failure', async () => {
-      const { mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, mockPromise, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });
@@ -105,14 +109,14 @@ describe('useApi', () => {
 
   describe('data property', () => {
     test('is undefined before fetch is called', () => {
-      const { fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       expect(getHookResult().data).toBeUndefined();
     });
 
     test('is undefined during fetch', () => {
-      const { fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });
@@ -120,8 +124,8 @@ describe('useApi', () => {
     });
 
     test('is set after fetch success', async () => {
-      const { mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, mockPromise, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });
@@ -130,8 +134,8 @@ describe('useApi', () => {
     });
 
     test('is undefined after fetch failure', async () => {
-      const { mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, mockPromise, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });
@@ -142,14 +146,14 @@ describe('useApi', () => {
 
   describe('error property', () => {
     test('is undefined before fetch is called', () => {
-      const { fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       expect(getHookResult().error).toBeUndefined();
     });
 
     test('is undefined during fetch', () => {
-      const { fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });
@@ -157,8 +161,8 @@ describe('useApi', () => {
     });
 
     test('is undefined after fetch success', async () => {
-      const { mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, mockPromise, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });
@@ -168,8 +172,8 @@ describe('useApi', () => {
 
     test('is set after fetch failure', async () => {
       const mockError = new Error();
-      const { mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(fetcher);
+      const { callApi, mockPromise, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
       act(() => {
         getHookResult().fetch('');
       });

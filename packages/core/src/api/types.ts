@@ -1,10 +1,16 @@
+export type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
 export type CallApiOptions = {
-  url: string;
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  href: string;
+  method?: ApiMethod;
   headers?: HeadersInit;
   signal?: AbortSignal | null;
   body?: unknown;
-}
+};
+
+export type ApiCaller<ResponseBody = unknown> = (
+  options: CallApiOptions
+) => Promise<ResponseBody>;
 
 export type ApiErrorResponse = {
   error?: {

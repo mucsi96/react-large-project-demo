@@ -4,14 +4,14 @@ import { ApiError } from './types';
 
 window.fetch = jest.fn();
 
-describe('rxfetchJSON', () => {
+describe('fetchJSON', () => {
   test('fetches using rxjs ajax', async () => {
     asMock(window.fetch).mockResolvedValue(({
       ok: true,
       status: 200,
       text: jest.fn().mockResolvedValue(JSON.stringify({ test: 'response' })),
     } as unknown) as Response);
-    const response = await fetchJSON('/test/url');
+    const response = await fetchJSON({ href: '/test/url' });
 
     expect(response).toEqual({ test: 'response' });
     expect(window.fetch).toHaveBeenCalledWith('/test/url', {
@@ -27,7 +27,8 @@ describe('rxfetchJSON', () => {
       status: 200,
       text: jest.fn().mockResolvedValue(JSON.stringify({ test: 'response' })),
     } as unknown) as Response);
-    const response = await fetchJSON('/test/url', {
+    const response = await fetchJSON({
+      href: '/test/url',
       method: 'POST',
       body: { test: 'body' },
       headers: { 'x-header-1': 'test value' },
@@ -54,7 +55,7 @@ describe('rxfetchJSON', () => {
     let coughtError: ApiError | null = null;
 
     try {
-      await fetchJSON('/test/url');
+      await fetchJSON({ href: '/test/url' });
     } catch (err) {
       coughtError = err as ApiError;
     }

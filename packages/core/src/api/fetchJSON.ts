@@ -1,25 +1,19 @@
-import { ApiError, ApiErrorResponse } from './types';
+import { ApiError, ApiErrorResponse, CallApiOptions } from './types';
 
-export async function fetchJSON<T>(
-  url: string,
-  init: {
-    method?: string;
-    headers?: Record<string, string>;
-    body?: Record<string, unknown>;
-  } = {}
-): Promise<T> {
-  const { method, headers, body } = init;
-  const response = await window.fetch(url, {
+export async function fetchJSON<ResponseBody>(
+  { href, method, headers, body }: CallApiOptions
+): Promise<ResponseBody> {
+  const response = await window.fetch(href, {
     ...(method && { method }),
     headers: {
       ...headers,
       'Content-Type': 'application/json',
     },
-    ...(body && { body: JSON.stringify(body) }),
+    ...(body ? { body: JSON.stringify(body) } : {}),
   });
 
   const textResult = await response.text();
-  const result = (textResult ? JSON.parse(textResult) : null) as T;
+  const result = (textResult ? JSON.parse(textResult) : null) as ResponseBody;
 
   if (!response.ok) {
     // eslint-disable-next-line no-throw-literal

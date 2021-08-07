@@ -4,6 +4,7 @@ import { setupApiMocks } from '../setupApiMocks';
 import { FriendsList } from './FriendsList';
 import { FriendsMockSwitch, setFriendsMockSwitch } from 'friends-api';
 import { useState } from 'react';
+import { fetchJSON } from 'core';
 
 type StoryProps = { friendsMock: FriendsMockSwitch };
 
@@ -23,7 +24,7 @@ const Template: Story<StoryProps> = ({ friendsMock, ...args }) => {
       >
         {'Remount'}
       </button>
-      <FriendsList fetch={fetch} {...args} key={count} />
+      <FriendsList callApi={fetchJSON} {...args} key={count} />
     </>
   );
 };

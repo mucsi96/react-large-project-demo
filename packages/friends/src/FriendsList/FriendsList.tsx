@@ -1,9 +1,9 @@
-import { Button, Fetch, Spinner } from 'core';
+import { ApiCaller, Button, Spinner } from 'core';
 import React, { FC } from 'react';
 import styles from './FriendsList.module.scss';
 import { useFriends } from './useFriends';
 
-export const FriendsList: FC<{ fetch: Fetch }> = ({ fetch }) => {
+export const FriendsList: FC<{ callApi: ApiCaller }> = ({ callApi }) => {
   const {
     friends = [],
     isLoading,
@@ -13,7 +13,7 @@ export const FriendsList: FC<{ fetch: Fetch }> = ({ fetch }) => {
     addToFavorites,
     removeFromFavorites,
     notifications,
-  } = useFriends(fetch);
+  } = useFriends(callApi);
 
   return (
     <div data-name="friend-list" className={styles.container}>
