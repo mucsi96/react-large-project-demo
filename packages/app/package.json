@@ -27,5 +27,8 @@
     "build:prop:app": "yarn build",
     "build:mock:app": "yarn build --use-mock-api",
     "build:app": "yarn build:prop:app && yarn build:mock:app"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

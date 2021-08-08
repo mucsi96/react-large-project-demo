@@ -1,23 +1,22 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import { setupApiMocks } from 'friends';
-import { WaitForMockApi, setMockApiDelay } from 'mock-api';
+import { setMockApiDelay } from 'mock-api';
+import { setupWorker } from 'msw';
+import { mockFriendHandlers } from 'friends-api';
 
-function renderApp(): ReactNode {
-  const app = <App />;
+import './index.css';
 
-  if (process.env.REACT_APP_USE_MOCK_API !== 'true') {
-    return app;
-  }
-
-  setupApiMocks();
+if (process.env.REACT_APP_USE_MOCK_API === 'true') {
+  const worker = setupWorker(...mockFriendHandlers);
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
+  worker.start();
   setMockApiDelay(750);
-  return <WaitForMockApi>{app}</WaitForMockApi>;
 }
 
 ReactDOM.render(
-  <React.StrictMode>{renderApp()}</React.StrictMode>,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
   document.getElementById('root')
 );
