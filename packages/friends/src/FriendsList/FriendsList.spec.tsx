@@ -2,9 +2,8 @@ import React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { FriendsList } from './FriendsList';
 import { act } from 'react-dom/test-utils';
-import { setupApiMocks } from '../setupApiMocks';
 import { FriendsMockSwitch, setFriendsMockSwitch } from 'friends-api';
-import { fetchJSON, Spinner } from 'core';
+import { fetchJSON, Spinner, waitFor } from 'core';
 
 jest.mock('core', () => {
   const actual = jest.requireActual<Record<string, unknown>>('core');
@@ -15,8 +14,6 @@ jest.mock('core', () => {
     Button: 'Button-',
   };
 });
-
-setupApiMocks();
 
 describe('FriendsList', () => {
   test('renders spinner during loading of friends', async () => {
@@ -40,7 +37,6 @@ describe('FriendsList', () => {
     const wrapper = await renderFriends();
     act(() => loadMore(wrapper));
     wrapper.update();
-    await act(() => Promise.resolve());
     expect(wrapper.find('[data-name="friend"]')).toHaveLength(5);
     expect(wrapper.find(Spinner).exists()).toBe(true);
   });
@@ -48,21 +44,25 @@ describe('FriendsList', () => {
   test('loads more friends clicking load more button', async () => {
     const wrapper = await renderFriends();
     act(() => loadMore(wrapper));
-    await act(() => Promise.resolve());
-    wrapper.update();
-    expect(wrapper.find('[data-name="friend"]')).toHaveLength(10);
+    await waitFor(() => {
+      wrapper.update();
+      expect(wrapper.find('[data-name="friend"]')).toHaveLength(10);
+    });
     expect(wrapper.find('[data-name="load-more"]').exists()).toBe(true);
   });
 
   test('shows no load more button if all friends are loaded', async () => {
     const wrapper = await renderFriends();
     act(() => loadMore(wrapper));
-    await act(() => Promise.resolve());
-    wrapper.update();
+    await waitFor(() => {
+      wrapper.update();
+      expect(wrapper.find('[data-name="friend"]')).toHaveLength(10);
+    });
     act(() => loadMore(wrapper));
-    await act(() => Promise.resolve());
-    wrapper.update();
-    expect(wrapper.find('[data-name="friend"]')).toHaveLength(15);
+    await waitFor(() => {
+      wrapper.update();
+      expect(wrapper.find('[data-name="friend"]')).toHaveLength(15);
+    });
     expect(wrapper.find('[data-name="load-more"]').exists()).toBe(false);
   });
 
@@ -88,7 +88,10 @@ describe('FriendsList', () => {
 
 async function renderFriends() {
   const wrapper = mount(<FriendsList callApi={fetchJSON} />);
-  await act(() => Promise.resolve());
+  await waitFor(() => {
+    wrapper.update();
+    expect(wrapper.find('[data-name="friend-list"]').exists()).toBe(true);
+  });
   wrapper.update();
   return wrapper;
 }

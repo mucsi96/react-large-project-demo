@@ -27,6 +27,8 @@ export function runPackageBinary({
     ...process.argv.slice(3),
   ];
 
+  console.log(binaryName, ...process.argv.slice(3));
+
   require(join(packageName, binaryPath));
 }
 

@@ -1,3 +1,3 @@
 export * from './types';
 export * from './friends';
-export * from './setupApiMocks';
+export * from './mocks/handlers';

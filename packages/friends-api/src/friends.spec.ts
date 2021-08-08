@@ -1,9 +1,7 @@
 import { fetchJSON } from 'core';
 import { getFriends, hasMore, processFriend } from './friends';
-import { setupApiMocks } from './setupApiMocks';
 import { FriendActions, FriendsResponse } from './types';
 
-setupApiMocks();
 
 describe('friends', () => {
   describe('getFriends', () => {

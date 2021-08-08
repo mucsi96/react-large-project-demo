@@ -1,5 +1,5 @@
 import del from 'del';
-import { basename, resolve } from 'path';
+import { basename, relative, resolve } from 'path';
 import { pickCommand, runPackageBinary, runReactScripts } from './utils';
 
 export function checkTypes(): void {
@@ -78,8 +78,10 @@ export function startStorybook(): void {
     packageName: '@storybook/react',
     binaryName: 'start-storybook',
     args: [
+      '--static-dir',
+      relative(process.cwd(), resolve(__dirname, '../config/public')),
       '--config-dir',
-      resolve(__dirname, '../config/.storybook'),
+      relative(process.cwd(), resolve(__dirname, '../config/.storybook')),
       '--port',
       '9009',
       '--host',

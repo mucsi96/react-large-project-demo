@@ -1,14 +1,15 @@
 import { Meta, Story } from '@storybook/react';
 import React from 'react';
-import { setupApiMocks } from '../setupApiMocks';
 import { FriendsList } from './FriendsList';
-import { FriendsMockSwitch, setFriendsMockSwitch } from 'friends-api';
+import {
+  FriendsMockSwitch,
+  mockFriendHandlers,
+  setFriendsMockSwitch,
+} from 'friends-api';
 import { useState } from 'react';
 import { fetchJSON } from 'core';
 
 type StoryProps = { friendsMock: FriendsMockSwitch };
-
-setupApiMocks();
 
 export default { title: 'FriendsList', component: FriendsList } as Meta;
 
@@ -32,6 +33,9 @@ const Template: Story<StoryProps> = ({ friendsMock, ...args }) => {
 function createStory(args: StoryProps) {
   const story = Template.bind({});
   story.args = args;
+  story.parameters = {
+    msw: [...mockFriendHandlers],
+  };
   return story;
 }
 

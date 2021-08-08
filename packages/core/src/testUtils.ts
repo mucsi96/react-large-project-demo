@@ -37,3 +37,29 @@ export function createMockPromise<T>(): MockPromise<T> {
 
   return mockPromise;
 }
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const waitFor = (callback: Function, { interval = 50, timeout = 1000 } = {}): Promise<undefined> =>
+  act(
+    () =>
+      new Promise((resolve, reject) => {
+        const startTime = Date.now();
+
+        const nextInterval = () => {
+          setTimeout(() => {
+            try {
+              callback();
+              resolve();
+            } catch (err) {
+              if (Date.now() - startTime > timeout) {
+                reject(new Error('Timed out.'));
+              } else {
+                nextInterval();
+              }
+            }
+          }, interval);
+        };
+
+        nextInterval();
+      })
+  );

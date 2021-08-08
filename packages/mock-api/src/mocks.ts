@@ -1,15 +1,4 @@
-import { Mock } from './types';
-
-let mocks: Mock[] = [];
 let mockSwitches: Record<string, string> = {};
-
-export function registerApiMocks(newMocks: Mock[]): void {
-  mocks = [...mocks, ...newMocks];
-}
-
-export function getMocks(): Mock[] {
-  return mocks;
-}
 
 export function setMockSwitch(switchName: string, value: string): void {
   mockSwitches[switchName] = value;
