@@ -12,6 +12,7 @@ import { readFileSync } from 'fs';
 import { basename, resolve } from 'path';
 import { page, startBrowser, stopBrowser } from './puppeteerConfig';
 import { startDistServer, stopDistServer } from './distServer';
+import { sync as mkdirpSync } from 'mkdirp';
 
 const distDir = process.env.DIST_DIR;
 let currentPickle: messages.IPickle;
@@ -39,6 +40,7 @@ function getScreenshotName() {
 }
 
 BeforeAll(async () => {
+  mkdirpSync(resolve(process.cwd(), 'screenshots'));
   if (distDir) {
     await startDistServer({ distDir });
   }
@@ -57,6 +59,8 @@ BeforeStep(({ pickle }) => {
 });
 
 AfterStep(function (this: IWorldOptions, { result }) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const world = this;
   if (result.status === Status.FAILED) {
     const path = getScreenshotName();
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -64,7 +68,7 @@ AfterStep(function (this: IWorldOptions, { result }) {
       .screenshot({
         path,
       })
-      .then(() => this.attach(readFileSync(path), 'image/png'));
+      .then(() => world.attach(readFileSync(path), 'image/png'));
   }
 });
 

@@ -115,8 +115,10 @@ export function buildStorybook(): void {
     packageName: '@storybook/react',
     binaryName: 'build-storybook',
     args: [
+      '--static-dir',
+      relative(process.cwd(), resolve(__dirname, '../config/public')),
       '--config-dir',
-      resolve(__dirname, '../config/.storybook'),
+      relative(process.cwd(), resolve(__dirname, '../config/.storybook')),
       '-o',
       resolve(__dirname, '../../../dist', basename(process.cwd())),
       '--quiet',
