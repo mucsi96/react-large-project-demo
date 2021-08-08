@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ApiCaller, ApiError, ApiState, CallApiOptions } from './types';
 
 export type Fetcher<FetchArgs extends unknown[], ResponseBody> = (
@@ -14,22 +14,33 @@ export type UseApiResult<FetchArgs extends unknown[], ResponseBody> = {
   fetchArgs?: FetchArgs;
 };
 
+export type UseApiOptions = {
+  cache?: boolean;
+  noAbortOnSubsequentCall?: boolean;
+};
+
 export function useApi<FetchArgs extends unknown[], ResponseBody>(
   callApi: ApiCaller,
-  fetcher: Fetcher<FetchArgs, ResponseBody>
+  fetcher: Fetcher<FetchArgs, ResponseBody>,
+  { cache, noAbortOnSubsequentCall }: UseApiOptions = {}
 ): UseApiResult<FetchArgs, ResponseBody> {
   const [apiState, setApiState] = useState({
     isLoading: false,
   } as ApiState<FetchArgs, ResponseBody>);
-  const abortController = useMemo(() => new AbortController(), []);
+  const abortController = useRef<AbortController>();
 
   useEffect(() => {
-    return () => abortController.abort();
-  }, [abortController]);
+    return () => abortController.current?.abort();
+  }, []);
 
   const fetchData = useCallback(
     async (...fetchArgs: FetchArgs) => {
+      if (!noAbortOnSubsequentCall) {
+        abortController.current?.abort();
+      }
+
       try {
+        abortController.current = new AbortController();
         setApiState({
           isLoading: true,
         });
@@ -37,7 +48,8 @@ export function useApi<FetchArgs extends unknown[], ResponseBody>(
           (options: CallApiOptions) =>
             callApi({
               ...options,
-              signal: abortController.signal,
+              cache,
+              signal: abortController.current?.signal,
             }),
           ...fetchArgs
         );
@@ -55,10 +67,15 @@ export function useApi<FetchArgs extends unknown[], ResponseBody>(
             error: error,
             fetchArgs: fetchArgs,
           });
+        } else {
+          setApiState({
+            isLoading: false,
+            fetchArgs: fetchArgs,
+          });
         }
       }
     },
-    [fetcher, abortController, callApi]
+    [fetcher, abortController, callApi, cache, noAbortOnSubsequentCall]
   );
 
   const result = useMemo(() => ({}), []);

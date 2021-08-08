@@ -6,6 +6,7 @@ export type CallApiOptions = {
   headers?: HeadersInit;
   signal?: AbortSignal | null;
   body?: unknown;
+  cache?: boolean;
 };
 
 export type ApiCaller<ResponseBody = unknown> = (

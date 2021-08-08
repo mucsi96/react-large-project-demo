@@ -5,11 +5,22 @@ import React, { FC } from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import { ApiCaller, ApiError } from './types';
+import { UseApiOptions } from './useApi';
+
+class MockAbortController {
+  static aborted = false;
+  signal = 'mockMockAbortControllerSignal';
+
+  abort() {
+    MockAbortController.aborted = true;
+  }
+}
 
 describe('useApi', () => {
   function mountHook(
     callApi: ApiCaller,
-    fetcher: (callApi: ApiCaller, input: string) => Promise<string>
+    fetcher: (callApi: ApiCaller, input: string) => Promise<string>,
+    options: UseApiOptions = {}
   ) {
     let hookResult: {
       fetch: (input: string) => void;
@@ -19,19 +30,24 @@ describe('useApi', () => {
     };
 
     const TestComponent: FC = () => {
-      hookResult = useApi(callApi, fetcher);
+      hookResult = useApi(callApi, fetcher, options);
       return null;
     };
-    mount(<TestComponent />);
+    const wrapper = mount(<TestComponent />);
 
     return {
       getHookResult() {
         return hookResult;
       },
+      unmount() {
+        wrapper.unmount();
+      }
     };
   }
 
   function setupMocks() {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+    window.AbortController = MockAbortController as any;
     const callApi = jest
       .fn()
       .mockResolvedValue({ test: 'response' }) as ApiCaller;
@@ -65,8 +81,80 @@ describe('useApi', () => {
         href: '/test/url',
         method: 'POST',
         body: 'test body',
-        signal: expect.any(AbortSignal) as AbortSignal,
+        signal: 'mockMockAbortControllerSignal',
       });
+    });
+
+    test('passes through the cache options to api caller', async () => {
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher, { cache: true });
+      act(() => {
+        getHookResult().fetch('test input');
+      });
+      await asMock(fetcher).mock.calls[0][0]({
+        href: '/test/url',
+        method: 'POST',
+        body: 'test body',
+      });
+      expect(callApi).toHaveBeenCalledWith({
+        href: '/test/url',
+        method: 'POST',
+        body: 'test body',
+        signal: 'mockMockAbortControllerSignal',
+        cache: true,
+      });
+    });
+
+    test('aborts api call on unmount', async () => {
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult, unmount } = mountHook(callApi, fetcher);
+      act(() => {
+        getHookResult().fetch('test input');
+      });
+      await asMock(fetcher).mock.calls[0][0]({
+        href: '/test/url',
+        method: 'POST',
+        body: 'test body',
+      });
+      MockAbortController.aborted = false;
+      unmount();
+      expect(MockAbortController.aborted).toBe(true);
+    });
+
+    test('aborts api call on subsequent api call', async () => {
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher);
+      act(() => {
+        getHookResult().fetch('test input');
+      });
+      await asMock(fetcher).mock.calls[0][0]({
+        href: '/test/url',
+        method: 'POST',
+        body: 'test body',
+      });
+      MockAbortController.aborted = false;
+      act(() => {
+        getHookResult().fetch('test input');
+      });
+      expect(MockAbortController.aborted).toBe(true);
+    });
+
+    test('doesn`t aborts api call on subsequent api call if noAbortOnSubsequentCall is set', async () => {
+      const { callApi, fetcher } = setupMocks();
+      const { getHookResult } = mountHook(callApi, fetcher, { noAbortOnSubsequentCall: true });
+      act(() => {
+        getHookResult().fetch('test input');
+      });
+      await asMock(fetcher).mock.calls[0][0]({
+        href: '/test/url',
+        method: 'POST',
+        body: 'test body',
+      });
+      MockAbortController.aborted = false;
+      act(() => {
+        getHookResult().fetch('test input');
+      });
+      expect(MockAbortController.aborted).toBe(false);
     });
   });
 

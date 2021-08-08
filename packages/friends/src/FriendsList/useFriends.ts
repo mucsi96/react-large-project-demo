@@ -17,7 +17,7 @@ export function useFriends(
   notifications: Notification[];
 } {
   const friends = useApi(callApi, getFriends);
-  const processFriends = useApi(callApi, processFriend);
+  const processFriends = useApi(callApi, processFriend, { noAbortOnSubsequentCall: true });
   const [state, dispatch] = useReducer(friendsReducer, {
     friends: [],
     notifications: [],

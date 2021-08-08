@@ -1,8 +1,12 @@
 import { ApiError, ApiErrorResponse, CallApiOptions } from './types';
 
-export async function fetchJSON<ResponseBody>(
-  { href, method, headers, body }: CallApiOptions
-): Promise<ResponseBody> {
+export async function fetchJSON<ResponseBody>({
+  href,
+  method,
+  headers,
+  body,
+  signal,
+}: CallApiOptions): Promise<ResponseBody> {
   const response = await window.fetch(href, {
     ...(method && { method }),
     headers: {
@@ -10,6 +14,7 @@ export async function fetchJSON<ResponseBody>(
       'Content-Type': 'application/json',
     },
     ...(body ? { body: JSON.stringify(body) } : {}),
+    ...(signal && { signal }),
   });
 
   const textResult = await response.text();
