@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/react-large-project-demo/app-mock/static/css/main.c772fbf2.chunk.css",
-    "main.js": "/react-large-project-demo/app-mock/static/js/main.68629c86.chunk.js",
-    "main.js.map": "/react-large-project-demo/app-mock/static/js/main.68629c86.chunk.js.map",
+    "main.js": "/react-large-project-demo/app-mock/static/js/main.0813d378.chunk.js",
+    "main.js.map": "/react-large-project-demo/app-mock/static/js/main.0813d378.chunk.js.map",
     "runtime-main.js": "/react-large-project-demo/app-mock/static/js/runtime-main.1809b6af.js",
     "runtime-main.js.map": "/react-large-project-demo/app-mock/static/js/runtime-main.1809b6af.js.map",
     "static/js/2.c80f2212.chunk.js": "/react-large-project-demo/app-mock/static/js/2.c80f2212.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.1809b6af.js",
     "static/js/2.c80f2212.chunk.js",
     "static/css/main.c772fbf2.chunk.css",
-    "static/js/main.68629c86.chunk.js"
+    "static/js/main.0813d378.chunk.js"
   ]
 }
