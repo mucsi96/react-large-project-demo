@@ -2,6 +2,7 @@ const { resolve, relative } = require('path');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const Visualizer = require('webpack-visualizer-plugin2');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
+const { existsSync } = require('fs');
 
 const useMockApi = process.env.REACT_APP_USE_MOCK_API === 'true';
 const prodDistPath = resolve(
@@ -28,11 +29,12 @@ const analyzerPlugins = [
 
 module.exports = {
   jest: function (config) {
+    const testSetup = resolve(process.cwd(), 'src/setupTests.ts');
     return {
       ...config,
       setupFilesAfterEnv: [
         resolve(__dirname, 'jest.setup.js'),
-        '<rootDir>/src/setupTests.js',
+        ...(existsSync(testSetup) ? [testSetup] : []),
       ],
       snapshotSerializers: ['enzyme-to-json/serializer'],
       testMatch: ['<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}'],

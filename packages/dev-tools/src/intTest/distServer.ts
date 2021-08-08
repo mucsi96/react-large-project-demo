@@ -14,7 +14,7 @@ export async function startDistServer({
   app.use(express.static(resolve(process.cwd(), distDir)));
 
   await new Promise<void>((resolve) => {
-    server = app.listen(9009, resolve);
+    server = app.listen(8080, resolve);
   });
 }
 

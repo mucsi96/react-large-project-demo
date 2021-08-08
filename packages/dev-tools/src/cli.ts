@@ -83,7 +83,7 @@ export function startStorybook(): void {
       '--config-dir',
       relative(process.cwd(), resolve(__dirname, '../config/.storybook')),
       '--port',
-      '9009',
+      '8080',
       '--host',
       'localhost',
     ],

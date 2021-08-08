@@ -4,7 +4,7 @@ export class BaseWorld {
   public mockSwitches = {} as Record<string, string>;
 
   getStoryUrl(storyId: string): string {
-    return `http://localhost:9009/iframe.html?id=${storyId}&no-delay&${this.getMockSwitchesQueryParam()}`;
+    return `http://localhost:8080/iframe.html?id=${storyId}&no-delay&${this.getMockSwitchesQueryParam()}`;
   }
 
   setMockSwitch(name: string, value: string): void {
