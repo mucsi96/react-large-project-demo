@@ -266,10 +266,6 @@ Object {
       "lastName": "Johnson",
     },
   ],
-  "_links": Object {
-    "next": Object {
-      "href": "/api/friends?from=5",
-    },
-  },
+  "_links": Object {},
 }
 `;

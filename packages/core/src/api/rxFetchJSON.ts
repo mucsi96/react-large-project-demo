@@ -28,10 +28,7 @@ export async function rxFetchJSON<ResponseBody>({
     }).toPromise();
 
     if (signal?.aborted) {
-      // eslint-disable-next-line no-throw-literal
-      throw {
-        name: 'AbortError',
-      };
+      throw new DOMException('Abort', 'AbortError')
     }
 
     return result.response as ResponseBody;
