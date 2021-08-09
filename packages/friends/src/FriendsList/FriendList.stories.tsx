@@ -8,7 +8,6 @@ import {
 } from 'friends-api';
 import { useState } from 'react';
 import { rxFetchJSON } from 'core';
-import { fetchJSON } from 'core';
 
 type StoryProps = { friendsMock: FriendsMockSwitch };
 
