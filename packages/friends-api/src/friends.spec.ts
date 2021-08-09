@@ -2,7 +2,6 @@ import { fetchJSON } from 'core';
 import { getFriends, hasMore, processFriend } from './friends';
 import { FriendActions, FriendsResponse } from './types';
 
-
 describe('friends', () => {
   describe('getFriends', () => {
     test('fetches friends', async () => {
@@ -10,44 +9,46 @@ describe('friends', () => {
       expect(reduceImages(friends)).toMatchSnapshot();
     });
 
-    it('fetches the next page of friends', async () => {
+    test('fetches the next page of friends', async () => {
       const friends1 = await getFriends(fetchJSON);
-      const friends2 = await getFriends(fetchJSON, friends1);
+      const friends2 = await getFriends(fetchJSON, { reference: friends1 });
       expect(reduceImages(friends2)).toMatchSnapshot();
     });
 
-    it('returns no next link if there are no more friends', async () => {
+    test('returns no next link if there are no more friends', async () => {
       const friends1 = await getFriends(fetchJSON);
-      const friends2 = await getFriends(fetchJSON, friends1);
-      const friends3 = await getFriends(fetchJSON, friends2);
+      const friends2 = await getFriends(fetchJSON, { reference: friends1 });
+      const friends3 = await getFriends(fetchJSON, { reference: friends2 });
       expect(hasMore(friends3)).toBe(false);
+    });
+
+    test('searches for friend', async () => {
+      const friends = await getFriends(fetchJSON, { searchText: 'ri' });
+      expect(reduceImages(friends)).toMatchSnapshot();
     });
   });
 
   describe('processFriend', () => {
-    it('adds friend to favorite', async () => {
+    test('adds friend to favorite', async () => {
       const friends = await getFriends(fetchJSON);
-      await processFriend(
-        fetchJSON,
-        friends._embedded[1],
-        FriendActions.ADD_TO_FAVORITE
-      );
+      await processFriend(fetchJSON, {
+        friend: friends._embedded[1],
+        action: FriendActions.ADD_TO_FAVORITE,
+      });
       const processedFriends = await getFriends(fetchJSON);
       expect(processedFriends._embedded[1].isFavorite).toBe(true);
     });
 
-    it('removes friend from favorite', async () => {
+    test('removes friend from favorite', async () => {
       const friends = await getFriends(fetchJSON);
-      await processFriend(
-        fetchJSON,
-        friends._embedded[1],
-        FriendActions.ADD_TO_FAVORITE
-      );
-      await processFriend(
-        fetchJSON,
-        friends._embedded[1],
-        FriendActions.REMOVE_FROM_FAVORITE
-      );
+      await processFriend(fetchJSON, {
+        friend: friends._embedded[1],
+        action: FriendActions.ADD_TO_FAVORITE,
+      });
+      await processFriend(fetchJSON, {
+        friend: friends._embedded[1],
+        action: FriendActions.REMOVE_FROM_FAVORITE,
+      });
       const processedFriends = await getFriends(fetchJSON);
       expect(processedFriends._embedded[1].isFavorite).toBe(false);
     });

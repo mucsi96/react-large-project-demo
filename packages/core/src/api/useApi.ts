@@ -28,9 +28,13 @@ export function useApi<FetchArgs extends unknown[], ResponseBody>(
     isLoading: false,
   } as ApiState<FetchArgs, ResponseBody>);
   const abortController = useRef<AbortController>();
+  const mounted = useRef(true);
 
   useEffect(() => {
-    return () => abortController.current?.abort();
+    return () => {
+      mounted.current = false;
+      abortController.current?.abort();
+    };
   }, []);
 
   const fetchData = useCallback(
@@ -67,7 +71,7 @@ export function useApi<FetchArgs extends unknown[], ResponseBody>(
             error: error,
             fetchArgs: fetchArgs,
           });
-        } else {
+        } else if (mounted.current) {
           setApiState({
             isLoading: false,
             fetchArgs: fetchArgs,

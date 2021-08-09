@@ -2,6 +2,7 @@ export type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export type CallApiOptions = {
   href: string;
+  queryParams?: Record<string, string>;
   method?: ApiMethod;
   headers?: HeadersInit;
   signal?: AbortSignal | null;

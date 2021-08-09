@@ -1,11 +1,11 @@
+import { asMock } from '../testUtils';
 import { fetchJSON } from './fetchJSON';
-import { asMock } from 'core';
 import { ApiError } from './types';
 
 window.fetch = jest.fn();
 
 describe('fetchJSON', () => {
-  test('fetches using rxjs ajax', async () => {
+  test('fetches using native fetch', async () => {
     asMock(window.fetch).mockResolvedValue(({
       ok: true,
       status: 200,
@@ -41,6 +41,48 @@ describe('fetchJSON', () => {
       headers: {
         'Content-Type': 'application/json',
         'x-header-1': 'test value',
+      },
+    });
+  });
+
+  test('handles query params', async () => {
+    asMock(window.fetch).mockResolvedValue(({
+      ok: true,
+      status: 200,
+      text: jest.fn().mockResolvedValue(JSON.stringify({ test: 'response' })),
+    } as unknown) as Response);
+    await fetchJSON({
+      href: '/test/url',
+      queryParams: {
+        a: '1',
+        b: '2',
+      },
+    });
+
+    expect(window.fetch).toHaveBeenCalledWith('/test/url?a=1&b=2', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+
+  test('handles query params in href', async () => {
+    asMock(window.fetch).mockResolvedValue(({
+      ok: true,
+      status: 200,
+      text: jest.fn().mockResolvedValue(JSON.stringify({ test: 'response' })),
+    } as unknown) as Response);
+    await fetchJSON({
+      href: '/test/url?a=1',
+      queryParams: {
+        b: '2',
+        c: '3',
+      },
+    });
+
+    expect(window.fetch).toHaveBeenCalledWith('/test/url?a=1&b=2&c=3', {
+      headers: {
+        'Content-Type': 'application/json',
       },
     });
   });

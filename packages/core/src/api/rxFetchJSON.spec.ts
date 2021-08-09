@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { ajax, AjaxResponse } from 'rxjs/ajax';
+import { asMock } from '../testUtils';
 import { rxFetchJSON } from './rxFetchJSON';
-import { asMock } from 'core';
 import { ApiError } from './types';
 
 jest.mock('rxjs/ajax');
@@ -41,6 +41,46 @@ describe('rxfetchJSON', () => {
       headers: {
         'Content-Type': 'application/json',
         'x-header-1': 'test value',
+      },
+    });
+  });
+
+  test('handles query params', async () => {
+    asMock(ajax).mockReturnValue({
+      toPromise: () => Promise.resolve({ response: { test: 'response' } }),
+    } as Observable<AjaxResponse>);
+    await rxFetchJSON({
+      href: '/test/url',
+      queryParams: {
+        a: '1',
+        b: '2',
+      },
+    });
+
+    expect(ajax).toHaveBeenCalledWith({
+      url: '/test/url?a=1&b=2',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  });
+
+  test('handles query params in href', async () => {
+    asMock(ajax).mockReturnValue({
+      toPromise: () => Promise.resolve({ response: { test: 'response' } }),
+    } as Observable<AjaxResponse>);
+    await rxFetchJSON({
+      href: '/test/url?a=1',
+      queryParams: {
+        b: '2',
+        c: '3',
+      },
+    });
+
+    expect(ajax).toHaveBeenCalledWith({
+      url: '/test/url?a=1&b=2&c=3',
+      headers: {
+        'Content-Type': 'application/json',
       },
     });
   });

@@ -9,14 +9,21 @@ export const FriendsList: FC<{ callApi: ApiCaller }> = ({ callApi }) => {
     isLoading,
     isEmpty,
     loadingErrorMessage,
+    searchText,
     loadMore,
     addToFavorites,
     removeFromFavorites,
     notifications,
+    search,
   } = useFriends(callApi);
 
   return (
     <div data-name="friend-list" className={styles.container}>
+      <input
+        type="text"
+        value={searchText}
+        onChange={(event) => search(event.target.value)}
+      />
       {!!notifications.length && (
         <div data-name="notifications" className={styles.notifications}>
           {notifications.map(({ key, message }) => (

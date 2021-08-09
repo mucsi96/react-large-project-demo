@@ -40,13 +40,19 @@ type ClearNotificationAction = {
   key: string;
 };
 
+type SearchAction = {
+  type: 'SEARCH';
+  text: string;
+}
+
 export type FriendsAction =
   | LoadFriendsAction
   | AddToFavoritesAction
   | RemoveFromFavoritesAction
   | ProcessingSucceedAction
   | ProcessingFailedAction
-  | ClearNotificationAction;
+  | ClearNotificationAction
+  | SearchAction;
 
 export type Notification = { key: string; message: string };
 
@@ -57,4 +63,5 @@ export type Friend = ApiFriend & {
 export type FriendsState = {
   friends: Friend[];
   notifications: Notification[];
+  searchText: string;
 };

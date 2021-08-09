@@ -11,21 +11,26 @@ export function useFriends(
   isLoading: boolean;
   isEmpty: boolean;
   loadingErrorMessage?: string;
+  searchText: string;
   loadMore?: () => void;
   addToFavorites: (friend: Friend) => void;
   removeFromFavorites: (friend: Friend) => void;
   notifications: Notification[];
+  search: (text: string) => void;
 } {
   const friends = useApi(callApi, getFriends);
-  const processFriends = useApi(callApi, processFriend, { noAbortOnSubsequentCall: true });
+  const processFriends = useApi(callApi, processFriend, {
+    noAbortOnSubsequentCall: true,
+  });
   const [state, dispatch] = useReducer(friendsReducer, {
     friends: [],
     notifications: [],
+    searchText: '',
   });
 
   useEffect(() => {
-    friends.fetch();
-  }, [friends]);
+    friends.fetch({ searchText: state.searchText });
+  }, [friends, state.searchText]);
 
   useEffect(() => {
     if (friends.data) {
@@ -38,7 +43,7 @@ export function useFriends(
       return;
     }
 
-    const [friend, action] = processFriends.fetchArgs;
+    const [{ friend, action }] = processFriends.fetchArgs;
     const notificationKey = Date.now().toString();
     dispatch({
       type: processFriends.error ? 'PROCESSING_FAILED' : 'PROCESSING_SUCCEED',
@@ -61,18 +66,27 @@ export function useFriends(
       `${friends.error.response?.error?.message ?? ''} Status: ${
         friends.error.status ?? ''
       }`,
+    searchText: state.searchText,
     loadMore:
       friends.data && hasMore(friends.data)
-        ? () => friends.fetch(friends.data)
+        ? () =>
+            friends.fetch({
+              reference: friends.data,
+              searchText: state.searchText,
+            })
         : undefined,
     addToFavorites: (friend: Friend) => {
       dispatch({ type: 'ADD_TO_FAVORITES', id: friend.id });
-      processFriends.fetch(friend, FriendActions.ADD_TO_FAVORITE);
+      processFriends.fetch({ friend, action: FriendActions.ADD_TO_FAVORITE });
     },
     removeFromFavorites: (friend: Friend) => {
       dispatch({ type: 'REMOVE_FROM_FAVORITES', id: friend.id });
-      processFriends.fetch(friend, FriendActions.REMOVE_FROM_FAVORITE);
+      processFriends.fetch({
+        friend,
+        action: FriendActions.REMOVE_FROM_FAVORITE,
+      });
     },
     notifications: state.notifications,
+    search: (text: string) => dispatch({ type: 'SEARCH', text }),
   };
 }

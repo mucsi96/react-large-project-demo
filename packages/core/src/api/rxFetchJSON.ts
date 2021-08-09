@@ -3,13 +3,22 @@ import { ApiError, ApiErrorResponse, CallApiOptions } from './types';
 
 export async function rxFetchJSON<ResponseBody>({
   href,
+  queryParams = {},
   method,
   headers,
   body,
+  signal,
 }: CallApiOptions): Promise<ResponseBody> {
   try {
+    const search = Object.entries(queryParams)
+      .reduce((params, [key, value]) => {
+        params.set(key, value);
+        return params;
+      }, new URLSearchParams())
+      .toString();
+    const paramsSeparator = href.includes('?') ? '&' : '?';
     const result = await ajax({
-      url: href,
+      url: [href, search].filter(Boolean).join(paramsSeparator),
       ...(method && { method }),
       ...(body ? { body } : {}),
       headers: {
@@ -18,14 +27,26 @@ export async function rxFetchJSON<ResponseBody>({
       },
     }).toPromise();
 
+    if (signal?.aborted) {
+      // eslint-disable-next-line no-throw-literal
+      throw {
+        name: 'AbortError',
+      };
+    }
+
     return result.response as ResponseBody;
-  } catch (error) {
-    const ajaxError = error as AjaxError;
+  } catch (err) {
+    const error = err as AjaxError & { name: string };
+
+    if (error.name === 'AbortError') {
+      throw error;
+    }
+
     // eslint-disable-next-line no-throw-literal
     throw {
-      message: ajaxError.message,
-      response: ajaxError.response as ApiErrorResponse,
-      status: ajaxError.status,
+      message: error.message,
+      response: error.response as ApiErrorResponse,
+      status: error.status,
     } as ApiError;
   }
 }

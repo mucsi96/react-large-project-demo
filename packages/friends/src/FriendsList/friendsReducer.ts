@@ -85,6 +85,12 @@ export function friendsReducer(
           ({ key }) => key !== action.key
         ),
       };
+    case 'SEARCH':
+      return {
+        ...state,
+        searchText: action.text,
+        friends: [],
+      };
     default:
       return state;
   }
