@@ -68,35 +68,32 @@ export const mockFriendHandlers = [
         const searchRegex = searchText ? new RegExp(searchText, 'i') : null;
         const from = parseInt(req.url.searchParams.get('from') ?? '0');
         const to = from + 5;
+        const matchingFriends = mockFriends.filter(
+          (friend) =>
+            !searchRegex ||
+            searchRegex.test([friend.firstName, friend.lastName].join(' '))
+        );
+
         return res(
           ctx.status(200),
           ctx.delay(getDelay()),
           ctx.json({
-            _embedded: mockFriends
-              .filter(
-                (friend) =>
-                  !searchRegex ||
-                  searchRegex.test(
-                    [friend.firstName, friend.lastName].join(' ')
-                  )
-              )
-              .slice(from, to)
-              .map((friend) => ({
-                ...friend,
-                isFavorite: getFavorites().includes(friend.id),
-                _links: {
-                  addToFavorite: {
-                    href: `/api/friends/${friend.id}/add-to-favorite`,
-                    method: 'POST',
-                  },
-                  removeFromFavorite: {
-                    href: `/api/friends/${friend.id}/remove-from-favorite`,
-                    method: 'POST',
-                  },
+            _embedded: matchingFriends.slice(from, to).map((friend) => ({
+              ...friend,
+              isFavorite: getFavorites().includes(friend.id),
+              _links: {
+                addToFavorite: {
+                  href: `/api/friends/${friend.id}/add-to-favorite`,
+                  method: 'POST',
                 },
-              })),
+                removeFromFavorite: {
+                  href: `/api/friends/${friend.id}/remove-from-favorite`,
+                  method: 'POST',
+                },
+              },
+            })),
             _links: {
-              next: mockFriends[to]
+              next: matchingFriends[to]
                 ? {
                     href: `/api/friends?from=${to}`,
                   }
