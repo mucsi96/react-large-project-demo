@@ -4,7 +4,8 @@
     "lib": ["ES2019", "DOM", "WebWorker"],
     "target": "ES2019",
     "module": "CommonJS",
-    "isolatedModules": false
+    "isolatedModules": false,
+    "jsx": "react-jsx"
   },
   "include": ["src"]
 }

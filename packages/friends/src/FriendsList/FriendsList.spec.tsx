@@ -49,12 +49,12 @@ describe('FriendsList', () => {
   });
 
   test('renders list of friends', async () => {
-    const { findByText } = renderFriends();
+    const { findByText, getByText } = renderFriends();
     await expect(findByText('Alyson Donnelly')).resolves.toBeDefined();
-    await expect(findByText('Carlee Kreiger')).resolves.toBeDefined();
-    await expect(findByText('Enrico Pouros')).resolves.toBeDefined();
-    await expect(findByText('Patricia Barrows')).resolves.toBeDefined();
-    await expect(findByText('Steven Bergstrom')).resolves.toBeDefined();
+    expect(getByText('Carlee Kreiger')).toBeDefined();
+    expect(getByText('Enrico Pouros')).toBeDefined();
+    expect(getByText('Patricia Barrows')).toBeDefined();
+    expect(getByText('Steven Bergstrom')).toBeDefined();
   });
 
   test('renders error message in case of loading failure', async () => {
@@ -71,6 +71,9 @@ describe('FriendsList', () => {
 
     await waitFor(() => findByTestId('spinner'));
     await expect(findAllByTestId('friend')).resolves.toHaveLength(5);
+    await waitFor(() =>
+      expect(findAllByTestId('friend')).resolves.toHaveLength(10)
+    );
   });
 
   test('loads more friends clicking load more button', async () => {

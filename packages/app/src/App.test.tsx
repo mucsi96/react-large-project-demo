@@ -1,17 +1,9 @@
-import { shallow } from 'enzyme';
+import { render } from '@testing-library/react';
 import React from 'react';
 import App from './App';
 
-jest.mock('friends', () => {
-  const actual = jest.requireActual<Record<string, unknown>>('friends');
-
-  return {
-    ...actual,
-    FriendsList: 'FriendsList-',
-  };
-});
-
-test('renders learn react link', () => {
-  const wrapper = shallow(<App />);
-  expect(wrapper).toMatchSnapshot();
+test('renders list of friends', async () => {
+  const { findByText, getByText } = render(<App />);
+  await findByText('Alyson Donnelly');
+  expect(getByText('Carlee Kreiger')).toBeDefined();
 });
