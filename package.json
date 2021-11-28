@@ -18,11 +18,5 @@
     "build:watch": "lerna run build:watch --parallel",
     "prepare": "lerna run prepare",
     "prepare:deploy": "lerna run build:storybook && lerna run build:app"
-  },
-  "resolutions": {
-    "node-notifier": "8.0.0",
-    "es-abstract": "1.18.0-next.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1"
   }
 }

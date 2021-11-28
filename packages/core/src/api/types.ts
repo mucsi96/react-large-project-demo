@@ -26,9 +26,20 @@ export type ApiError = {
   status?: number;
 };
 
-export type ApiState<FetchArgs extends unknown[], ResponseBody> = {
+export type Fetcher<FetchArgs extends unknown[], ResponseBody> = (
+  callApi: ApiCaller,
+  ...args: FetchArgs
+) => Promise<ResponseBody>;
+
+export enum FetchState {
+  LOADING = 'LOADING',
+  READY = 'READY',
+  FAILED = 'FAILED',
+}
+
+export type ApiResponse<FetchArgs extends unknown[], ResponseBody> = {
   data?: ResponseBody;
+  fetchState?: FetchState;
   error?: ApiError;
-  isLoading: boolean;
   fetchArgs?: FetchArgs;
 };

@@ -1,11 +1,6 @@
-/* eslint-disable @typescript-eslint/unbound-method */
-import { useApi } from '../api';
-import { asMock, createMockPromise } from 'core';
-import React, { FC } from 'react';
-import { mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
-import { ApiCaller, ApiError } from './types';
-import { UseApiOptions } from './useApi';
+import { act, renderHook } from '@testing-library/react-hooks';
+import { useApi } from './useApi';
+import { ApiCaller, FetchState } from './types';
 
 class MockAbortController {
   static aborted = false;
@@ -17,49 +12,22 @@ class MockAbortController {
 }
 
 describe('useApi', () => {
-  function mountHook(
-    callApi: ApiCaller,
-    fetcher: (callApi: ApiCaller, input: string) => Promise<string>,
-    options: UseApiOptions = {}
-  ) {
-    let hookResult: {
-      fetch: (input: string) => void;
-      data?: string;
-      error?: ApiError;
-      isLoading: boolean;
-    };
-
-    const TestComponent: FC = () => {
-      hookResult = useApi(callApi, fetcher, options);
-      return null;
-    };
-    const wrapper = mount(<TestComponent />);
-
-    return {
-      getHookResult() {
-        return hookResult;
-      },
-      unmount() {
-        wrapper.unmount();
-      }
-    };
-  }
-
-  function setupMocks() {
+  function setupMocks({ fail }: { fail?: boolean } = {}) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
     window.AbortController = MockAbortController as any;
-    const callApi = jest
-      .fn()
-      .mockResolvedValue({ test: 'response' }) as ApiCaller;
-    const mockPromise = createMockPromise<string>();
-    const fetcher = jest.fn().mockReturnValue(mockPromise) as (
-      callApi: ApiCaller,
-      input: string
-    ) => Promise<string>;
+    const callApi = !fail
+      ? (jest.fn().mockResolvedValue({ test: 'response' }) as ApiCaller)
+      : (jest.fn().mockRejectedValue(new Error('api error')) as ApiCaller);
+    const fetcher = jest.fn().mockImplementation(() =>
+      callApi({
+        href: '/test/url',
+        method: 'POST',
+        body: 'test body',
+      })
+    ) as (callApi: ApiCaller, input: string) => Promise<string>;
 
     return {
       callApi,
-      mockPromise,
       fetcher,
     };
   }
@@ -67,55 +35,46 @@ describe('useApi', () => {
   describe('fetch function', () => {
     test('passes through the arguments to fetcher', async () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('test input');
+        result.current[0]('test input');
       });
       expect(fetcher).toHaveBeenCalledWith(expect.any(Function), 'test input');
-      await asMock(fetcher).mock.calls[0][0]({
-        href: '/test/url',
-        method: 'POST',
-        body: 'test body',
-      });
+      await waitForNextUpdate();
       expect(callApi).toHaveBeenCalledWith({
         href: '/test/url',
         method: 'POST',
         body: 'test body',
-        signal: 'mockMockAbortControllerSignal',
       });
     });
 
     test('passes through the cache options to api caller', async () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher, { cache: true });
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher, { cache: true })
+      );
       act(() => {
-        getHookResult().fetch('test input');
+        result.current[0]('test input');
       });
-      await asMock(fetcher).mock.calls[0][0]({
-        href: '/test/url',
-        method: 'POST',
-        body: 'test body',
-      });
+      await waitForNextUpdate();
       expect(callApi).toHaveBeenCalledWith({
         href: '/test/url',
         method: 'POST',
-        body: 'test body',
-        signal: 'mockMockAbortControllerSignal',
-        cache: true,
+        body: 'test body'
       });
     });
 
     test('aborts api call on unmount', async () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult, unmount } = mountHook(callApi, fetcher);
+      const { result, unmount, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('test input');
+        result.current[0]('test input');
       });
-      await asMock(fetcher).mock.calls[0][0]({
-        href: '/test/url',
-        method: 'POST',
-        body: 'test body',
-      });
+      await waitForNextUpdate();
       MockAbortController.aborted = false;
       unmount();
       expect(MockAbortController.aborted).toBe(true);
@@ -123,150 +82,204 @@ describe('useApi', () => {
 
     test('aborts api call on subsequent api call', async () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('test input');
+        result.current[0]('test input');
       });
-      await asMock(fetcher).mock.calls[0][0]({
-        href: '/test/url',
-        method: 'POST',
-        body: 'test body',
-      });
+      await waitForNextUpdate();
       MockAbortController.aborted = false;
       act(() => {
-        getHookResult().fetch('test input');
+        result.current[0]('test input');
       });
       expect(MockAbortController.aborted).toBe(true);
+      await waitForNextUpdate();
     });
 
     test('doesn`t aborts api call on subsequent api call if noAbortOnSubsequentCall is set', async () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher, { noAbortOnSubsequentCall: true });
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher, { noAbortOnSubsequentCall: true })
+      );
       act(() => {
-        getHookResult().fetch('test input');
+        result.current[0]('test input');
       });
-      await asMock(fetcher).mock.calls[0][0]({
-        href: '/test/url',
-        method: 'POST',
-        body: 'test body',
-      });
+      await waitForNextUpdate();
       MockAbortController.aborted = false;
       act(() => {
-        getHookResult().fetch('test input');
+        result.current[0]('test input');
       });
       expect(MockAbortController.aborted).toBe(false);
+      await waitForNextUpdate();
     });
   });
 
-  describe('isLoading property', () => {
-    test('is false before fetch is called', () => {
+  describe('fetchState property', () => {
+    test('is undefined before fetch is called', () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
-      expect(getHookResult().isLoading).toBe(false);
+      const { result } = renderHook(() => useApi(callApi, fetcher));
+      expect(result.current[1].fetchState).toBeUndefined();
     });
 
-    test('is true during fetch', () => {
+    test('is LOADING during fetch', async () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { result, waitForNextUpdate } = renderHook(() => useApi(callApi, fetcher));
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      expect(getHookResult().isLoading).toBe(true);
+      expect(result.current[1].fetchState).toBe(FetchState.LOADING);
+      await waitForNextUpdate()
     });
 
-    test('is false after fetch success', async () => {
-      const { callApi, mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+    test('is READY after fetch success', async () => {
+      const { callApi, fetcher } = setupMocks();
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      await mockPromise.resolve('');
-      expect(getHookResult().isLoading).toBe(false);
+      await waitForNextUpdate();
+      expect(result.current[1].fetchState).toBe(FetchState.READY);
     });
 
-    test('is false after fetch failure', async () => {
-      const { callApi, mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+    test('is FAILED after fetch failure', async () => {
+      const { callApi, fetcher } = setupMocks({ fail: true });
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      await mockPromise.reject(new Error());
-      expect(getHookResult().isLoading).toBe(false);
+      await waitForNextUpdate();
+      expect(result.current[1].fetchState).toBe(FetchState.FAILED);
     });
   });
 
   describe('data property', () => {
     test('is undefined before fetch is called', () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
-      expect(getHookResult().data).toBeUndefined();
+      const { result } = renderHook(() => useApi(callApi, fetcher));
+      expect(result.current[1].data).toBeUndefined();
     });
 
-    test('is undefined during fetch', () => {
+    test('is undefined during fetch', async () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { result, waitForNextUpdate } = renderHook(() => useApi(callApi, fetcher));
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      expect(getHookResult().data).toBeUndefined();
+      expect(result.current[1].data).toBeUndefined();
+      await waitForNextUpdate()
     });
 
     test('is set after fetch success', async () => {
-      const { callApi, mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { callApi, fetcher } = setupMocks();
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      await mockPromise.resolve('success response');
-      expect(getHookResult().data).toBe('success response');
+      await waitForNextUpdate();
+      expect(result.current[1].data).toEqual({ test: 'response' });
     });
 
     test('is undefined after fetch failure', async () => {
-      const { callApi, mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { callApi, fetcher } = setupMocks({ fail: true });
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      await mockPromise.reject(new Error());
-      expect(getHookResult().data).toBeUndefined();
+      await waitForNextUpdate();
+      expect(result.current[1].data).toBeUndefined();
     });
   });
 
   describe('error property', () => {
     test('is undefined before fetch is called', () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
-      expect(getHookResult().error).toBeUndefined();
+      const { result } = renderHook(() => useApi(callApi, fetcher));
+      expect(result.current[1].error).toBeUndefined();
     });
 
-    test('is undefined during fetch', () => {
+    test('is undefined during fetch', async () => {
       const { callApi, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { result, waitForNextUpdate } = renderHook(() => useApi(callApi, fetcher));
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      expect(getHookResult().error).toBeUndefined();
+      expect(result.current[1].error).toBeUndefined();
+      await waitForNextUpdate();
     });
 
     test('is undefined after fetch success', async () => {
-      const { callApi, mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { callApi, fetcher } = setupMocks();
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      await mockPromise.resolve('success response');
-      expect(getHookResult().error).toBeUndefined();
+      await waitForNextUpdate();
+      expect(result.current[1].error).toBeUndefined();
     });
 
     test('is set after fetch failure', async () => {
-      const mockError = new Error();
-      const { callApi, mockPromise, fetcher } = setupMocks();
-      const { getHookResult } = mountHook(callApi, fetcher);
+      const { callApi, fetcher } = setupMocks({ fail: true });
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
       act(() => {
-        getHookResult().fetch('');
+        result.current[0]('');
       });
-      await mockPromise.reject(mockError);
-      expect(getHookResult().error).toBe(mockError);
+      await waitForNextUpdate();
+      expect(result.current[1].error?.message).toEqual('api error');
     });
   });
+
+  describe('fetchArgs property', () => {
+    test('is undefined before fetch is called', () => {
+      const { callApi, fetcher } = setupMocks();
+      const { result } = renderHook(() => useApi(callApi, fetcher));
+      expect(result.current[1].fetchArgs).toBeUndefined();
+    });
+
+    test('is undefined during fetch', async () => {
+      const { callApi, fetcher } = setupMocks();
+      const { result, waitForNextUpdate } = renderHook(() => useApi(callApi, fetcher));
+      act(() => {
+        result.current[0]('');
+      });
+      expect(result.current[1].fetchArgs).toBeUndefined();
+      await waitForNextUpdate();
+    });
+
+    test('is the original fetch args after fetch success', async () => {
+      const { callApi, fetcher } = setupMocks();
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
+      act(() => {
+        result.current[0]('test input');
+      });
+      await waitForNextUpdate();
+      expect(result.current[1].fetchArgs).toEqual(['test input']);
+    });
+
+    test('is the original fetch args after fetch failure', async () => {
+      const { callApi, fetcher } = setupMocks({ fail: true });
+      const { result, waitForNextUpdate } = renderHook(() =>
+        useApi(callApi, fetcher)
+      );
+      act(() => {
+        result.current[0]('test input');
+      });
+      await waitForNextUpdate();
+      expect(result.current[1].fetchArgs).toEqual(['test input']);
+    });
+  })
 });

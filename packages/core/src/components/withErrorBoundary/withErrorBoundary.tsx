@@ -1,6 +1,6 @@
 import React, { Component, FC, ReactNode } from 'react';
 import { ApiError } from '../../api';
-import styles from './withErrorBoundary.module.scss';
+import styles from './withErrorBoundary.module.css';
 
 type ErrorBoundaryState = { error?: ApiError };
 

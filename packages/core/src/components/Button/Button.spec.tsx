@@ -1,8 +1,8 @@
-import { shallow } from "enzyme";
 import React from "react";
 import { Button } from "./Button";
+import { render } from '@testing-library/react';
 
 test("render", () => {
-  const wrapper = shallow(<Button onClick={jest.fn()} primary />);
-  expect(wrapper).toMatchSnapshot();
+  const { asFragment } = render(<Button onClick={jest.fn()} primary />);
+  expect(asFragment()).toMatchSnapshot();
 });

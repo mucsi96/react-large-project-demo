@@ -36,7 +36,6 @@ module.exports = {
         resolve(__dirname, 'jest.setup.js'),
         ...(existsSync(testSetup) ? [testSetup] : []),
       ],
-      snapshotSerializers: ['enzyme-to-json/serializer'],
       testMatch: ['<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
     };
   },

@@ -1,8 +1,4 @@
-import {
-  Friend as ApiFriend,
-  FriendsResponse,
-  FriendActions,
-} from 'friends-api';
+import { Friend, FriendActions, FriendsResponse } from 'friends-api';
 
 export type Fetch = (url: string, options?: RequestInit) => Promise<Response>;
 
@@ -43,7 +39,7 @@ type ClearNotificationAction = {
 type SearchAction = {
   type: 'SEARCH';
   text: string;
-}
+};
 
 export type FriendsAction =
   | LoadFriendsAction
@@ -56,12 +52,10 @@ export type FriendsAction =
 
 export type Notification = { key: string; message: string };
 
-export type Friend = ApiFriend & {
-  isProcessing?: boolean;
-};
-
 export type FriendsState = {
   friends: Friend[];
+  favorites: string[];
+  processing: string[];
   notifications: Notification[];
   searchText: string;
 };

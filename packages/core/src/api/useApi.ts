@@ -1,18 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ApiCaller, ApiError, ApiState, CallApiOptions } from './types';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  ApiCaller,
+  ApiError,
+  ApiResponse,
+  CallApiOptions,
+  Fetcher,
+  FetchState,
+} from './types';
 
-export type Fetcher<FetchArgs extends unknown[], ResponseBody> = (
-  callApi: ApiCaller,
-  ...args: FetchArgs
-) => Promise<ResponseBody>;
-
-export type UseApiResult<FetchArgs extends unknown[], ResponseBody> = {
-  fetch: (...args: FetchArgs) => void;
-  data?: ResponseBody;
-  error?: ApiError;
-  isLoading: boolean;
-  fetchArgs?: FetchArgs;
-};
+export type UseApiResult<FetchArgs extends unknown[], ResponseBody> = [
+  (...args: FetchArgs) => void,
+  ApiResponse<FetchArgs, ResponseBody>
+];
 
 export type UseApiOptions = {
   cache?: boolean;
@@ -24,11 +23,12 @@ export function useApi<FetchArgs extends unknown[], ResponseBody>(
   fetcher: Fetcher<FetchArgs, ResponseBody>,
   { cache, noAbortOnSubsequentCall }: UseApiOptions = {}
 ): UseApiResult<FetchArgs, ResponseBody> {
-  const [apiState, setApiState] = useState({
-    isLoading: false,
-  } as ApiState<FetchArgs, ResponseBody>);
-  const abortController = useRef<AbortController>();
+  const [apiState, setApiState] = useState({ response: {} } as ApiResponse<
+    FetchArgs,
+    ResponseBody
+  >);
   const mounted = useRef(true);
+  const abortController = useRef<AbortController>();
 
   useEffect(() => {
     return () => {
@@ -45,9 +45,7 @@ export function useApi<FetchArgs extends unknown[], ResponseBody>(
 
       try {
         abortController.current = new AbortController();
-        setApiState({
-          isLoading: true,
-        });
+        setApiState({ fetchState: FetchState.LOADING });
         const payload = await fetcher(
           (options: CallApiOptions) =>
             callApi({
@@ -57,24 +55,15 @@ export function useApi<FetchArgs extends unknown[], ResponseBody>(
             }),
           ...fetchArgs
         );
-        setApiState({
-          isLoading: false,
-          data: payload,
-          fetchArgs: fetchArgs,
-        });
+        setApiState({ fetchState: FetchState.READY, data: payload, fetchArgs });
       } catch (err) {
         const error = err as ApiError & { name: string };
 
         if (error.name !== 'AbortError') {
-          setApiState({
-            isLoading: false,
-            error: error,
-            fetchArgs: fetchArgs,
-          });
+          setApiState({ fetchState: FetchState.FAILED, error, fetchArgs });
         } else if (mounted.current) {
           setApiState({
-            isLoading: false,
-            fetchArgs: fetchArgs,
+            fetchArgs,
           });
         }
       }
@@ -82,7 +71,5 @@ export function useApi<FetchArgs extends unknown[], ResponseBody>(
     [fetcher, abortController, callApi, cache, noAbortOnSubsequentCall]
   );
 
-  const result = useMemo(() => ({}), []);
-
-  return Object.assign(result, apiState, { fetch: fetchData });
+  return [fetchData, apiState];
 }

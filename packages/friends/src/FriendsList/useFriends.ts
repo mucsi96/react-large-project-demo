@@ -1,36 +1,49 @@
-import { useApi, ApiCaller } from 'core';
-import { getFriends, processFriend, FriendActions, hasMore } from 'friends-api';
+import { ApiCaller, ApiResponse, useApi } from 'core';
+import {
+  Friend,
+  FriendActions,
+  FriendsResponse,
+  getFriends,
+  GetFriendsOptions,
+  hasMore,
+  processFriend,
+} from 'friends-api';
 import { useEffect, useReducer } from 'react';
 import { friendsReducer } from './friendsReducer';
-import { Notification, Friend } from './types';
+import { FriendsState, Notification } from './types';
 
 export function useFriends(
   callApi: ApiCaller
 ): {
-  friends?: Friend[];
-  isLoading: boolean;
-  isEmpty: boolean;
-  loadingErrorMessage?: string;
+  friendsResponse: ApiResponse<
+    [(GetFriendsOptions | undefined)?],
+    FriendsResponse
+  >;
+  friends: Friend[];
   searchText: string;
   loadMore?: () => void;
   addToFavorites: (friend: Friend) => void;
   removeFromFavorites: (friend: Friend) => void;
   notifications: Notification[];
   search: (text: string) => void;
+  isProcessing: (friend: Friend) => boolean;
+  isFavorite: (friend: Friend) => boolean;
 } {
-  const friends = useApi(callApi, getFriends);
-  const processFriends = useApi(callApi, processFriend, {
+  const [fetchFriends, friends] = useApi(callApi, getFriends);
+  const [processFriends, processingResponse] = useApi(callApi, processFriend, {
     noAbortOnSubsequentCall: true,
   });
   const [state, dispatch] = useReducer(friendsReducer, {
     friends: [],
     notifications: [],
     searchText: '',
-  });
+    favorites: [],
+    processing: [],
+  } as FriendsState);
 
   useEffect(() => {
-    friends.fetch({ searchText: state.searchText });
-  }, [friends, state.searchText]);
+    fetchFriends({ searchText: state.searchText });
+  }, [fetchFriends, state.searchText]);
 
   useEffect(() => {
     if (friends.data) {
@@ -39,54 +52,54 @@ export function useFriends(
   }, [friends.data]);
 
   useEffect(() => {
-    if (!processFriends.fetchArgs) {
+    if (!processingResponse.fetchArgs) {
       return;
     }
 
-    const [{ friend, action }] = processFriends.fetchArgs;
+    const [{ friend, action }] = processingResponse.fetchArgs;
     const notificationKey = Date.now().toString();
     dispatch({
-      type: processFriends.error ? 'PROCESSING_FAILED' : 'PROCESSING_SUCCEED',
+      type: processingResponse.error
+        ? 'PROCESSING_FAILED'
+        : 'PROCESSING_SUCCEED',
       friend,
       action,
       notificationKey,
     });
-    setTimeout(
+    const timeout = setTimeout(
       () => dispatch({ type: 'CLEAR_NOTIFICATION', key: notificationKey }),
       3000
     );
-  }, [processFriends.data, processFriends.error, processFriends.fetchArgs]);
+    return () => clearTimeout(timeout);
+  }, [processingResponse.error, processingResponse.fetchArgs]);
 
   return {
+    friendsResponse: friends,
     friends: state.friends,
-    isLoading: friends.isLoading,
-    isEmpty: friends.data ? !state.friends.length : false,
-    loadingErrorMessage:
-      friends.error &&
-      `${friends.error.response?.error?.message ?? ''} Status: ${
-        friends.error.status ?? ''
-      }`,
     searchText: state.searchText,
     loadMore:
       friends.data && hasMore(friends.data)
         ? () =>
-            friends.fetch({
+            fetchFriends({
               reference: friends.data,
               searchText: state.searchText,
             })
         : undefined,
     addToFavorites: (friend: Friend) => {
       dispatch({ type: 'ADD_TO_FAVORITES', id: friend.id });
-      processFriends.fetch({ friend, action: FriendActions.ADD_TO_FAVORITE });
+      processFriends({ friend, action: FriendActions.ADD_TO_FAVORITE });
     },
     removeFromFavorites: (friend: Friend) => {
       dispatch({ type: 'REMOVE_FROM_FAVORITES', id: friend.id });
-      processFriends.fetch({
+      processFriends({
         friend,
         action: FriendActions.REMOVE_FROM_FAVORITE,
       });
     },
     notifications: state.notifications,
     search: (text: string) => dispatch({ type: 'SEARCH', text }),
+    isProcessing: (friend: Friend) => state.processing.includes(friend.id),
+    isFavorite: (friend: Friend) =>
+      state.favorites.includes(friend.id) || friend.isFavorite,
   };
 }

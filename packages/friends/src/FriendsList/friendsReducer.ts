@@ -1,24 +1,12 @@
 import { FriendActions } from 'friends-api';
-import { FriendsAction, FriendsState, Friend } from './types';
+import { FriendsAction, FriendsState } from './types';
 
-function updateFriend(
-  state: FriendsState,
-  id: string,
-  update: Partial<Friend>
-) {
-  return {
-    ...state,
-    friends: state.friends.map((friend) => {
-      if (friend.id !== id) {
-        return friend;
-      }
+function add<T>(list: T[], idToAdd: T): T[] {
+  return [...list.filter((id) => id !== idToAdd), idToAdd];
+}
 
-      return {
-        ...friend,
-        ...update,
-      };
-    }),
-  };
+function remove<T>(list: T[], idToRemove: T): T[] {
+  return list.filter((id) => id !== idToRemove);
 }
 
 export function friendsReducer(
@@ -30,50 +18,45 @@ export function friendsReducer(
       return {
         ...state,
         friends: [...state.friends, ...action.payload._embedded],
-      };
+      }
     case 'ADD_TO_FAVORITES':
-      return updateFriend(state, action.id, {
-        isFavorite: true,
-        isProcessing: true,
-      });
+      return {
+        ...state,
+        processing: add(state.processing, action.id),
+        favorites: add(state.favorites, action.id),
+      };
     case 'REMOVE_FROM_FAVORITES':
-      return updateFriend(state, action.id, {
-        isFavorite: false,
-        isProcessing: true,
-      });
+      return {
+        ...state,
+        processing: add(state.processing, action.id),
+        favorites: remove(state.favorites, action.id),
+      };
     case 'PROCESSING_SUCCEED':
-      return updateFriend(state, action.friend.id, {
-        isProcessing: false,
-      });
+      return {
+        ...state,
+        processing: remove(state.processing, action.friend.id),
+      };
     case 'PROCESSING_FAILED':
       switch (action.action) {
         case FriendActions.ADD_TO_FAVORITE:
           return {
-            ...updateFriend(state, action.friend.id, {
-              isProcessing: false,
-              isFavorite: false,
+            ...state,
+            processing: remove(state.processing, action.friend.id),
+            favorites: remove(state.favorites, action.friend.id),
+            notifications: add(state.notifications, {
+              key: action.notificationKey,
+              message: `Adding ${action.friend.firstName} to favorite was not successful`,
             }),
-            notifications: [
-              {
-                key: action.notificationKey,
-                message: `Adding ${action.friend.firstName} to favorite was not successful`,
-              },
-              ...state.notifications,
-            ],
           };
         case FriendActions.REMOVE_FROM_FAVORITE:
           return {
-            ...updateFriend(state, action.friend.id, {
-              isProcessing: false,
-              isFavorite: true,
+            ...state,
+            processing: remove(state.processing, action.friend.id),
+            favorites: add(state.favorites, action.friend.id),
+            notifications: add(state.notifications, {
+              key: action.notificationKey,
+              message: `Removing ${action.friend.firstName} from favorite was not successful`,
             }),
-            notifications: [
-              {
-                key: action.notificationKey,
-                message: `Removing ${action.friend.firstName} from favorite was not successful`,
-              },
-              ...state.notifications,
-            ],
           };
         default:
           return state;
@@ -89,7 +72,6 @@ export function friendsReducer(
       return {
         ...state,
         searchText: action.text,
-        friends: [],
       };
     default:
       return state;

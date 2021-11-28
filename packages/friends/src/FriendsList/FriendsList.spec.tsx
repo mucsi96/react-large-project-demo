@@ -1,145 +1,124 @@
-import React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
-import { FriendsList } from './FriendsList';
-import { act } from 'react-dom/test-utils';
+import '@testing-library/jest-dom';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
+import { fetchJSON } from 'core';
 import { FriendsMockSwitch, setFriendsMockSwitch } from 'friends-api';
-import { fetchJSON, Spinner, waitFor } from 'core';
+import React from 'react';
+import { FriendsList } from './FriendsList';
 
-jest.mock('core', () => {
-  const actual = jest.requireActual<Record<string, unknown>>('core');
+function renderFriends() {
+  return render(<FriendsList callApi={fetchJSON} />);
+}
 
-  return {
-    ...actual,
-    Spinner: 'Spinner-',
-    Button: 'Button-',
-  };
-});
+async function loadMore() {
+  fireEvent.click(await screen.findByText('Load more...'));
+}
+
+function isFavorite(index: number): boolean {
+  const friend = screen.getAllByTestId('friend');
+  const button = within(friend[index]).queryByText('Remove from favorite');
+  return !!button && button.getAttribute('disabled') === null;
+}
+
+function isNotFavorite(index: number): boolean {
+  const friend = screen.getAllByTestId('friend');
+  const button = within(friend[index]).queryByText('Add to favorite');
+  return !!button && button.getAttribute('disabled') === null;
+}
+
+function addToFavorite(index: number) {
+  const friend = screen.getAllByTestId('friend');
+  fireEvent.click(within(friend[index]).getByText('Add to favorite'));
+}
+
+function removeFromFavorite(index: number) {
+  const friend = screen.getAllByTestId('friend');
+  fireEvent.click(within(friend[index]).getByText('Remove from favorite'));
+}
 
 describe('FriendsList', () => {
   test('renders spinner during loading of friends', async () => {
-    const wrapper = mount(<FriendsList callApi={fetchJSON} />);
-    await act(() => Promise.resolve());
-    expect(wrapper.children()).toMatchSnapshot();
+    const { findByTestId } = renderFriends();
+    await waitFor(() => findByTestId('spinner'));
+    await waitFor(() => findByTestId('friend-list'));
   });
 
   test('renders list of friends', async () => {
-    const wrapper = await renderFriends();
-    expect(wrapper.children()).toMatchSnapshot();
+    const { findByText } = renderFriends();
+    await expect(findByText('Alyson Donnelly')).resolves.toBeDefined();
+    await expect(findByText('Carlee Kreiger')).resolves.toBeDefined();
+    await expect(findByText('Enrico Pouros')).resolves.toBeDefined();
+    await expect(findByText('Patricia Barrows')).resolves.toBeDefined();
+    await expect(findByText('Steven Bergstrom')).resolves.toBeDefined();
   });
 
   test('renders error message in case of loading failure', async () => {
     setFriendsMockSwitch(FriendsMockSwitch.LOADING_FAILURE);
-    const wrapper = await renderFriends();
-    expect(wrapper.children()).toMatchSnapshot();
+    const { findByText } = renderFriends();
+    await expect(
+      findByText("We couldn't process your request at this time Status: 500")
+    ).resolves.toBeDefined();
   });
 
   test('shows spinner on clicking load more button', async () => {
-    const wrapper = await renderFriends();
-    act(() => loadMore(wrapper));
-    wrapper.update();
-    expect(wrapper.find('[data-name="friend"]')).toHaveLength(5);
-    expect(wrapper.find(Spinner).exists()).toBe(true);
+    const { findByTestId, findAllByTestId } = renderFriends();
+    await loadMore();
+
+    await waitFor(() => findByTestId('spinner'));
+    await expect(findAllByTestId('friend')).resolves.toHaveLength(5);
   });
 
   test('loads more friends clicking load more button', async () => {
-    const wrapper = await renderFriends();
-    act(() => loadMore(wrapper));
-    await waitFor(() => {
-      wrapper.update();
-      expect(wrapper.find('[data-name="friend"]')).toHaveLength(10);
-    });
-    expect(wrapper.find('[data-name="load-more"]').exists()).toBe(true);
+    const { findByText, findAllByTestId } = renderFriends();
+    await loadMore();
+    await waitFor(() =>
+      expect(findAllByTestId('friend')).resolves.toHaveLength(10)
+    );
+    await expect(findByText('Load more...')).resolves.toBeDefined();
   });
 
   test('shows no load more button if all friends are loaded', async () => {
-    const wrapper = await renderFriends();
-    act(() => loadMore(wrapper));
-    await waitFor(() => {
-      wrapper.update();
-      expect(wrapper.find('[data-name="friend"]')).toHaveLength(10);
-    });
-    act(() => loadMore(wrapper));
-    await waitFor(() => {
-      wrapper.update();
-      expect(wrapper.find('[data-name="friend"]')).toHaveLength(15);
-    });
-    expect(wrapper.find('[data-name="load-more"]').exists()).toBe(false);
+    const { queryByText, findAllByTestId } = renderFriends();
+    await loadMore();
+    await waitFor(() =>
+      expect(findAllByTestId('friend')).resolves.toHaveLength(10)
+    );
+    await loadMore();
+    await waitFor(() =>
+      expect(findAllByTestId('friend')).resolves.toHaveLength(10)
+    );
+    expect(queryByText('Load more...')).toBeNull();
   });
 
   test('adds friend as favorite by clicking on "Add to favorite" button', async () => {
-    const wrapper = await renderFriends();
-    await addToFavorite(wrapper, 1);
-    expect(isFavorite(wrapper, 1)).toBe(true);
+    renderFriends();
+    await screen.findByText('Load more...');
+    addToFavorite(1);
+    await waitFor(() => expect(isFavorite(1)).toBe(true));
   });
 
   test('persits favories', async () => {
-    await addToFavorite(await renderFriends(), 1);
-    const wrapper = await renderFriends();
-    expect(isFavorite(wrapper, 1)).toBe(true);
+    const { unmount } = renderFriends();
+    await screen.findByText('Load more...');
+    addToFavorite(1);
+    await waitFor(() => expect(isFavorite(1)).toBe(true));
+    unmount();
+    renderFriends();
+    await screen.findByText('Load more...');
+    await waitFor(() => expect(isFavorite(1)).toBe(true));
   });
 
   test('remove friend from favorite by clicking on "Remove from favorite" button', async () => {
-    await addToFavorite(await renderFriends(), 1);
-    const wrapper = await renderFriends();
-    await removeFromFavorite(wrapper, 1);
-    expect(isNotFavorite(wrapper, 1)).toBe(true);
+    renderFriends();
+    await screen.findByText('Load more...');
+    addToFavorite(1);
+    await waitFor(() => expect(isFavorite(1)).toBe(true));
+    removeFromFavorite(1);
+    await waitFor(() => expect(isNotFavorite(1)).toBe(true));
   });
 });
-
-async function renderFriends() {
-  const wrapper = mount(<FriendsList callApi={fetchJSON} />);
-  await waitFor(() => {
-    wrapper.update();
-    expect(wrapper.find('[data-name="friend-list"]').exists()).toBe(true);
-  });
-  wrapper.update();
-  return wrapper;
-}
-
-function loadMore(wrapper: ReactWrapper) {
-  act(() => {
-    wrapper.find('[data-name="load-more"]').simulate('click');
-  });
-}
-
-function isFavorite(wrapper: ReactWrapper, index: number): boolean {
-  return wrapper
-    .find('[data-name="friend"]')
-    .at(index)
-    .find('[data-name="remove-from-favorite"]')
-    .exists();
-}
-
-function isNotFavorite(wrapper: ReactWrapper, index: number): boolean {
-  return wrapper
-    .find('[data-name="friend"]')
-    .at(index)
-    .find('[data-name="add-to-favorite"]')
-    .exists();
-}
-
-async function addToFavorite(wrapper: ReactWrapper, index: number) {
-  await act(() => {
-    wrapper
-      .find('[data-name="friend"]')
-      .at(index)
-      .find('[data-name="add-to-favorite"]')
-      .simulate('click');
-    return Promise.resolve();
-  });
-
-  wrapper.update();
-}
-
-async function removeFromFavorite(wrapper: ReactWrapper, index: number) {
-  await act(() => {
-    wrapper
-      .find('[data-name="friend"]')
-      .at(index)
-      .find('[data-name="remove-from-favorite"]')
-      .simulate('click');
-    return Promise.resolve();
-  });
-
-  wrapper.update();
-}

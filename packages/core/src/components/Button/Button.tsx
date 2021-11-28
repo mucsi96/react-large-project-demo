@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React, { FC } from 'react';
-import styles from './Button.module.scss';
+import styles from './Button.module.css';
 
 export type ButtonProps = {
   disabled?: boolean;
