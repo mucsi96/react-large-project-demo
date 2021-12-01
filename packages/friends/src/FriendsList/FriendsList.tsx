@@ -38,7 +38,7 @@ export const FriendsList: FC<{ callApi: ApiCaller }> = ({ callApi }) => {
         const fullName = [firstName, lastName].join(' ');
         return (
           <div key={id} data-testid="friend" className={styles.friend}>
-            {/* <img src={image} alt={fullName} /> */}
+            <img src={image} alt={fullName} />
             <span data-testid="full-name">{fullName}</span>
             <div className={styles.actions}>
               {!isFavorite(friend) && (
