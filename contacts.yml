@@ -1,0 +1,94 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Contacts API"
+basePath: "/api"
+paths:
+  /contacts:
+    get:
+      tags:
+        - "contacts"
+      summary: "Get list of contacts"
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: "#/definitions/ContactsResponse"
+  /contacts/{contactId}/add-to-favorite:
+    post:
+      tags:
+        - "contacts"
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: "contactId"
+          in: "path"
+          required: true
+          type: "string"
+  /contacts/{contactId}/remove-from-favorite:
+    post:
+      tags:
+        - "contacts"
+      responses:
+        "200":
+          description: ""
+      parameters:
+        - name: "contactId"
+          in: "path"
+          required: true
+          type: "string"
+definitions:
+  Link:
+    type: "object"
+    required: 
+      - href
+      - method
+    properties:
+      href:
+        type: "string"
+      method:
+        type: "string"
+  ContactsResponse:
+    type: "object"
+    required: 
+      - _embedded
+      - _links
+    properties:
+      _embedded:
+        type: "array"
+        items:
+          $ref: "#/definitions/Contact"
+      _links:
+        type: "object"
+        required: 
+          - next
+        properties:
+          next:
+            $ref: "#/definitions/Link"
+  Contact:
+    type: "object"
+    required: 
+      - id
+      - _links
+    properties:
+      id:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      image:
+        type: "string"
+      isFavorite:
+        type: "boolean"
+      _links:
+        type: "object"
+        required: 
+        - addToFavorite
+        - removeFromFavorite
+        properties:
+          addToFavorite:
+            $ref: "#/definitions/Link"
+          removeFromFavorite:
+            $ref: "#/definitions/Link"
